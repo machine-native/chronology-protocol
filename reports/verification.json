@@ -1,0 +1,67 @@
+{
+  "protocol": "Chronology Protocol v0.1.0",
+  "openssl": "OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)",
+  "evidence_class": "SIMULATED",
+  "protocol_genesis_id": {
+    "sha256": "fcd200e65395c2831d5a71e356d56a7fd1cbb1ba7129af3415ce3390490e42e9",
+    "shake256_384": "7d95bbad5af9ac15d5ae058da8c90f394742dd7d7ae7ce2d9c5d61eb54c5386c76e96750e38043b86832cf388981a008"
+  },
+  "bundle": {
+    "path": "vectors/valid/evidence-bundle.cbor",
+    "bytes": 349466,
+    "sha256": "9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854"
+  },
+  "witness_history": {
+    "records": 8,
+    "logical_witnesses": 4,
+    "latest_sequence": 1
+  },
+  "checkpoint": {
+    "epoch": 0,
+    "verdict": "CONSENSUS",
+    "q": 3,
+    "f": 1,
+    "interval_ps": [
+      999999992000,
+      1000000009000
+    ],
+    "record_commitment": {
+      "sha256": "7270814b43cb2404d71d9d3eb5fe48082195b3d47dd1499ff2f92b4c6a52aa64",
+      "shake256_384": "c757c74732982d6a5dbe90a8ec4aac9bbd6cb7a79b8ff6ece13636f7400053d1611e8869fde1b7950f631e2dc9888ca2"
+    }
+  },
+  "anchor": {
+    "payload_hex": "4348524e0101000300000000000000007270814b43cb2404d71d9d3eb5fe48082195b3d47dd1499ff2f92b4c6a52aa64c757c74732982d6a5dbe90a8ec4aac9bbd6cb7a79b8ff6ece13636f7400053d1611e8869fde1b7950f631e2dc9888ca2",
+    "payload_bytes": 96,
+    "coinbase_scriptsig_bytes": 98,
+    "candidate_prev_hash": "00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a",
+    "candidate_median_time_past": 1785781375,
+    "candidate_txid": "42b6b90400b705e2fafba2ce8ed6daa70d83af070302f0bb4d7612d61c8bbebc",
+    "candidate_block_hash_nonce0": "d437dc51b66837353db7d17a29933eac8321135ca6973e668ee4fa16f97968db",
+    "difficulty_bits": "0x1d00ffff",
+    "pow_valid_nonce0": false,
+    "live_chain_status": "NOT_CLAIMED"
+  },
+  "checks": {
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": false
+  },
+  "verdict": "PASS_PRE_POW",
+  "remaining_external_gate": [
+    "replace offline previous-block reference with current live tip",
+    "mine real difficulty-1 proof of work",
+    "submit exact block to running Jan09-derived network",
+    "capture unmodified-node acceptance and chain inclusion evidence"
+  ]
+}

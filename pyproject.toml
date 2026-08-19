@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chronology-protocol"
+version = "0.1.0"
+description = "Witnessed physical chronology with post-quantum evidence and Jan09 Bitcoin anchoring"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

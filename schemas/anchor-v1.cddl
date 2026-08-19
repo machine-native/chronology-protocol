@@ -1,0 +1,3 @@
+; Anchor is a fixed 96-byte binary payload, not CBOR:
+; "CHRN" || version:u8 || hash_suite:u8 || flags:u16be || epoch:u64be ||
+; checkpoint_sha256:32 || checkpoint_shake256_384:48

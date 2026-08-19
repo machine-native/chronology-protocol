@@ -1,0 +1,88 @@
+{
+  "protocol": "Chronology Protocol",
+  "version": "0.1.0",
+  "audit_unix_time": 1786946173,
+  "status": "RELEASE_CANDIDATE_PASS_PRE_POW",
+  "all_completed_engineering_checks_pass": true,
+  "live_anchor_claimed": false,
+  "external_gate": [
+    "construct candidate against current live tip using exact median-time-past and next-work context",
+    "mine valid proof-of-work",
+    "submit exact block to running Jan09-derived node",
+    "capture ProcessBlock/AcceptBlock and active-chain evidence from unmodified node(s)"
+  ],
+  "steps": {
+    "PY_COMPILE": {
+      "ok": true,
+      "files": 32
+    },
+    "PYTEST": {
+      "command": "/opt/pyvenv/bin/python -m pytest -q",
+      "returncode": 0,
+      "stdout": "....................                                                     [100%]\n20 passed in 2.75s",
+      "stderr": "",
+      "ok": true
+    },
+    "MILESTONE": {
+      "command": "/opt/pyvenv/bin/python scripts/run_milestone1.py",
+      "returncode": 0,
+      "stdout": "{\n  \"protocol\": \"Chronology Protocol v0.1.0\",\n  \"openssl\": \"OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)\",\n  \"evidence_class\": \"SIMULATED\",\n  \"protocol_genesis_id\": {\n    \"sha256\": \"fcd200e65395c2831d5a71e356d56a7fd1cbb1ba7129af3415ce3390490e42e9\",\n    \"shake256_384\": \"7d95bbad5af9ac15d5ae058da8c90f394742dd7d7ae7ce2d9c5d61eb54c5386c76e96750e38043b86832cf388981a008\"\n  },\n  \"bundle\": {\n    \"path\": \"vectors/valid/evidence-bundle.cbor\",\n    \"bytes\": 349466,\n    \"sha256\": \"9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854\"\n  },\n  \"witness_history\": {\n    \"records\": 8,\n    \"logical_witnesses\": 4,\n    \"latest_sequence\": 1\n  },\n  \"checkpoint\": {\n    \"epoch\": 0,\n    \"verdict\": \"CONSENSUS\",\n    \"q\": 3,\n    \"f\": 1,\n    \"interval_ps\": [\n      999999992000,\n      1000000009000\n    ],\n    \"record_commitment\": {\n      \"sha256\": \"7270814b43cb2404d71d9d3eb5fe48082195b3d47dd1499ff2f92b4c6a52aa64\",\n      \"shake256_384\": \"c757c74732982d6a5dbe90a8ec4aac9bbd6cb7a79b8ff6ece13636f7400053d1611e8869fde1b7950f631e2dc9888ca2\"\n    }\n  },\n  \"anchor\": {\n    \"payload_hex\": \"4348524e0101000300000000000000007270814b43cb2404d71d9d3eb5fe48082195b3d47dd1499ff2f92b4c6a52aa64c757c74732982d6a5dbe90a8ec4aac9bbd6cb7a79b8ff6ece13636f7400053d1611e8869fde1b7950f631e2dc9888ca2\",\n    \"payload_bytes\": 96,\n    \"coinbase_scriptsig_bytes\": 98,\n    \"candidate_prev_hash\": \"00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a\",\n    \"candidate_median_time_past\": 1785781375,\n    \"candidate_txid\": \"42b6b90400b705e2fafba2ce8ed6daa70d83af070302f0bb4d7612d61c8bbebc\",\n    \"candidate_block_hash_nonce0\": \"d437dc51b66837353db7d17a29933eac8321135ca6973e668ee4fa16f97968db\",\n    \"difficulty_bits\": \"0x1d00ffff\",\n    \"pow_valid_nonce0\": false,\n    \"live_chain_status\": \"NOT_CLAIMED\"\n  },\n  \"checks\": {\n    \"PROJECT_GENESIS_REPRODUCES\": true,\n    \"PROTOCOL_GENESIS_BINDING\": true,\n    \"ALL_OBSERVATION_PQ_SIGNATURES\": true,\n    \"WITNESS_CHAINS\": true,\n    \"UNIQUE_CHECKPOINT_WITNESSES\": true,\n    \"CHECKPOINT_LATEST_OBSERVATION_SET\": true,\n    \"MERKLE_ROOT\": true,\n    \"CONSENSUS_RULE\": true,\n    \"CHECKPOINT_PQ_SIGNATURES\": true,\n    \"ANCHOR_PAYLOAD_96\": true,\n    \"JAN09_COINBASE_SCRIPTSIG_98\": true,\n    \"BITCOIN_RAW_STRUCTURE\": true,\n    \"BITCOIN_POW\": false\n  },\n  \"verdict\": \"PASS_PRE_POW\",\n  \"remaining_external_gate\": [\n    \"replace offline previous-block reference with current live tip\",\n    \"mine real difficulty-1 proof of work\",\n    \"submit exact block to running Jan09-derived network\",\n    \"capture unmodified-node acceptance and chain inclusion evidence\"\n  ]\n}",
+      "stderr": "",
+      "ok": true
+    },
+    "STANDALONE_VERIFY": {
+      "command": "/opt/pyvenv/bin/python scripts/verify_bundle.py vectors/valid/evidence-bundle.cbor",
+      "returncode": 0,
+      "stdout": "{\n  \"bundle\": \"vectors/valid/evidence-bundle.cbor\",\n  \"sha256\": \"9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854\",\n  \"checks\": {\n    \"PROJECT_GENESIS_REPRODUCES\": true,\n    \"PROTOCOL_GENESIS_BINDING\": true,\n    \"ALL_OBSERVATION_PQ_SIGNATURES\": true,\n    \"WITNESS_CHAINS\": true,\n    \"UNIQUE_CHECKPOINT_WITNESSES\": true,\n    \"CHECKPOINT_LATEST_OBSERVATION_SET\": true,\n    \"MERKLE_ROOT\": true,\n    \"CONSENSUS_RULE\": true,\n    \"CHECKPOINT_PQ_SIGNATURES\": true,\n    \"ANCHOR_PAYLOAD_96\": true,\n    \"JAN09_COINBASE_SCRIPTSIG_98\": true,\n    \"BITCOIN_RAW_STRUCTURE\": true,\n    \"BITCOIN_POW\": false\n  },\n  \"verdict\": \"PASS_PRE_POW\"\n}",
+      "stderr": "",
+      "ok": true
+    },
+    "NATIVE_BUILD": {
+      "command": "cc -O3 -march=native native/mine_sha256d.c -lcrypto -o native/mine_sha256d",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "ok": true
+    },
+    "GENESIS_NONCE_SCAN": {
+      "command": "/mnt/data/chronology-protocol-v0.1.0/native/mine_sha256d 0100000000000000000000000000000000000000000000000000000000000000000000008580a3211e4e3a77f12db073dd7fc6815751b8aa7599db46a675406cfdbda5aa7fdc706affff001da28efd01 33394338 1",
+      "returncode": 0,
+      "stdout": "FOUND nonce=33394338 hash=00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a\nheader=0100000000000000000000000000000000000000000000000000000000000000000000008580a3211e4e3a77f12db073dd7fc6815751b8aa7599db46a675406cfdbda5aa7fdc706affff001da28efd01",
+      "stderr": "",
+      "ok": true,
+      "expected_hash": "00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a",
+      "hash_match": true
+    },
+    "TAMPER_REJECTION": {
+      "command": "/opt/pyvenv/bin/python scripts/verify_bundle.py /mnt/data/chronology-protocol-v0.1.0/vectors/invalid/evidence-bundle-bitflip.cbor",
+      "returncode": 1,
+      "stdout": "{\n  \"bundle\": \"/mnt/data/chronology-protocol-v0.1.0/vectors/invalid/evidence-bundle-bitflip.cbor\",\n  \"sha256\": \"22909504a60e57d2fd640b6a3537f5524870f88740ec704aa73d7c263d51761d\",\n  \"checks\": {\n    \"PROJECT_GENESIS_REPRODUCES\": true,\n    \"PROTOCOL_GENESIS_BINDING\": true,\n    \"ALL_OBSERVATION_PQ_SIGNATURES\": false,\n    \"WITNESS_CHAINS\": true,\n    \"UNIQUE_CHECKPOINT_WITNESSES\": true,\n    \"CHECKPOINT_LATEST_OBSERVATION_SET\": true,\n    \"MERKLE_ROOT\": true,\n    \"CONSENSUS_RULE\": true,\n    \"CHECKPOINT_PQ_SIGNATURES\": true,\n    \"ANCHOR_PAYLOAD_96\": true,\n    \"JAN09_COINBASE_SCRIPTSIG_98\": true,\n    \"BITCOIN_RAW_STRUCTURE\": true,\n    \"BITCOIN_POW\": false\n  },\n  \"verdict\": \"FAIL\"\n}",
+      "stderr": "",
+      "ok": true
+    },
+    "MILESTONE_STATUS": {
+      "ok": true,
+      "verdict": "PASS_PRE_POW",
+      "checks": {
+        "PROJECT_GENESIS_REPRODUCES": true,
+        "PROTOCOL_GENESIS_BINDING": true,
+        "ALL_OBSERVATION_PQ_SIGNATURES": true,
+        "WITNESS_CHAINS": true,
+        "UNIQUE_CHECKPOINT_WITNESSES": true,
+        "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+        "MERKLE_ROOT": true,
+        "CONSENSUS_RULE": true,
+        "CHECKPOINT_PQ_SIGNATURES": true,
+        "ANCHOR_PAYLOAD_96": true,
+        "JAN09_COINBASE_SCRIPTSIG_98": true,
+        "BITCOIN_RAW_STRUCTURE": true,
+        "BITCOIN_POW": false
+      },
+      "bundle_sha256": "9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854",
+      "protocol_genesis_id": {
+        "sha256": "fcd200e65395c2831d5a71e356d56a7fd1cbb1ba7129af3415ce3390490e42e9",
+        "shake256_384": "7d95bbad5af9ac15d5ae058da8c90f394742dd7d7ae7ce2d9c5d61eb54c5386c76e96750e38043b86832cf388981a008"
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "release": "chronology-protocol-v0.1.0",
+  "status": "RELEASE_CANDIDATE_PASS_PRE_POW",
+  "tests": "20 passed",
+  "completed_engineering_checks_pass": true,
+  "live_anchor_claimed": false,
+  "protocol_genesis_id": {
+    "sha256": "fcd200e65395c2831d5a71e356d56a7fd1cbb1ba7129af3415ce3390490e42e9",
+    "shake256_384": "7d95bbad5af9ac15d5ae058da8c90f394742dd7d7ae7ce2d9c5d61eb54c5386c76e96750e38043b86832cf388981a008"
+  },
+  "sealed_evidence_bundle_sha256": "9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854",
+  "milestone_verdict": "PASS_PRE_POW",
+  "external_gate": [
+    "construct candidate against current live tip using exact median-time-past and next-work context",
+    "mine valid proof-of-work",
+    "submit exact block to running Jan09-derived node",
+    "capture ProcessBlock/AcceptBlock and active-chain evidence from unmodified node(s)"
+  ]
+}

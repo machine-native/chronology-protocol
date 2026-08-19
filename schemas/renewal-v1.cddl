@@ -1,0 +1,8 @@
+renewal = {
+  1: 1,
+  2: digest-pair,             ; prior lineage id
+  3: [+ digest-pair],         ; prior record/anchor evidence commitments
+  4: tstr,                    ; successor suite profile
+  5: uint                     ; renewal sequence
+}
+digest-pair = {1:bstr .size 32,2:bstr .size 48}

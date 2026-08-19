@@ -1,0 +1,15 @@
+checkpoint = {
+  1: 1,
+  2: uint,                    ; epoch
+  3: digest-pair / null,
+  4: [+ digest-pair],         ; signed observation record commitments
+  5: digest-pair,             ; dual Merkle root
+  6: uint,                    ; witness count
+  7: uint,                    ; f
+  8: uint,                    ; q
+  9: "CONSENSUS" / "TIME_CONFLICT",
+  10: [int,int] / null,
+  11: tstr,
+  12: digest-pair             ; protocol genesis id
+}
+digest-pair = {1:bstr .size 32,2:bstr .size 48}
