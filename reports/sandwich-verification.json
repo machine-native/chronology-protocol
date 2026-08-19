@@ -1,7 +1,7 @@
 {
   "bundle": "vectors\\valid\\reality-sandwich-bundle.cbor",
   "bytes": 431525,
-  "sha256": "24132630527490192b6a06db07cf40cd8522e7ad6a6018bdf36944a662ca7407",
+  "sha256": "61d409059c8ccb891acd84b663ee898ff025e67178af6216843b2a0e3835be71",
   "b0": {
     "hash": "00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b",
     "height": 221

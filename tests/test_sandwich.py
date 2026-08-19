@@ -86,6 +86,20 @@ def test_era_expectation_integer_and_sane():
     assert e == era_expectation(1_787_097_600, 43_200 * PS)
 
 
+def test_era_expectation_matches_float_reference():
+    # Regression for the v0.2.0 factor-1000 constant error, caught by cross-checking
+    # against the astrolabe engine's validated GAST. Integer path must agree with
+    # a float evaluation of the IAU 2000 formula to ~1 nano-turn.
+    for origin, rel in ((1_787_097_600, 41_342_186_440_899_932),
+                       (1_787_097_600, 43_200 * PS),
+                       (1_600_000_000, 12_345 * PS)):
+        e = era_expectation(origin, rel)
+        jd_ut = 2440587.5 + (origin + rel / PS) / 86400.0
+        turns = 0.7790572732640 + 1.00273781191135448 * (jd_ut - 2451545.0)
+        ref_nano = (turns % 1.0) * 1e9
+        assert abs(e[4] - ref_nano) < 10, (e[4], ref_nano)
+
+
 def _pq_keys(tmp: Path, name: str):
     d = tmp / name
     d.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,36 @@
+{
+  "label": "EXPECTATION_NOT_EVIDENCE",
+  "engine": "open-astrolabe astrolabe-engine (local clone, git f41723e, v2.0.0)",
+  "doctrine": "consumes the engine's public surface; grades are the engine's own declarations",
+  "instant_utc": "2026-08-19T11:29:02.186Z",
+  "time_scales": {
+    "jd_ut": 2461271.9784975285,
+    "delta_t_seconds": 75.4643796465811,
+    "delta_t_source": "espenak-meeus-2005-2050",
+    "jd_tt": 2461271.9793709586
+  },
+  "gast_deg": 140.0928865200257,
+  "gast_hms": "9h 20m 22.29s",
+  "grahas": [
+    {
+      "graha": "Sun",
+      "tropical_lon_deg": 146.5162815627248,
+      "ecliptic_lat_deg": 0.00004184561257322461,
+      "observer_mode": "geocentric",
+      "grade": "reference",
+      "tolerance_arcsec": 10
+    },
+    {
+      "graha": "Moon",
+      "tropical_lon_deg": 229.42159077477874,
+      "ecliptic_lat_deg": -5.195976560333041,
+      "observer_mode": "geocentric",
+      "grade": "reference",
+      "tolerance_arcsec": 10
+    }
+  ],
+  "provider_floor": {
+    "grade": "approximate",
+    "tolerance_arcsec": 15
+  }
+}

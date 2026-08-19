@@ -158,7 +158,7 @@ def ntp_unsigned(seq: int, ex: dict, meas: dict, blob: bytes, genesis_id, previo
 # ERA(turns) = frac(0.7790572732640 + 1.00273781191135448 * (JD_UT1 - 2451545.0))
 # Computed here from the consensus UTC midpoint with |UT1-UTC| bounded by 0.9 s.
 # This is a deterministic MODEL EXPECTATION, never physical evidence.
-ERA_A_NANO = 779057273264          # 0.7790572732640 in nano-turns
+ERA_A_NANO = 779057273             # 0.7790572732640 turns in nano-turns (rounds 0.264 nano away)
 ERA_B_SCALED = 100273781191135448  # 1.00273781191135448 * 1e17
 DUT1_BOUND_PS = 900 * (PS // 1000)
 

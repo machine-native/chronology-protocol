@@ -104,3 +104,31 @@ commitment. The consensus interval from the five witnesses is ±42 ms wide; the 
 window is one block on each side — the tightest this chain can express. The sandwich
 proves when the evidence was acquired, never that its content is true; every
 non-claim in the normative document applies.
+
+---
+
+# v0.2.1 — Cross-checked expectation, corrected constant, real-Bitcoin sidecar anchors (2026-08-19)
+
+**A cross-check did its job, and the error is stated rather than buried.** The
+astrolabe-engine (open-astrolabe, the ecosystem's validated celestial model — Sun/Moon
+at `reference` grade, 10″, validated against JPL Horizons and IMCCE) was run against
+the sandwich's consensus instant. Its GAST disagreed with the bundle's stored ERA by
+~100°: the v0.2.0 integer implementation had `ERA_A_NANO` a factor of 1000 too large
+(pico-turns written as nano-turns). Corrected, the two now agree to the physics:
+engine GAST 140.0929°, bundle ERA 139.7493°, difference +0.3436° = the equation of
+origins. A float-reference regression test pins this forever (suite: 26).
+
+- `vectors/valid/reality-sandwich-bundle.cbor` re-assembled with the corrected
+  expectation (only the labeled `EXPECTATION_NOT_EVIDENCE` field changed; every
+  signed observation, checkpoint, and block byte is identical):
+  sha256 `61d409059c8ccb89…`, verdict `SANDWICH_PASS`, burial 2 at assembly.
+- `live/anchor-evidence/astrolabe-expectation.json` — the engine's own prediction
+  for the consensus instant (GAST, Sun, Moon, with the engine's declared grades),
+  produced by consuming its public surface only. Still an expectation, never evidence.
+- **External anchor sidecars**: standard OpenTimestamps proofs for all three evidence
+  bundles (`vectors/valid/*.cbor.ots`, via `scripts/ots_stamp.py`), submitted to two
+  independent public calendars. These add an economically real upper causal bound on
+  the same bytes from the public Bitcoin chain; pending attestations become Bitcoin
+  block attestations after calendar aggregation (`ots upgrade` with any standard
+  client). Two of four calendars were unreachable (expired TLS certificates on their
+  side) — stated, and two independent attestations were obtained.
