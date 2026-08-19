@@ -46,3 +46,27 @@ This release does not claim:
   captured acceptance/active-chain evidence from the unmodified Jan09-derived network.
 
 No script in v0.1.0 silently upgrades `PASS_PRE_POW` to `PASS_LIVE_ANCHORED`.
+
+---
+
+# v0.1.1 — Live anchor executed (2026-08-19)
+
+The external gate declared above was completed on 2026-08-19. The sealed 96-byte CHRN
+checkpoint payload was carried, byte-identical, in the coinbase of a really-mined
+difficulty-1 block accepted as the active tip of the live laboratory chain:
+
+```
+block   00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b   height 221
+chain   Bitcoin (2026), genesis 00000000ad12f3ec…   nNonce 2757362010
+```
+
+Evidence, in four independent forms — the operated seed's active chain, an independent
+full-chain linkage re-verification, an unmodified released Jan09-derived client's own
+acceptance log, and the bundle verifier's `PASS` verdict (all 13 checks true) — is in
+[`live/anchor-evidence/ACCEPTANCE.md`](live/anchor-evidence/ACCEPTANCE.md). The
+live-anchored bundle is `vectors/valid/evidence-bundle-live-anchored.cbor`; the sealed
+v0.1.0 bundle and `MANIFEST.sha256` remain untouched, exactly as sealed.
+
+Two earlier candidates with valid PoW lost their height races to the laboratory's own
+miner and are disclosed in the acceptance record. `PASS_LIVE_ANCHORED` was reached by
+adding mined-and-accepted reality to the sealed evidence, never by editing a verdict.

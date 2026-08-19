@@ -1,0 +1,9 @@
+__pycache__/
+.pytest_cache/
+native/mine_sha256d.exe
+native/mine_sha256d
+live/mine/
+live/node-evidence/datadir/database/
+live/node-evidence/datadir/addr.dat
+live/node-evidence/datadir/wallet.dat
+live/node-evidence/db.log

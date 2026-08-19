@@ -54,6 +54,13 @@ requires:
 
 That is an execution gate, not a protocol-design gap.
 
+**Completed 2026-08-19.** Block
+`00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b` (height 221 of the
+live laboratory chain, real difficulty-1 work, nNonce 2757362010) carries the sealed
+96-byte checkpoint payload and was accepted by the operated seed and by an unmodified
+released Jan09-derived client. See `live/anchor-evidence/ACCEPTANCE.md` and
+`vectors/valid/evidence-bundle-live-anchored.cbor` (verifier verdict: `PASS`, 13/13).
+
 ## Scientific claim
 
 This protocol does **not** claim universal absolute time or exact simultaneity across spacetime.
@@ -75,4 +82,5 @@ cryptographic and causal lineage. Calendars and civil timescales are projections
 
 ## Licensing status
 
-No public license is granted in v0.1.0. See `LICENSING.md` before publication.
+Apache License 2.0, granted at v0.1.1 for public distribution. Copyright (c) Parth
+Mauria Saxena. See `LICENSE` and `LICENSING.md`.

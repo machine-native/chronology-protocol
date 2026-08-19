@@ -1,19 +1,25 @@
 {
-  "release": "chronology-protocol-v0.1.0",
-  "status": "RELEASE_CANDIDATE_PASS_PRE_POW",
+  "release": "chronology-protocol-v0.1.1",
+  "status": "PASS_LIVE_ANCHORED",
   "tests": "20 passed",
   "completed_engineering_checks_pass": true,
-  "live_anchor_claimed": false,
+  "live_anchor_claimed": true,
   "protocol_genesis_id": {
     "sha256": "fcd200e65395c2831d5a71e356d56a7fd1cbb1ba7129af3415ce3390490e42e9",
     "shake256_384": "7d95bbad5af9ac15d5ae058da8c90f394742dd7d7ae7ce2d9c5d61eb54c5386c76e96750e38043b86832cf388981a008"
   },
   "sealed_evidence_bundle_sha256": "9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854",
-  "milestone_verdict": "PASS_PRE_POW",
-  "external_gate": [
-    "construct candidate against current live tip using exact median-time-past and next-work context",
-    "mine valid proof-of-work",
-    "submit exact block to running Jan09-derived node",
-    "capture ProcessBlock/AcceptBlock and active-chain evidence from unmodified node(s)"
-  ]
+  "live_anchored_evidence_bundle_sha256": "9fbccb5b37e5c3798f557d9de91f1d60a16b86dd817544e2967fdf729d6561a4",
+  "milestone_verdict": "PASS",
+  "external_gate_completed": {
+    "date_utc": "2026-08-19",
+    "anchor_block_hash": "00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b",
+    "anchor_height": 221,
+    "anchor_parent": "000000004ccc5b55de9727622be0e2fb2ae17c4e994b504c1914e366a1ce6f7c",
+    "anchor_nTime": 1787136965,
+    "anchor_nBits": "0x1d00ffff",
+    "anchor_nNonce": 2757362010,
+    "target_chain_genesis": "00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a",
+    "evidence": "live/anchor-evidence/ACCEPTANCE.md"
+  }
 }

@@ -1,13 +1,15 @@
 # Licensing status
 
-**No public software/content license is granted by this v0.1.0 package.**
+**As of v0.1.1, this repository is licensed under the Apache License, Version 2.0.**
 
-This is deliberate. The protocol is a research/engineering release candidate and the appropriate
-open-source, source-available, standards, patent, defensive-publication, trademark and commercial
-licensing strategy has not been frozen.
+Copyright (c) Parth Mauria Saxena. See [`LICENSE`](LICENSE) for the full text.
 
-Before public distribution, choose and document the intended licensing/IP strategy. Do not infer an
-MIT, Apache, GPL or patent license from the presence of source code in this package.
+History: the sealed v0.1.0 package deliberately granted no public license, pending a
+licensing decision before public distribution (the original text of this file recorded
+that). The decision was made at public release: Apache-2.0, chosen for its explicit
+patent grant, consistent with the wider machine-native project's licensing posture.
 
-The third-party technologies and source material referenced by the project remain subject to their
-own licenses.
+The third-party technologies and source material referenced by the project remain
+subject to their own licenses. The laboratory chain this protocol anchors into
+(original-bitcoin-laboratory's Bitcoin (2026)) is MIT-licensed by that project and is
+not part of this repository.
