@@ -1,0 +1,2323 @@
+sending: version      (46 bytes)  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bitcoin CMyApp::OnInit()
+Loading addresses...
+dbenv.open strAppDir=C:\Users\Yoga\Desktop\workspace\vscode_workspace_machine-native-foundation\chronology-protocol\live\node-evidence\sandwich-datadir
+mapAddresses:
+-----
+ addresses                 980848
+Loading block index...
+00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a
+aaa5bdfd6c4075a646db9975aab8515781c67fdd73b02df1773a4e1e21a38085
+00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a
+0x34F8A2CE5FD92F8E7E829BA92A219268222F0C3CE59731BAD727852E60A04C79BA5E814A595E045786F9DD45FA1FDC7035A0436EB0438570309800CCFD4C41C004 OP_CHECKSIG
+CBlock(hash=00000000ad12f3, ver=1, hashPrevBlock=00000000000000, hashMerkleRoot=aaa5bd, nTime=1785781375, nBits=1d00ffff, nNonce=33394338, vtx=1)
+  CTransaction(hash=aaa5bd, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0104365468652054696d65732030332f4175672f3230323620546f6c6c206f66207363686f6f6c696e6720277374726169746a61636b657427)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x34F8A2CE5FD92F8E7E829B)
+  vMerkleTree: aaa5bd 
+AddToBlockIndex: new best=00000000ad12f3  height=0
+RelayWalletTransactions()
+ block index               983235
+Loading wallet...
+fGenerateBitcoins = 0
+nTransactionFee = 0
+addrIncoming = 0.0.0.0:0
+ wallet                   5902935
+Done loading
+mapBlockIndex.size() = 1
+nBestHeight = 0
+mapKeys.size() = 1
+mapPubKeys.size() = 1
+mapWallet.size() = 0
+mapAddressBook.size() = 1
+addrLocalHost = 172.23.48.1:18026
+bound to addrLocalHost = 172.23.48.1:18026
+
+ERROR: GetMyExternalIP() : connection to 72.233.89.199:80 failed
+
+ThreadMessageHandler started
+ThreadOpenConnections started
+ThreadSocketHandler started
+RefreshListCtrl starting
+RefreshListCtrl done
+IRC :*.freenode.net NOTICE * :*** Looking up your ident...
+IRC :*.freenode.net NOTICE * :*** Looking up your hostname...
+IRC :*.freenode.net NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (122.161.76.149) instead.
+accepted connection from 172.23.48.1:59407
+sending: version      (46 bytes)  
+MainFrameRepaint()
+ProcessMessages(9466 bytes)
+received: version      (46 bytes)  d1 00 00 00 01 00 00 00 00 00 00 00 63 c1 85 6a 00 00 00 00 01 00 00 00 00 
+Added time data, samples 2, ip 013017ac, offset +0 (+0 minutes)
+sending: getblocks    (101 bytes)  
+version addrMe = 127.0.0.1:18026
+received: block        (215 bytes)  01 00 00 00 8a 20 ee ce 8f d1 35 ad 95 ce 5d f0 58 d6 b0 6f 93 98 ac 76 42 
+received block:
+CBlock(hash=000000007beb32, ver=1, hashPrevBlock=00000000ad12f3, hashMerkleRoot=d52bbf, nTime=1785883013, nBits=1d00ffff, nNonce=895691393, vtx=1)
+  CTransaction(hash=d52bbf, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0101)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x43D676AD9CEA2E2C6980D5)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007beb32  height=1
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 7c 40 1e e8 1c cb 83 16 66 cd e0 ec d4 fb e4 5c 1a 26 91 5a 59 
+received block:
+CBlock(hash=000000001690a6, ver=1, hashPrevBlock=000000007beb32, hashMerkleRoot=3f076b, nTime=1785975831, nBits=1d00ffff, nNonce=1510572694, vtx=1)
+  CTransaction(hash=3f076b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0101)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xB5415DEF9769F38BDFDE0A)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001690a6  height=2
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d5 75 ed a7 ae 78 44 8a dc 00 d7 b2 e2 fd 35 05 58 d2 77 7c f9 
+received block:
+CBlock(hash=00000000428303, ver=1, hashPrevBlock=000000001690a6, hashMerkleRoot=d2076b, nTime=1785980422, nBits=1d00ffff, nNonce=612491648, vtx=1)
+  CTransaction(hash=d2076b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0102)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xACC5F7315D47C2C6CE2429)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000428303  height=3
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 cf 9d f4 a7 8f 10 66 3a 26 17 b4 10 f3 b5 4c 64 d7 7a 2c 79 45 
+received block:
+CBlock(hash=0000000097b129, ver=1, hashPrevBlock=00000000428303, hashMerkleRoot=73bef2, nTime=1786227562, nBits=1d00ffff, nNonce=2045882594, vtx=1)
+  CTransaction(hash=73bef2, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0101)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x694A6B09990E0FCB1E12CE)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000097b129  height=4
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0c d2 1b 3c 18 3f 48 9a 5f 2a 9d e9 74 52 ce 8a a4 cd 4a 2e 87 
+received block:
+CBlock(hash=000000000b4ac4, ver=1, hashPrevBlock=0000000097b129, hashMerkleRoot=0b158d, nTime=1786231132, nBits=1d00ffff, nNonce=547114793, vtx=1)
+  CTransaction(hash=0b158d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0101)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x25C70593C64B2CEC1CEC61)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000000b4ac4  height=5
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 8d 60 a9 de d2 f8 e4 29 e1 8f 46 2d cd 1e 65 0c cb 4d c9 a1 f2 
+received block:
+CBlock(hash=00000000592053, ver=1, hashPrevBlock=000000000b4ac4, hashMerkleRoot=18209f, nTime=1786234703, nBits=1d00ffff, nNonce=620275769, vtx=1)
+  CTransaction(hash=18209f, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0103)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x138534B0CE63C63D3DFF1B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000592053  height=6
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d9 3e 18 3a 3a ee 7d 66 14 d4 ca d8 3a 1e 5f 85 2e 2f af 42 15 
+received block:
+CBlock(hash=000000005b7254, ver=1, hashPrevBlock=00000000592053, hashMerkleRoot=4425d0, nTime=1786236291, nBits=1d00ffff, nNonce=2242935947, vtx=1)
+  CTransaction(hash=4425d0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0104)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x622C5376985309B8D55BDF)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005b7254  height=7
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 5f 33 b4 14 74 8d b7 d1 57 4b 7d 55 0b d3 4c 2d a0 8a 45 30 db 
+received block:
+CBlock(hash=00000000924ddd, ver=1, hashPrevBlock=000000005b7254, hashMerkleRoot=a50079, nTime=1786237901, nBits=1d00ffff, nNonce=2268409214, vtx=1)
+  CTransaction(hash=a50079, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0105)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x7496D1804E4B7F43F82F31)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000924ddd  height=8
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b5 f1 df e7 3c f1 5d 82 87 04 25 4c c0 de 24 9d 7f fb 43 79 d6 
+received block:
+CBlock(hash=00000000976037, ver=1, hashPrevBlock=00000000924ddd, hashMerkleRoot=7d0290, nTime=1786241396, nBits=1d00ffff, nNonce=609848735, vtx=1)
+  CTransaction(hash=7d0290, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0107)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xEC9F05F22EF72CCCDDDEDC)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000976037  height=9
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d1 ef e7 b7 b2 d6 ab f9 b1 d3 cf b0 97 18 b2 68 65 42 1f b6 bc 
+received block:
+CBlock(hash=00000000b08f0d, ver=1, hashPrevBlock=00000000976037, hashMerkleRoot=51b8b2, nTime=1786241665, nBits=1d00ffff, nNonce=383622898, vtx=1)
+  CTransaction(hash=51b8b2, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0108)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xC63FA97AFE15C1690A9915)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b08f0d  height=10
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d3 b0 ff 53 42 f0 c3 08 80 3b e6 58 a6 02 25 3d 88 d0 32 a0 1e 
+received block:
+CBlock(hash=00000000bab9d2, ver=1, hashPrevBlock=00000000b08f0d, hashMerkleRoot=995fc8, nTime=1786248142, nBits=1d00ffff, nNonce=444544404, vtx=1)
+  CTransaction(hash=995fc8, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5F37EE594CE1E40CE2AB95)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000bab9d2  height=11
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 a9 81 d1 72 c5 8c 02 8a eb d1 8f 5a 20 30 40 41 2a 55 fd f0 7f 
+received block:
+CBlock(hash=00000000d82fcd, ver=1, hashPrevBlock=00000000bab9d2, hashMerkleRoot=9cb0df, nTime=1786255921, nBits=1d00ffff, nNonce=2142404037, vtx=1)
+  CTransaction(hash=9cb0df, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2E31249CCFCA0F77BADE21)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d82fcd  height=12
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 6f d7 bf ec 8c 91 33 57 04 e4 eb bb 4e 19 b4 7a 96 ae 99 e5 10 
+received block:
+CBlock(hash=00000000c02493, ver=1, hashPrevBlock=00000000d82fcd, hashMerkleRoot=4fb2f2, nTime=1786260399, nBits=1d00ffff, nNonce=1859911707, vtx=1)
+  CTransaction(hash=4fb2f2, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0110)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x8A3955BDB6D219F9E5F887)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c02493  height=13
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 67 de f4 e0 ef a7 38 f0 47 2a 0a ca 65 f0 2d 15 ec ce fd 4d 1f 
+received block:
+CBlock(hash=00000000f0090e, ver=1, hashPrevBlock=00000000c02493, hashMerkleRoot=2d6d71, nTime=1786260699, nBits=1d00ffff, nNonce=407037783, vtx=1)
+  CTransaction(hash=2d6d71, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0111)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xF38FE60BDDC8C3C169F79C)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000f0090e  height=14
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b0 60 d2 56 0f 96 63 ce 48 bc b3 83 7a f6 05 6b 79 53 be 99 09 
+received block:
+CBlock(hash=00000000c44815, ver=1, hashPrevBlock=00000000f0090e, hashMerkleRoot=a68f6f, nTime=1786262115, nBits=1d00ffff, nNonce=1925117672, vtx=1)
+  CTransaction(hash=a68f6f, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0112)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9976F522A25949C743DA0F)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c44815  height=15
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d1 f2 5f cb 69 38 6e b6 74 15 f4 81 73 08 82 04 e9 e6 1c 25 2c 
+received block:
+CBlock(hash=000000005ed10e, ver=1, hashPrevBlock=00000000c44815, hashMerkleRoot=ff6667, nTime=1786270267, nBits=1d00ffff, nNonce=2499398547, vtx=1)
+  CTransaction(hash=ff6667, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0115)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xE70BC3E1255D5450C1F6EF)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005ed10e  height=16
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 92 43 bd 18 f6 66 fb c3 6f b7 5a 90 55 f1 ec 4d 86 4e cb 5a 22 
+received block:
+CBlock(hash=00000000c3fc90, ver=1, hashPrevBlock=000000005ed10e, hashMerkleRoot=4c6561, nTime=1786277645, nBits=1d00ffff, nNonce=1401457723, vtx=1)
+  CTransaction(hash=4c6561, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0118)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x28AFEACBA08D1DE49D3B00)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c3fc90  height=17
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 aa 31 61 3f 8c a5 cb 7f 19 d1 9f 1b d8 3b a9 fd 08 fe b1 b2 c8 
+received block:
+CBlock(hash=00000000bec17f, ver=1, hashPrevBlock=00000000c3fc90, hashMerkleRoot=fdfebc, nTime=1786279792, nBits=1d00ffff, nNonce=2879400971, vtx=1)
+  CTransaction(hash=fdfebc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0119)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x566417459F108978E441A7)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000bec17f  height=18
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 6a b6 37 cc 5d 96 f3 8d 14 7e f5 e7 86 8f ef 61 cd cc 35 40 ad 
+received block:
+CBlock(hash=000000008a1da9, ver=1, hashPrevBlock=00000000bec17f, hashMerkleRoot=d28e9f, nTime=1786280702, nBits=1d00ffff, nNonce=1218043712, vtx=1)
+  CTransaction(hash=d28e9f, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2F5BB03CF2CC3310A3B822)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000008a1da9  height=19
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 8a ac 69 31 dd f3 9a 44 17 7c 86 8d f6 18 a9 e6 96 71 67 bf fc 
+received block:
+CBlock(hash=00000000900635, ver=1, hashPrevBlock=000000008a1da9, hashMerkleRoot=8775d5, nTime=1786281277, nBits=1d00ffff, nNonce=761875831, vtx=1)
+  CTransaction(hash=8775d5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x0C74F89A1DB9716B48DF3A)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000900635  height=20
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 04 6e 7d 8e 0f e6 bb bc 54 ed b9 33 2f fc d8 51 7e 9b 1b e7 89 
+received block:
+CBlock(hash=00000000916885, ver=1, hashPrevBlock=00000000900635, hashMerkleRoot=df3a44, nTime=1786283570, nBits=1d00ffff, nNonce=3055767637, vtx=1)
+  CTransaction(hash=df3a44, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x783729EDE54F2AE811A60A)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000916885  height=21
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 74 82 5f b1 98 35 c2 a7 64 b7 f9 9a d2 8b b6 cd aa 74 f1 15 25 
+received block:
+CBlock(hash=00000000274800, ver=1, hashPrevBlock=00000000916885, hashMerkleRoot=4ab679, nTime=1786286021, nBits=1d00ffff, nNonce=3259728347, vtx=1)
+  CTransaction(hash=4ab679, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x22AD4C3041984712FDF960)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000274800  height=22
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d8 6f 17 b0 6a 51 df a5 62 b8 9a 10 ef e6 76 83 9a e9 c1 0b c4 
+received block:
+CBlock(hash=000000003637f8, ver=1, hashPrevBlock=00000000274800, hashMerkleRoot=f4bade, nTime=1786286099, nBits=1d00ffff, nNonce=103306984, vtx=1)
+  CTransaction(hash=f4bade, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xCABDC2108842A911E41C72)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003637f8  height=23
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 59 2e fd 54 1a 8b ae 44 c3 be 89 4b ef bc 39 bc 77 9b 02 b0 36 
+received block:
+CBlock(hash=00000000ed5c3f, ver=1, hashPrevBlock=000000003637f8, hashMerkleRoot=c8746c, nTime=1786289347, nBits=1d00ffff, nNonce=30993789, vtx=1)
+  CTransaction(hash=c8746c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0120)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x171163A074ECB0847B6FE2)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ed5c3f  height=24
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 56 b9 79 dd ac 2d ea c9 c3 b5 0c fd 52 2d a5 3f ad d5 6a 74 71 
+received block:
+CBlock(hash=00000000c5b452, ver=1, hashPrevBlock=00000000ed5c3f, hashMerkleRoot=044e76, nTime=1786290287, nBits=1d00ffff, nNonce=1244235848, vtx=1)
+  CTransaction(hash=044e76, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0121)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD93B0F3636381BF4244BF7)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c5b452  height=25
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 e7 e7 7c 01 04 61 4d 35 fc 6b 09 43 1d 0c 3a 15 87 d8 6f 08 b3 
+received block:
+CBlock(hash=000000007c5129, ver=1, hashPrevBlock=00000000c5b452, hashMerkleRoot=6ee30c, nTime=1786291312, nBits=1d00ffff, nNonce=1346787204, vtx=1)
+  CTransaction(hash=6ee30c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0122)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x134D4FB5DA5149381A0224)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007c5129  height=26
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d3 75 95 f7 1d b4 db a5 09 13 be 7e 17 16 99 be 80 56 1c 52 5f 
+received block:
+CBlock(hash=000000001dae14, ver=1, hashPrevBlock=000000007c5129, hashMerkleRoot=0eace3, nTime=1786292013, nBits=1d00ffff, nNonce=922340139, vtx=1)
+  CTransaction(hash=0eace3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0123)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9B3AA2222C3C090852AE98)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001dae14  height=27
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 57 8f 99 4b f6 00 3e 08 3a 84 b0 94 a7 c8 74 37 e8 cd 76 7a fc 
+received block:
+CBlock(hash=000000009b6d2e, ver=1, hashPrevBlock=000000001dae14, hashMerkleRoot=4893cc, nTime=1786307221, nBits=1d00ffff, nNonce=2949243652, vtx=1)
+  CTransaction(hash=4893cc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0128)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x522892709AB4812213A65B)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000009b6d2e  height=28
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 a8 a4 00 d8 16 ee 43 be d3 a7 6a 14 b6 df 83 4a 2d d6 2b 36 99 
+received block:
+CBlock(hash=000000005d1bab, ver=1, hashPrevBlock=000000009b6d2e, hashMerkleRoot=b6fe23, nTime=1786320738, nBits=1d00ffff, nNonce=3650005196, vtx=1)
+  CTransaction(hash=b6fe23, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0101)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x51431679A74B73428EB3E2)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005d1bab  height=29
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 95 e9 99 e0 89 92 ea 86 5a 3b 3b dc 8b ad 96 60 88 14 aa ab e1 
+received block:
+CBlock(hash=0000000089852a, ver=1, hashPrevBlock=000000005d1bab, hashMerkleRoot=e10d16, nTime=1786320795, nBits=1d00ffff, nNonce=60088873, vtx=1)
+  CTransaction(hash=e10d16, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0102)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xE4BEC4C87B7A0C9F8FE6BF)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000089852a  height=30
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 84 23 b8 56 32 01 36 bf 48 d7 9e 01 3b 76 23 eb c5 eb 29 38 ac 
+received block:
+CBlock(hash=00000000cfc72b, ver=1, hashPrevBlock=0000000089852a, hashMerkleRoot=a9a6e3, nTime=1786333841, nBits=1d00ffff, nNonce=3460368381, vtx=1)
+  CTransaction(hash=a9a6e3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0106)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDA9F3381B384642175BAB6)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000cfc72b  height=31
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 94 5e aa 5d 5c 8f 13 ab 1a cd a8 a8 7b 1c be 19 3b 50 a6 64 7c 
+received block:
+CBlock(hash=00000000a25ccb, ver=1, hashPrevBlock=00000000cfc72b, hashMerkleRoot=69923d, nTime=1786335874, nBits=1d00ffff, nNonce=2587696005, vtx=1)
+  CTransaction(hash=69923d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0107)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2610A4F0A61142029ADDF8)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000a25ccb  height=32
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 00 b4 39 a3 44 f3 4f d2 69 f0 8e ca 23 df e3 80 1c 90 e0 c8 fc 
+received block:
+CBlock(hash=000000008c1496, ver=1, hashPrevBlock=00000000a25ccb, hashMerkleRoot=c09d11, nTime=1786339607, nBits=1d00ffff, nNonce=324368256, vtx=1)
+  CTransaction(hash=c09d11, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0109)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6DF87DBDAC7695DAC07A5A)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000008c1496  height=33
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 32 ce cc 29 3e bf 63 6e ed 53 00 11 6c bf 8d 5c d0 c0 7b 59 ac 
+received block:
+CBlock(hash=00000000491c3e, ver=1, hashPrevBlock=000000008c1496, hashMerkleRoot=ce8ac2, nTime=1786340557, nBits=1d00ffff, nNonce=1190626130, vtx=1)
+  CTransaction(hash=ce8ac2, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xE383C421CD627E06467EBA)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000491c3e  height=34
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 9a db 03 f3 29 b3 ca 3f 03 5c 8e bd 81 a1 ac 8d 39 b3 ed 5f 6b 
+received block:
+CBlock(hash=00000000ebd5c1, ver=1, hashPrevBlock=00000000491c3e, hashMerkleRoot=91c414, nTime=1786341886, nBits=1d00ffff, nNonce=1582155425, vtx=1)
+  CTransaction(hash=91c414, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x542E3C95A31D362AC5B305)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ebd5c1  height=35
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 7b 9f 91 b1 c8 d9 7c bc f2 2e a9 bd a4 3b 44 fd 04 57 a2 46 81 
+received block:
+CBlock(hash=00000000e3c13b, ver=1, hashPrevBlock=00000000ebd5c1, hashMerkleRoot=c44e2b, nTime=1786344995, nBits=1d00ffff, nNonce=3839142320, vtx=1)
+  CTransaction(hash=c44e2b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x432D5ABC1C21EB544AB5DC)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e3c13b  height=36
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 de 8d 05 b5 75 76 4c 3e a5 bd 00 25 69 ee a6 50 1d cd a8 6a 9a 
+received block:
+CBlock(hash=000000002e761a, ver=1, hashPrevBlock=00000000e3c13b, hashMerkleRoot=e6f2b9, nTime=1786347340, nBits=1d00ffff, nNonce=2859071216, vtx=1)
+  CTransaction(hash=e6f2b9, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x8A904098BC5785696DACF9)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000002e761a  height=37
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 4d 4c db 74 ac b5 14 bd ad 7f 55 7c b9 bd 53 22 5c 76 d0 2d 64 
+received block:
+CBlock(hash=0000000014ddd4, ver=1, hashPrevBlock=000000002e761a, hashMerkleRoot=8edca6, nTime=1786349770, nBits=1d00ffff, nNonce=3078754800, vtx=1)
+  CTransaction(hash=8edca6, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xBDD8997A1348806742BF02)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000014ddd4  height=38
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 95 8d 5a 9e f4 e5 f1 21 24 b9 38 8e 30 ce ea 5b 82 35 1f db ac 
+received block:
+CBlock(hash=0000000055f7a3, ver=1, hashPrevBlock=0000000014ddd4, hashMerkleRoot=9e992b, nTime=1786352065, nBits=1d00ffff, nNonce=2802042100, vtx=1)
+  CTransaction(hash=9e992b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD98A64E2A9B4DF276CD59B)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000055f7a3  height=39
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 f9 fe 3f ab 07 55 1e d5 3b 15 8a 46 e6 47 9b 9d b7 4a f2 c9 1c 
+received block:
+CBlock(hash=00000000152a67, ver=1, hashPrevBlock=0000000055f7a3, hashMerkleRoot=e848dd, nTime=1786355319, nBits=1d00ffff, nNonce=3947171913, vtx=1)
+  CTransaction(hash=e848dd, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0110)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x0A8357CB61A504CEF30B88)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000152a67  height=40
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+recv failed: 10054
+ProcessMessages(43450 bytes)
+received: block        (215 bytes)  01 00 00 00 87 d7 17 8c e3 14 fe 57 df 41 2e cc dd 1b 28 09 58 62 ef 53 15 
+received block:
+CBlock(hash=0000000013d32d, ver=1, hashPrevBlock=00000000152a67, hashMerkleRoot=6b38a9, nTime=1786357680, nBits=1d00ffff, nNonce=2903631835, vtx=1)
+  CTransaction(hash=6b38a9, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0111)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xAD12C3FBA304090619946A)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000013d32d  height=41
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0b 7a dd e2 ef 48 44 85 a9 29 2e 97 a9 f7 f4 97 ba d1 80 ff e3 
+received block:
+CBlock(hash=00000000d3ec69, ver=1, hashPrevBlock=0000000013d32d, hashMerkleRoot=b23b79, nTime=1786358193, nBits=1d00ffff, nNonce=630417501, vtx=1)
+  CTransaction(hash=b23b79, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0112)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x3E0C6E0433AEA0F72FEC4C)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d3ec69  height=42
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0d b5 88 d3 15 b6 40 46 a8 aa 8e c2 d3 3a e6 23 72 f3 3e ae c2 
+received block:
+CBlock(hash=000000007f13ae, ver=1, hashPrevBlock=00000000d3ec69, hashMerkleRoot=da00f5, nTime=1786367025, nBits=1d00ffff, nNonce=1930534017, vtx=1)
+  CTransaction(hash=da00f5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0115)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6F0694FC4E5249619A3FB6)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007f13ae  height=43
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 5e 0e 18 93 80 1d 6f 00 5e b2 d5 0d f5 9f 85 29 ba 9f b8 9c de 
+received block:
+CBlock(hash=00000000f423ac, ver=1, hashPrevBlock=000000007f13ae, hashMerkleRoot=fe6aa7, nTime=1786370290, nBits=1d00ffff, nNonce=3924170385, vtx=1)
+  CTransaction(hash=fe6aa7, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0116)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x89780E8FD88C42B5B94C8D)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000f423ac  height=44
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 9f 08 a4 31 ff ae ed ad 58 b2 07 a2 a6 82 ae b9 9c 5a 94 c7 e1 
+received block:
+CBlock(hash=00000000ec5760, ver=1, hashPrevBlock=00000000f423ac, hashMerkleRoot=028ec0, nTime=1786382378, nBits=1d00ffff, nNonce=1410121139, vtx=1)
+  CTransaction(hash=028ec0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD960AFF2C9D9F7B7126B6B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ec5760  height=45
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 6e 2d 97 75 53 86 87 c3 7c 8e ce 24 ae ed 14 31 91 06 7f c3 6d 
+received block:
+CBlock(hash=00000000a8595b, ver=1, hashPrevBlock=00000000ec5760, hashMerkleRoot=aa17bb, nTime=1786390177, nBits=1d00ffff, nNonce=629223716, vtx=1)
+  CTransaction(hash=aa17bb, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5CC4E582C627FADD62FFD2)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000a8595b  height=46
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 90 5b 22 fc b3 22 37 f2 f6 c0 73 75 ea 0f 1c c7 b5 a3 9d 98 73 
+received block:
+CBlock(hash=00000000be7853, ver=1, hashPrevBlock=00000000a8595b, hashMerkleRoot=985970, nTime=1786390227, nBits=1d00ffff, nNonce=61146321, vtx=1)
+  CTransaction(hash=985970, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x50DD6B5A51F1D7072B41CB)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000be7853  height=47
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0c 7a be d5 1f 1c 91 cf 1d c1 95 89 67 4c e1 ba 6a 6e 95 39 d7 
+received block:
+CBlock(hash=00000000c6b49a, ver=1, hashPrevBlock=00000000be7853, hashMerkleRoot=3f219d, nTime=1786392736, nBits=1d00ffff, nNonce=2966438129, vtx=1)
+  CTransaction(hash=3f219d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x0CB6DA48A925F2C7E5DF56)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c6b49a  height=48
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 96 e0 6b 24 74 21 54 82 bd 3d 81 6b 5f f2 36 6b 3f e8 19 75 b7 
+received block:
+CBlock(hash=00000000e156c8, ver=1, hashPrevBlock=00000000c6b49a, hashMerkleRoot=8ff708, nTime=1786393571, nBits=1d00ffff, nNonce=954098958, vtx=1)
+  CTransaction(hash=8ff708, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0120)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x8D49A9CF99E1B5723C3766)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e156c8  height=49
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 9a 7a 2e 10 96 37 ef d3 ea fc 8a 6c 7b 3f fe 8e fc a0 37 fe f2 
+received block:
+CBlock(hash=000000000fbf84, ver=1, hashPrevBlock=00000000e156c8, hashMerkleRoot=dc967c, nTime=1786397028, nBits=1d00ffff, nNonce=4045787733, vtx=1)
+  CTransaction(hash=dc967c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0121)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x67814CF8E13D4DC3613481)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000000fbf84  height=50
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 1d ca 32 2c 1e ad 05 b7 44 7f 6a 60 53 ef 0d dd f0 74 c2 b7 ec 
+received block:
+CBlock(hash=00000000133cef, ver=1, hashPrevBlock=000000000fbf84, hashMerkleRoot=73bee5, nTime=1786405471, nBits=1d00ffff, nNonce=2812990928, vtx=1)
+  CTransaction(hash=73bee5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0102)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x3B48C7E5B02DC6359E7670)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000133cef  height=51
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 90 7e 6c 07 b8 17 45 4a 8a 20 2f 33 c3 01 7b b1 13 18 94 59 0b 
+received block:
+CBlock(hash=0000000076ed4a, ver=1, hashPrevBlock=00000000133cef, hashMerkleRoot=7659f9, nTime=1786407004, nBits=1d00ffff, nNonce=1770766849, vtx=1)
+  CTransaction(hash=7659f9, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0103)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x10AE73A7F0059D37B9E523)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000076ed4a  height=52
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 f6 f2 e1 3a 19 17 f3 83 fd fc e9 11 b4 18 78 b2 30 8e b3 76 c9 
+received block:
+CBlock(hash=000000004e264a, ver=1, hashPrevBlock=0000000076ed4a, hashMerkleRoot=d01752, nTime=1786414707, nBits=1d00ffff, nNonce=524989682, vtx=1)
+  CTransaction(hash=d01752, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0106)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6533946F8BF70F3DAB27C3)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004e264a  height=53
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 a4 03 18 ef 34 83 f2 a2 75 61 1e 12 f5 13 45 fb 2b 4c 90 ad f8 
+received block:
+CBlock(hash=00000000cddf19, ver=1, hashPrevBlock=000000004e264a, hashMerkleRoot=96f42c, nTime=1786416375, nBits=1d00ffff, nNonce=1980241585, vtx=1)
+  CTransaction(hash=96f42c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0107)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x74BAF9BE341E1E1E915F0E)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000cddf19  height=54
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 fd aa 43 89 7d f5 0e 70 01 dc 36 3c fc 77 cd 3d 5e ed 7e 7a b9 
+received block:
+CBlock(hash=00000000e2353a, ver=1, hashPrevBlock=00000000cddf19, hashMerkleRoot=e98535, nTime=1786419163, nBits=1d00ffff, nNonce=3259603393, vtx=1)
+  CTransaction(hash=e98535, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0108)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xBEC05996E1B56E58C74208)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e2353a  height=55
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 1a 89 0d 7f 8b a0 fb 60 63 62 37 d1 87 16 89 ce 85 af f1 a9 f2 
+received block:
+CBlock(hash=000000003a0749, ver=1, hashPrevBlock=00000000e2353a, hashMerkleRoot=4c96f0, nTime=1786423293, nBits=1d00ffff, nNonce=608246492, vtx=1)
+  CTransaction(hash=4c96f0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xF58B56EC020CE22EC1E561)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003a0749  height=56
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 39 c7 55 ac 82 c6 14 7f 8c 52 2d b8 31 98 2c c6 b3 9c 9f 30 9b 
+received block:
+CBlock(hash=0000000053e84b, ver=1, hashPrevBlock=000000003a0749, hashMerkleRoot=56362a, nTime=1786426871, nBits=1d00ffff, nNonce=4096400628, vtx=1)
+  CTransaction(hash=56362a, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x07294AD89FE9FBEDFD2C09)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000053e84b  height=57
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 be e2 c3 09 c0 a0 df e6 42 3e 8b 30 83 7f b0 c8 75 d1 58 4d a3 
+received block:
+CBlock(hash=000000007c9b17, ver=1, hashPrevBlock=0000000053e84b, hashMerkleRoot=d9077f, nTime=1786430709, nBits=1d00ffff, nNonce=123751928, vtx=1)
+  CTransaction(hash=d9077f, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x48494674A64B3C0B5B820C)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007c9b17  height=58
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 13 3f 58 51 43 7a cb e0 a6 10 0c f2 54 10 8a 7e 64 76 8d de 8c 
+received block:
+CBlock(hash=0000000057600b, ver=1, hashPrevBlock=000000007c9b17, hashMerkleRoot=20e001, nTime=1786447962, nBits=1d00ffff, nNonce=1970933110, vtx=1)
+  CTransaction(hash=20e001, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5231E0B2938F6ECB25226A)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000057600b  height=59
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 32 f5 4d 8c 95 8a df 08 13 d6 ad fd b7 5c ea 40 2a 82 fc 32 44 
+received block:
+CBlock(hash=0000000099bb63, ver=1, hashPrevBlock=0000000057600b, hashMerkleRoot=275aea, nTime=1786460017, nBits=1d00ffff, nNonce=2118061424, vtx=1)
+  CTransaction(hash=275aea, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0110)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x8A3565430D2EC7D15E8078)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000099bb63  height=60
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 e4 c1 5d 69 cf 41 ce 95 72 73 a8 59 05 89 97 86 d8 cb 88 50 62 
+received block:
+CBlock(hash=000000008a6bb2, ver=1, hashPrevBlock=0000000099bb63, hashMerkleRoot=418951, nTime=1786484856, nBits=1d00ffff, nNonce=3903830335, vtx=1)
+  CTransaction(hash=418951, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0102)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xBE8EEDC124F3CBF11BEB25)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000008a6bb2  height=61
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 15 df e7 c0 b9 41 f4 fa 40 3e 54 e0 c5 ed 95 d8 62 6d 42 53 2a 
+received block:
+CBlock(hash=000000003b21ac, ver=1, hashPrevBlock=000000008a6bb2, hashMerkleRoot=1b989c, nTime=1786486763, nBits=1d00ffff, nNonce=2118793699, vtx=1)
+  CTransaction(hash=1b989c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0103)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9B02468DD4AC22B8DD1E2A)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003b21ac  height=62
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 39 28 1a b9 31 6e 56 e8 0e 5e 87 3a 40 41 0e 95 4c 3e 18 80 44 
+received block:
+CBlock(hash=000000001b3089, ver=1, hashPrevBlock=000000003b21ac, hashMerkleRoot=0721b5, nTime=1786496885, nBits=1d00ffff, nNonce=2293600967, vtx=1)
+  CTransaction(hash=0721b5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0106)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xC0B91F7121ECCA96542B7D)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001b3089  height=63
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 eb 06 9d a2 4d a0 4e d2 19 a2 43 74 a9 36 26 7e 16 61 5f 0a f6 
+received block:
+CBlock(hash=00000000378a1a, ver=1, hashPrevBlock=000000001b3089, hashMerkleRoot=8fa92b, nTime=1786542904, nBits=1d00ffff, nNonce=2588970899, vtx=1)
+  CTransaction(hash=8fa92b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0101)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9D2540FE5E2ABC86F7F9B7)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000378a1a  height=64
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 f5 99 5d bd 00 69 f9 16 76 4b 56 86 50 19 5f bf 00 fa a3 67 44 
+received block:
+CBlock(hash=00000000733f1e, ver=1, hashPrevBlock=00000000378a1a, hashMerkleRoot=95317e, nTime=1786543667, nBits=1d00ffff, nNonce=851915622, vtx=1)
+  CTransaction(hash=95317e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0102)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6A151CC516BB3471B28857)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000733f1e  height=65
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 4b 0a d1 86 66 86 99 53 36 e0 04 3a a2 90 73 1c 52 84 cb 12 8f 
+received block:
+CBlock(hash=000000005d78ae, ver=1, hashPrevBlock=00000000733f1e, hashMerkleRoot=992caa, nTime=1786547663, nBits=1d00ffff, nNonce=296815427, vtx=1)
+  CTransaction(hash=992caa, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0104)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x3C3922CD229028436551F4)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005d78ae  height=66
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 fc 5e 74 50 6b 30 c7 c2 70 0d 5d 08 85 23 c9 f8 7e e4 a6 f6 75 
+received block:
+CBlock(hash=0000000066cc77, ver=1, hashPrevBlock=000000005d78ae, hashMerkleRoot=d5e2b3, nTime=1786564782, nBits=1d00ffff, nNonce=2010207271, vtx=1)
+  CTransaction(hash=d5e2b3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0109)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xE74F7E4FB7541ABB5CD6D6)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000066cc77  height=67
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 97 f0 45 be ad b0 bb 61 69 85 f4 64 2f c2 e7 56 a0 a1 26 45 bd 
+received block:
+CBlock(hash=00000000d6404b, ver=1, hashPrevBlock=0000000066cc77, hashMerkleRoot=743664, nTime=1786565718, nBits=1d00ffff, nNonce=1003779598, vtx=1)
+  CTransaction(hash=743664, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x86B5EB0C5A403F25EBE696)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d6404b  height=68
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b2 e9 e5 2d bf 74 46 a8 d6 28 11 88 3a 06 63 14 f3 a7 4f 55 3a 
+received block:
+CBlock(hash=00000000433dca, ver=1, hashPrevBlock=00000000d6404b, hashMerkleRoot=d86c37, nTime=1786567681, nBits=1d00ffff, nNonce=2182966636, vtx=1)
+  CTransaction(hash=d86c37, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xB5DAD5E39BAD34DEC8AD74)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000433dca  height=69
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 00 d1 be 48 14 0e 60 d4 28 d7 9a 86 e5 29 bb 52 21 55 f1 93 56 
+received block:
+CBlock(hash=00000000f3d58d, ver=1, hashPrevBlock=00000000433dca, hashMerkleRoot=e0d1ec, nTime=1786569239, nBits=1d00ffff, nNonce=1746393620, vtx=1)
+  CTransaction(hash=e0d1ec, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x58F6C8B5F759543179B7E2)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000f3d58d  height=70
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 3b 11 80 30 d7 10 18 3a ca 9d aa 0e c7 d2 c0 0c bb c9 40 4f 11 
+received block:
+CBlock(hash=00000000433511, ver=1, hashPrevBlock=00000000f3d58d, hashMerkleRoot=c4ea39, nTime=1786571821, nBits=1d00ffff, nNonce=2969152581, vtx=1)
+  CTransaction(hash=c4ea39, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6F981738613E1D6AFA27C0)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000433511  height=71
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 13 03 80 41 ab 77 ac 36 3f 88 a4 ee 26 e9 8e cd fb 30 5d 8d 8d 
+received block:
+CBlock(hash=000000007d4688, ver=1, hashPrevBlock=00000000433511, hashMerkleRoot=d0d179, nTime=1786572471, nBits=1d00ffff, nNonce=748974084, vtx=1)
+  CTransaction(hash=d0d179, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x18835B6F2DAE16527591B3)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007d4688  height=72
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 77 ea c9 d2 9c 23 d4 6a df d9 d0 61 53 ac a4 ae fd c1 e8 37 13 
+received block:
+CBlock(hash=00000000ecdb51, ver=1, hashPrevBlock=000000007d4688, hashMerkleRoot=7d0356, nTime=1786584401, nBits=1d00ffff, nNonce=608518911, vtx=1)
+  CTransaction(hash=7d0356, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0112)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x71DE6ED7777638980A6761)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ecdb51  height=73
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d0 a4 eb f6 a3 7d 34 24 21 77 68 18 0c cf 26 06 39 e1 be 78 10 
+received block:
+CBlock(hash=000000001404a8, ver=1, hashPrevBlock=00000000ecdb51, hashMerkleRoot=7edd54, nTime=1786588141, nBits=1d00ffff, nNonce=4187473709, vtx=1)
+  CTransaction(hash=7edd54, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0113)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x632CCDCAD969D662AC9D88)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001404a8  height=74
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 42 52 36 7b de 6c 29 85 ce 29 e5 15 5a be 3e 0d 90 4f f5 bb d2 
+received block:
+CBlock(hash=00000000ca0720, ver=1, hashPrevBlock=000000001404a8, hashMerkleRoot=1b05c3, nTime=1786589009, nBits=1d00ffff, nNonce=1002156232, vtx=1)
+  CTransaction(hash=1b05c3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0114)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x8726D86DE16B7561AD5711)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ca0720  height=75
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d1 8e 9b 33 2d 71 59 da c6 81 6d f0 bd 6a 16 f5 d0 4b de c8 b9 
+received block:
+CBlock(hash=0000000011de08, ver=1, hashPrevBlock=00000000ca0720, hashMerkleRoot=6d19f8, nTime=1786592212, nBits=1d00ffff, nNonce=3643713839, vtx=1)
+  CTransaction(hash=6d19f8, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0115)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x17FED01091DCE8FBD19CA3)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000011de08  height=76
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 2d e0 90 e0 89 5f 45 1b d8 6f 49 54 38 ae 79 b0 a0 19 85 d2 34 
+received block:
+CBlock(hash=000000004fe39e, ver=1, hashPrevBlock=0000000011de08, hashMerkleRoot=da5412, nTime=1786593075, nBits=1d00ffff, nNonce=973975027, vtx=1)
+  CTransaction(hash=da5412, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0116)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xBD1E8D66375F67F1477231)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004fe39e  height=77
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 c4 d5 73 33 4d fd e2 fb 60 03 23 44 9f 02 05 3e 47 23 f0 8a cf 
+received block:
+CBlock(hash=0000000007c473, ver=1, hashPrevBlock=000000004fe39e, hashMerkleRoot=43f69e, nTime=1786593170, nBits=1d00ffff, nNonce=111224258, vtx=1)
+  CTransaction(hash=43f69e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0117)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x69D91D320AB176FF6A4160)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000007c473  height=78
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 c7 11 fd c6 39 d3 6a 69 fc 1b dc dd b2 0f ee ef 27 d4 f8 d9 2d 
+received block:
+CBlock(hash=000000007e1eeb, ver=1, hashPrevBlock=0000000007c473, hashMerkleRoot=70939b, nTime=1786593443, nBits=1d00ffff, nNonce=316074582, vtx=1)
+  CTransaction(hash=70939b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0118)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xBC2E7149B7E1E7C8A9E9AA)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007e1eeb  height=79
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 ff 49 06 ff 08 74 b0 8d 44 be 0f 0a d4 29 de 34 6c a9 f2 2c df 
+received block:
+CBlock(hash=000000006aaa21, ver=1, hashPrevBlock=000000007e1eeb, hashMerkleRoot=c62bef, nTime=1786601688, nBits=1d00ffff, nNonce=717873155, vtx=1)
+  CTransaction(hash=c62bef, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x588D6A0A0F4E68F8A7EB52)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000006aaa21  height=80
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 25 3c b4 7c 51 93 85 e0 f6 ae 2b 93 c1 5b f0 f9 0b a9 21 10 56 
+received block:
+CBlock(hash=00000000842efe, ver=1, hashPrevBlock=000000006aaa21, hashMerkleRoot=ca470d, nTime=1786604864, nBits=1d00ffff, nNonce=3573142766, vtx=1)
+  CTransaction(hash=ca470d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9A2B1914F7AC7AC2B515D3)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000842efe  height=81
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 17 90 b8 89 39 dd 5f 5a 4f dc ef 16 8d 4a bd 62 ca ba 98 15 d4 
+received block:
+CBlock(hash=00000000749bbf, ver=1, hashPrevBlock=00000000842efe, hashMerkleRoot=3dc613, nTime=1786606247, nBits=1d00ffff, nNonce=1577270708, vtx=1)
+  CTransaction(hash=3dc613, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x236F57FD98D65D16199E5C)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000749bbf  height=82
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 5b a8 9f 97 d6 a4 7f e4 5e a6 a5 d4 14 ba e2 1d 71 76 63 e7 35 
+received block:
+CBlock(hash=000000001b5ebb, ver=1, hashPrevBlock=00000000749bbf, hashMerkleRoot=da3946, nTime=1786608297, nBits=1d00ffff, nNonce=2302741946, vtx=1)
+  CTransaction(hash=da3946, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xEE49C7E0FA6570CF828442)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001b5ebb  height=83
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 80 fd 4d 36 2d fc 97 6e e6 a7 dc 49 a1 da ce b3 ee 7e 20 d6 e2 
+received block:
+CBlock(hash=0000000074b109, ver=1, hashPrevBlock=000000001b5ebb, hashMerkleRoot=089c4a, nTime=1786610467, nBits=1d00ffff, nNonce=2448632494, vtx=1)
+  CTransaction(hash=089c4a, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x98BCB3DB0D1ED66FBF5BDF)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000074b109  height=84
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 81 27 bd 35 bc d9 8a d1 25 7e 39 5c 75 ff db ae 23 58 54 6a cd 
+received block:
+CBlock(hash=00000000176b4c, ver=1, hashPrevBlock=0000000074b109, hashMerkleRoot=a56694, nTime=1786613676, nBits=1d00ffff, nNonce=3608740079, vtx=1)
+  CTransaction(hash=a56694, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0120)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xF382B75190C79DBAFAF275)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000176b4c  height=85
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0a ed 7d 9e e9 a4 77 39 62 28 d1 45 ef a2 b2 05 6c 81 63 18 21 
+received block:
+CBlock(hash=00000000dd5ee7, ver=1, hashPrevBlock=00000000176b4c, hashMerkleRoot=fb4e2b, nTime=1786617413, nBits=1d00ffff, nNonce=4172850302, vtx=1)
+  CTransaction(hash=fb4e2b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0121)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x065BDB6120240A5C2FF81A)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000dd5ee7  height=86
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 ed 2d 22 81 79 c0 cd 91 31 39 46 51 58 1a b1 32 bc 3d 76 e9 f8 
+received block:
+CBlock(hash=00000000c10a28, ver=1, hashPrevBlock=00000000dd5ee7, hashMerkleRoot=b16a62, nTime=1786624348, nBits=1d00ffff, nNonce=3543824610, vtx=1)
+  CTransaction(hash=b16a62, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0123)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x85AB6796360D0AE87F757B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c10a28  height=87
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 16 06 13 9a be d9 b8 0f 29 4a 42 d6 d3 ca b7 91 5f d4 c7 f5 c1 
+received block:
+CBlock(hash=000000001bea7b, ver=1, hashPrevBlock=00000000c10a28, hashMerkleRoot=610a41, nTime=1786624467, nBits=1d00ffff, nNonce=133830392, vtx=1)
+  CTransaction(hash=610a41, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0124)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9025CF84CD2FDF254A4CC1)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001bea7b  height=88
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0b 2d 9c e6 42 e7 29 94 21 7c db 03 cf 43 5d 2e f2 12 22 9d a7 
+received block:
+CBlock(hash=0000000094686b, ver=1, hashPrevBlock=000000001bea7b, hashMerkleRoot=326f5d, nTime=1786624645, nBits=1d00ffff, nNonce=215570034, vtx=1)
+  CTransaction(hash=326f5d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0125)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x28AD9D8ED8FA09BA658094)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000094686b  height=89
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 80 29 ad 66 f7 c8 b0 9e 3c 1a b0 3e d7 af b2 51 45 76 b1 15 5d 
+received block:
+CBlock(hash=000000004834ab, ver=1, hashPrevBlock=0000000094686b, hashMerkleRoot=7b8287, nTime=1786625082, nBits=1d00ffff, nNonce=448549131, vtx=1)
+  CTransaction(hash=7b8287, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0126)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA217455E5981866333CD83)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004834ab  height=90
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 c2 6b a3 42 91 b8 0d 53 16 d1 8a e9 6d 5e ec 07 8a 9a 26 0a e3 
+received block:
+CBlock(hash=0000000095a012, ver=1, hashPrevBlock=000000004834ab, hashMerkleRoot=d436cf, nTime=1786626622, nBits=1d00ffff, nNonce=1761028019, vtx=1)
+  CTransaction(hash=d436cf, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0127)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xC7AA9008B3E742E6F06E36)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000095a012  height=91
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 3e d5 e7 90 64 cd 11 15 4f f5 b6 e7 e4 26 0c 44 62 9e 0e 60 eb 
+received block:
+CBlock(hash=000000005dcd76, ver=1, hashPrevBlock=0000000095a012, hashMerkleRoot=d0d885, nTime=1786626853, nBits=1d00ffff, nNonce=263770933, vtx=1)
+  CTransaction(hash=d0d885, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0128)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x3128275793CE602A07BFBA)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005dcd76  height=92
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 05 93 4c 7e 03 12 2f e1 25 29 d2 3c 9b 7e 68 ae a0 e1 67 3b 83 
+received block:
+CBlock(hash=00000000a1c3e5, ver=1, hashPrevBlock=000000005dcd76, hashMerkleRoot=504d1d, nTime=1786629365, nBits=1d00ffff, nNonce=3078616093, vtx=1)
+  CTransaction(hash=504d1d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0129)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDEEF9AC46F1F21A7899865)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000a1c3e5  height=93
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0a 90 b6 8b 9f 24 57 b9 3f 09 ae 31 7d 20 6e a2 f4 e0 8d 6d 09 
+received block:
+CBlock(hash=000000006f2f8a, ver=1, hashPrevBlock=00000000a1c3e5, hashMerkleRoot=e380b4, nTime=1786637342, nBits=1d00ffff, nNonce=3037972844, vtx=1)
+  CTransaction(hash=e380b4, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d012c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2A0569D74C244AA4AAD267)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000006f2f8a  height=94
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d9 13 dc 7d 78 d5 87 80 af 09 90 98 de 0c 2e 76 ca f2 4e 33 73 
+received block:
+CBlock(hash=000000001a9341, ver=1, hashPrevBlock=000000006f2f8a, hashMerkleRoot=1ec8c3, nTime=1786645668, nBits=1d00ffff, nNonce=3534829312, vtx=1)
+  CTransaction(hash=1ec8c3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d012f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x77B14D01D5E5C4077F670C)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001a9341  height=95
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 95 75 f0 c7 84 7e f6 3b 4b dc c5 45 5f 5f b9 d1 c0 38 6e de 1b 
+received block:
+CBlock(hash=000000002e3824, ver=1, hashPrevBlock=000000001a9341, hashMerkleRoot=906f5d, nTime=1786648663, nBits=1d00ffff, nNonce=44126097, vtx=1)
+  CTransaction(hash=906f5d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0131)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA550119DA8E9F8BC6D960E)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000002e3824  height=96
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d3 67 6c 1b 29 47 61 5f b7 b0 3b 06 e3 13 e0 00 08 f9 78 c1 ff 
+received block:
+CBlock(hash=000000005ea6ea, ver=1, hashPrevBlock=000000002e3824, hashMerkleRoot=f33dc3, nTime=1786650069, nBits=1d00ffff, nNonce=2071382177, vtx=1)
+  CTransaction(hash=f33dc3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0132)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2943D7194857E5163CE132)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005ea6ea  height=97
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b8 dd 9c c6 ee f2 df 55 1f 4e 51 d5 9c bf 61 e2 51 92 06 4b 31 
+received block:
+CBlock(hash=00000000b168bf, ver=1, hashPrevBlock=000000005ea6ea, hashMerkleRoot=b96d66, nTime=1786650181, nBits=1d00ffff, nNonce=154323806, vtx=1)
+  CTransaction(hash=b96d66, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0133)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA72A4677FFA31AF32E61CC)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b168bf  height=98
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 96 df 72 8a 7f f4 06 f0 19 c9 74 0b 87 ed a9 f6 39 6b f0 bc 66 
+received block:
+CBlock(hash=0000000022c43e, ver=1, hashPrevBlock=00000000b168bf, hashMerkleRoot=e05f1f, nTime=1786650193, nBits=1d00ffff, nNonce=6628643, vtx=1)
+  CTransaction(hash=e05f1f, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0134)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x381567CD1BB183266DAB8A)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000022c43e  height=99
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 31 5e e8 5a a4 c5 b4 2f 35 3e 54 4a 2d 5b e7 67 eb cf 1d 95 cd 
+received block:
+CBlock(hash=000000007cca6b, ver=1, hashPrevBlock=0000000022c43e, hashMerkleRoot=e05860, nTime=1786655102, nBits=1d00ffff, nNonce=2891073328, vtx=1)
+  CTransaction(hash=e05860, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0136)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x08ED70C61E5677C29D4450)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007cca6b  height=100
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 47 9f 70 ea f5 38 16 39 7f a0 8d 54 60 c8 bc dc c0 35 d8 39 58 
+received block:
+CBlock(hash=000000003d10a6, ver=1, hashPrevBlock=000000007cca6b, hashMerkleRoot=866c65, nTime=1786655832, nBits=1d00ffff, nNonce=1058837652, vtx=1)
+  CTransaction(hash=866c65, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0137)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xAA070002E6C051E9F0A2AF)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003d10a6  height=101
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 48 db fe 43 0f ed bb 6a 54 3d 65 a0 47 e2 a8 eb 1e 8b 35 3c 04 
+received block:
+CBlock(hash=00000000b17af6, ver=1, hashPrevBlock=000000003d10a6, hashMerkleRoot=160310, nTime=1786662345, nBits=1d00ffff, nNonce=944436281, vtx=1)
+  CTransaction(hash=160310, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x39468280CDC3B0D3DFBB99)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b17af6  height=102
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 1d e2 ce 4a ba 4f f2 88 8c 0b 4c ec bd c8 eb ec 74 8f 23 45 5b 
+received block:
+CBlock(hash=00000000df78f5, ver=1, hashPrevBlock=00000000b17af6, hashMerkleRoot=f8a333, nTime=1786667653, nBits=1d00ffff, nNonce=1718452126, vtx=1)
+  CTransaction(hash=f8a333, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x668FB8E505B9BDCBA9A118)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000df78f5  height=103
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 2a 78 0b ef 9f b3 5b 5e c2 14 3c 97 5c 8e ed dc 68 8d a4 f0 a0 
+received block:
+CBlock(hash=00000000b178a3, ver=1, hashPrevBlock=00000000df78f5, hashMerkleRoot=75949a, nTime=1786672775, nBits=1d00ffff, nNonce=1566517343, vtx=1)
+  CTransaction(hash=75949a, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5AC25D6BAA662434A44FEE)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b178a3  height=104
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 22 2b e3 a1 b9 bc af d1 cb 89 41 1b 44 e3 95 8d 8f 0e 74 d0 f6 
+received block:
+CBlock(hash=00000000ce98fb, ver=1, hashPrevBlock=00000000b178a3, hashMerkleRoot=e293dc, nTime=1786674129, nBits=1d00ffff, nNonce=1567147000, vtx=1)
+  CTransaction(hash=e293dc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDB3DEE3367DD74DE4592D7)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ce98fb  height=105
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d9 ef b7 4f 97 bc ad 0c 9c 6d 12 4c cf 92 cf 9a 9b 04 eb f4 49 
+received block:
+CBlock(hash=00000000ec1dcd, ver=1, hashPrevBlock=00000000ce98fb, hashMerkleRoot=b099b5, nTime=1786675636, nBits=1d00ffff, nNonce=1664958119, vtx=1)
+  CTransaction(hash=b099b5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0140)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x7BC9D2A48BF36687191116)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ec1dcd  height=106
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 18 da 45 3a 7e 69 da e6 7a 45 bf ad 3d b5 95 10 36 7e 3e 2f 90 
+received block:
+CBlock(hash=0000000038da70, ver=1, hashPrevBlock=00000000ec1dcd, hashMerkleRoot=4d2f02, nTime=1786679006, nBits=1d00ffff, nNonce=3875582177, vtx=1)
+  CTransaction(hash=4d2f02, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0141)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2CFB6B66CCE592AC2A43F1)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000038da70  height=107
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 45 e3 e8 fe 02 ab c7 72 80 32 5f e1 b9 32 1a 9f ea 1e b5 46 1e 
+received block:
+CBlock(hash=000000006afb96, ver=1, hashPrevBlock=0000000038da70, hashMerkleRoot=86bac0, nTime=1786682991, nBits=1d00ffff, nNonce=248961887, vtx=1)
+  CTransaction(hash=86bac0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0143)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x7F48D8910605A3D38DA1D6)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000006afb96  height=108
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 00 5a 70 d2 80 ae b2 7f 28 b3 8d 8e 55 74 8f ea c3 8b 9f 49 cb 
+received block:
+CBlock(hash=000000003a4970, ver=1, hashPrevBlock=000000006afb96, hashMerkleRoot=f06bf1, nTime=1786688458, nBits=1d00ffff, nNonce=1919994365, vtx=1)
+  CTransaction(hash=f06bf1, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0145)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xE48FA1CD1F9CB9CAF30D5A)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003a4970  height=109
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 52 fc 91 8b ca 1c 8d 49 fd b8 6f 28 79 f9 75 90 18 b1 d9 3b dd 
+received block:
+CBlock(hash=00000000974f36, ver=1, hashPrevBlock=000000003a4970, hashMerkleRoot=625077, nTime=1786689539, nBits=1d00ffff, nNonce=1239237764, vtx=1)
+  CTransaction(hash=625077, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0146)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x073C136B24F8823C320390)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000974f36  height=110
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 52 56 a5 f1 f9 f9 71 fc 2e 39 77 18 ee 23 16 25 09 55 26 bf 2f 
+received block:
+CBlock(hash=0000000040b747, ver=1, hashPrevBlock=00000000974f36, hashMerkleRoot=e32806, nTime=1786690063, nBits=1d00ffff, nNonce=578743181, vtx=1)
+  CTransaction(hash=e32806, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0147)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDF05DB4CC7BB346E350225)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000040b747  height=111
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 64 9f 5c d5 af b0 8a 6c 5c e6 74 b5 c7 c6 40 ad af b1 1d ec 5a 
+received block:
+CBlock(hash=00000000cfd872, ver=1, hashPrevBlock=0000000040b747, hashMerkleRoot=1453b0, nTime=1786696137, nBits=1d00ffff, nNonce=2519790537, vtx=1)
+  CTransaction(hash=1453b0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0149)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x7B68DA16397B78B1CD7EB3)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000cfd872  height=112
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 04 8f f5 35 e9 3c 89 2a b1 52 59 2e 22 9e d3 6f 69 84 0a c6 e1 
+received block:
+CBlock(hash=000000002380cc, ver=1, hashPrevBlock=00000000cfd872, hashMerkleRoot=3a4f74, nTime=1786696477, nBits=1d00ffff, nNonce=382018681, vtx=1)
+  CTransaction(hash=3a4f74, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x1D13DA68F3E9185EB69225)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000002380cc  height=113
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0c 9d 03 6e b6 ca f8 15 5a 28 99 02 a3 6a bc 2a e0 48 ca aa 29 
+received block:
+CBlock(hash=00000000e27df3, ver=1, hashPrevBlock=000000002380cc, hashMerkleRoot=5060af, nTime=1786697958, nBits=1d00ffff, nNonce=1652439132, vtx=1)
+  CTransaction(hash=5060af, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xC09DF7DB7A51B6F4AD9B2C)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e27df3  height=114
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 26 fd 53 63 5a 57 6d d9 66 cd e6 0a d9 b9 a4 b8 3b ca db a0 be 
+received block:
+CBlock(hash=00000000da903c, ver=1, hashPrevBlock=00000000e27df3, hashMerkleRoot=3962e3, nTime=1786699095, nBits=1d00ffff, nNonce=1276318940, vtx=1)
+  CTransaction(hash=3962e3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x90C482926EDB4871DF8BD6)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000da903c  height=115
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 3f 4c 91 da e4 bc 74 50 22 bf 64 76 c2 e6 4d d3 65 9d d2 38 d3 
+received block:
+CBlock(hash=0000000006ba72, ver=1, hashPrevBlock=00000000da903c, hashMerkleRoot=979662, nTime=1786710442, nBits=1d00ffff, nNonce=4277525989, vtx=1)
+  CTransaction(hash=979662, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xBAA6684D106C2BCD3C38CE)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000006ba72  height=116
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 42 4d 61 4b 50 70 28 bc 4f a2 50 a0 b4 32 75 54 5a 3e 34 2e cf 
+received block:
+CBlock(hash=000000007db04b, ver=1, hashPrevBlock=0000000006ba72, hashMerkleRoot=d34767, nTime=1786711740, nBits=1d00ffff, nNonce=1487502427, vtx=1)
+  CTransaction(hash=d34767, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0150)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xBA69A00D4F9DB86F85AE2D)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007db04b  height=117
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 f5 38 bd 33 8f 55 51 45 77 6d 37 74 26 aa ef d2 a1 2f e3 c5 f5 
+received block:
+CBlock(hash=00000000723c9c, ver=1, hashPrevBlock=000000007db04b, hashMerkleRoot=e29481, nTime=1786715187, nBits=1d00ffff, nNonce=3877232436, vtx=1)
+  CTransaction(hash=e29481, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0151)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5411C2537449FD318132A8)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000723c9c  height=118
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 27 80 e0 73 32 e7 5e 8f 15 df 44 41 d5 76 40 fa b5 d2 4f 6b 9f 
+received block:
+CBlock(hash=000000004cbb2f, ver=1, hashPrevBlock=00000000723c9c, hashMerkleRoot=f368e3, nTime=1786715443, nBits=1d00ffff, nNonce=285345956, vtx=1)
+  CTransaction(hash=f368e3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0152)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA685F6CE6F37FDFBDD2EA3)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004cbb2f  height=119
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 73 3c 5e e6 d7 ee e9 16 aa 72 45 6c 89 db 99 87 4c fd 55 e6 5b 
+received block:
+CBlock(hash=00000000a00885, ver=1, hashPrevBlock=000000004cbb2f, hashMerkleRoot=62d7e0, nTime=1786718190, nBits=1d00ffff, nNonce=3125583173, vtx=1)
+  CTransaction(hash=62d7e0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0153)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xCFEBDDF176F940EE7B8AC8)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000a00885  height=120
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 04 a4 ba f3 b4 8e 67 c1 4b 28 0f f4 53 43 a7 84 0f 1d b6 64 62 
+received block:
+CBlock(hash=00000000accf9b, ver=1, hashPrevBlock=00000000a00885, hashMerkleRoot=99ac39, nTime=1786718456, nBits=1d00ffff, nNonce=323687751, vtx=1)
+  CTransaction(hash=99ac39, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0154)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD0F841FAD2F534CF367AE7)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000accf9b  height=121
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 c7 71 a1 f7 58 f4 5a bb af f3 88 ed 31 a9 c4 a7 20 1d ca 3a 9f 
+received block:
+CBlock(hash=00000000b104c3, ver=1, hashPrevBlock=00000000accf9b, hashMerkleRoot=6b82e5, nTime=1786739805, nBits=1d00ffff, nNonce=2218712895, vtx=1)
+  CTransaction(hash=6b82e5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0103)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x44C5037F5FF5A12E5D44AD)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b104c3  height=122
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 73 e7 87 01 8f 34 c1 67 49 dd d6 bc 62 5a dd d2 de 58 5d b8 55 
+received block:
+CBlock(hash=00000000cbf289, ver=1, hashPrevBlock=00000000b104c3, hashMerkleRoot=5ecff9, nTime=1786752372, nBits=1d00ffff, nNonce=1383393140, vtx=1)
+  CTransaction(hash=5ecff9, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0107)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x4A483F7C311C3A0255E43B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000cbf289  height=123
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 86 f0 64 4a f2 b9 3b a5 f0 0a a7 5b c1 1a d2 f0 83 3c 9f e6 95 
+received block:
+CBlock(hash=00000000a4fe36, ver=1, hashPrevBlock=00000000cbf289, hashMerkleRoot=cbf507, nTime=1786753209, nBits=1d00ffff, nNonce=992688796, vtx=1)
+  CTransaction(hash=cbf507, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0108)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD7D6BEB12331EF6B57BA11)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000a4fe36  height=124
+IRC ERROR :Closing link: (208AAGIHJ@122.161.76.149) [Registration timeout]
+IRC socket closed
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 e6 5f 37 e5 38 7a 25 92 c7 96 7b b6 8e 38 7a d0 8e a5 49 f0 a7 
+received block:
+CBlock(hash=0000000017d6a2, ver=1, hashPrevBlock=00000000a4fe36, hashMerkleRoot=829904, nTime=1786755795, nBits=1d00ffff, nNonce=2947621041, vtx=1)
+  CTransaction(hash=829904, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0109)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x8AC88AF5E14AF95ED93715)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000017d6a2  height=125
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 c0 a9 7d f2 d1 c3 99 eb 1c 23 71 a2 b8 8e 29 7d cd 01 e1 87 c4 
+received block:
+CBlock(hash=00000000f39772, ver=1, hashPrevBlock=0000000017d6a2, hashMerkleRoot=a980c8, nTime=1786764147, nBits=1d00ffff, nNonce=830443187, vtx=1)
+  CTransaction(hash=a980c8, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xB5795B9F1E4AF1D78C9584)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000f39772  height=126
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 43 10 5c 7d 66 a8 33 10 94 29 2b f5 ec 17 e8 87 76 f0 42 89 ca 
+received block:
+CBlock(hash=0000000035ed04, ver=1, hashPrevBlock=00000000f39772, hashMerkleRoot=90bd81, nTime=1786768315, nBits=1d00ffff, nNonce=504425703, vtx=1)
+  CTransaction(hash=90bd81, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d010e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xC26E1CD55599332538BB4B)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000035ed04  height=127
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 41 53 0f 34 d5 40 cf 7a 8a 92 22 c3 9b e4 04 34 e0 af 89 d4 d3 
+received block:
+CBlock(hash=00000000e20316, ver=1, hashPrevBlock=0000000035ed04, hashMerkleRoot=e791d8, nTime=1786776750, nBits=1d00ffff, nNonce=816902517, vtx=1)
+  CTransaction(hash=e791d8, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0111)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x91EF98D2B9BD1527D7AAEC)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e20316  height=128
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 bf cd 6f 13 71 03 4b 93 e1 58 9f 6e c5 cf 96 b4 53 2f d5 9f f1 
+received block:
+CBlock(hash=00000000702c6d, ver=1, hashPrevBlock=00000000e20316, hashMerkleRoot=47441b, nTime=1786780708, nBits=1d00ffff, nNonce=153667605, vtx=1)
+  CTransaction(hash=47441b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0113)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x85F827FC90C64F84DC5CAD)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000702c6d  height=129
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 13 05 b5 16 a2 e5 87 ea c4 d2 35 e1 8e ca 6b 8a 3f f6 83 5c e3 
+received block:
+CBlock(hash=00000000e58741, ver=1, hashPrevBlock=00000000702c6d, hashMerkleRoot=a17807, nTime=1786781978, nBits=1d00ffff, nNonce=1467777132, vtx=1)
+  CTransaction(hash=a17807, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0114)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA48F026041754F4AF7DE1E)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e58741  height=130
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 09 c9 52 45 d1 b7 62 71 77 46 09 10 f8 e2 87 91 9c 4d d9 c7 ef 
+received block:
+CBlock(hash=000000000945d7, ver=1, hashPrevBlock=00000000e58741, hashMerkleRoot=c87b9c, nTime=1786783530, nBits=1d00ffff, nNonce=1762004839, vtx=1)
+  CTransaction(hash=c87b9c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0115)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5BDB1581B8C41F8A166A1E)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000000945d7  height=131
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 31 67 fb cf 3f fb 44 ed 2f 24 7c 83 01 ae 7d 76 a7 9d 7e c4 5d 
+received block:
+CBlock(hash=0000000002b5bb, ver=1, hashPrevBlock=000000000945d7, hashMerkleRoot=bd1bdc, nTime=1786791148, nBits=1d00ffff, nNonce=66898794, vtx=1)
+  CTransaction(hash=bd1bdc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0118)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD24D616EB96E2BF79B57AB)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000002b5bb  height=132
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b1 29 30 71 01 e2 dc 1c c7 3a 09 71 ed de e7 88 93 dc 0c 7c bd 
+received block:
+CBlock(hash=0000000009806e, ver=1, hashPrevBlock=0000000002b5bb, hashMerkleRoot=f48204, nTime=1786793545, nBits=1d00ffff, nNonce=2672912484, vtx=1)
+  CTransaction(hash=f48204, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0119)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDD9B425C31DAC761924F66)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000009806e  height=133
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b8 f5 ee 41 3e ef fa e4 85 5e 27 cc 4e 0a 4f 95 58 64 0a cd d2 
+received block:
+CBlock(hash=000000000158f0, ver=1, hashPrevBlock=0000000009806e, hashMerkleRoot=3fef4d, nTime=1786799863, nBits=1d00ffff, nNonce=2964214472, vtx=1)
+  CTransaction(hash=3fef4d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xC46F3B933087387E611E32)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000000158f0  height=134
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0e 0f 19 4d 91 9f 41 3b 09 9d 3e 90 eb 36 c1 dd f6 23 11 f4 13 
+received block:
+CBlock(hash=000000004cf5f6, ver=1, hashPrevBlock=000000000158f0, hashMerkleRoot=2178d8, nTime=1786799977, nBits=1d00ffff, nNonce=113558667, vtx=1)
+  CTransaction(hash=2178d8, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xB5C0AF66D5D2092D1C1625)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004cf5f6  height=135
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 00 40 01 9d 03 e1 e3 c3 e6 44 3e ce 9c 4a 96 29 5f f0 da 65 2e 
+received block:
+CBlock(hash=000000009a11ba, ver=1, hashPrevBlock=000000004cf5f6, hashMerkleRoot=420e90, nTime=1786803971, nBits=1d00ffff, nNonce=232582025, vtx=1)
+  CTransaction(hash=420e90, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d011e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x84C8D6560D14B042FDE450)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000009a11ba  height=136
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 a0 77 c4 51 21 4b a1 12 35 65 9c 99 d0 07 b7 19 44 52 27 ca 77 
+received block:
+CBlock(hash=00000000e40c56, ver=1, hashPrevBlock=000000009a11ba, hashMerkleRoot=de5cab, nTime=1786819948, nBits=1d00ffff, nNonce=950681265, vtx=1)
+  CTransaction(hash=de5cab, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0123)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD6702A7B5D9682FBC13379)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e40c56  height=137
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 bc 08 12 ee 15 fa 17 8f e6 12 f9 37 24 79 1d 7d 0c 38 0b 69 ed 
+received block:
+CBlock(hash=00000000b59295, ver=1, hashPrevBlock=00000000e40c56, hashMerkleRoot=5e6929, nTime=1786820627, nBits=1d00ffff, nNonce=751042124, vtx=1)
+  CTransaction(hash=5e6929, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0124)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x270FB27D99E4CD2BAF8CC7)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b59295  height=138
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 ff 16 09 41 d8 52 38 97 9b c0 b0 e4 71 87 ef 8a 5d a5 fc e5 3f 
+received block:
+CBlock(hash=00000000599274, ver=1, hashPrevBlock=00000000b59295, hashMerkleRoot=cf90b3, nTime=1786820815, nBits=1d00ffff, nNonce=217015444, vtx=1)
+  CTransaction(hash=cf90b3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0125)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD17CF9B91FE9F9FE7AE8A8)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000599274  height=139
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 73 fd 6f 5b 31 4f 93 a4 ac fb 3c f9 be e5 09 7e 18 a8 4f 13 dd 
+received block:
+CBlock(hash=000000003c49e7, ver=1, hashPrevBlock=00000000599274, hashMerkleRoot=51f069, nTime=1786821283, nBits=1d00ffff, nNonce=539408261, vtx=1)
+  CTransaction(hash=51f069, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0126)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x06269CB739A6002B47CAE1)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003c49e7  height=140
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 60 a3 f0 ec c8 f7 cd 34 6e b4 e3 8c 75 10 ec 76 94 d7 06 c9 4d 
+received block:
+CBlock(hash=00000000f29ea3, ver=1, hashPrevBlock=000000003c49e7, hashMerkleRoot=3d8a75, nTime=1786827827, nBits=1d00ffff, nNonce=3190653261, vtx=1)
+  CTransaction(hash=3d8a75, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0128)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x91B0B256851AF798336D8B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000f29ea3  height=141
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 81 62 d4 b5 db af 37 d2 b4 fb 53 10 48 ff ea 0c e2 8b 1c 45 f7 
+received block:
+CBlock(hash=0000000020fc70, ver=1, hashPrevBlock=00000000f29ea3, hashMerkleRoot=6b1d54, nTime=1786834035, nBits=1d00ffff, nNonce=2755107494, vtx=1)
+  CTransaction(hash=6b1d54, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d012a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x3388542AC99E823DC6B8F8)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000020fc70  height=142
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 07 06 96 5c 70 fe f3 71 cf 88 af c4 d6 a4 1d dc aa 17 13 ca 10 
+received block:
+CBlock(hash=000000003dbcb5, ver=1, hashPrevBlock=0000000020fc70, hashMerkleRoot=e2a08c, nTime=1786835095, nBits=1d00ffff, nNonce=1190261208, vtx=1)
+  CTransaction(hash=e2a08c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d012b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x51B068170BC9397A71BB41)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003dbcb5  height=143
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 91 42 c7 c3 f5 80 0b a8 11 da 16 ca 8f 8f c5 ca 9a f7 81 87 92 
+received block:
+CBlock(hash=00000000044d86, ver=1, hashPrevBlock=000000003dbcb5, hashMerkleRoot=a9e1ef, nTime=1786840212, nBits=1d00ffff, nNonce=1577091189, vtx=1)
+  CTransaction(hash=a9e1ef, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d012d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xECDF1EBD7CB407A2306017)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000044d86  height=144
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 27 f1 11 ae be f0 d1 51 f5 62 6a 9b 7a 35 3c fd f7 12 5b bc b3 
+received block:
+CBlock(hash=00000000ba6302, ver=1, hashPrevBlock=00000000044d86, hashMerkleRoot=0532b3, nTime=1786853854, nBits=1d00ffff, nNonce=2898556797, vtx=1)
+  CTransaction(hash=0532b3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0131)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x1D3B99DD96AEC3ED1A0C8F)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ba6302  height=145
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 26 0c c1 49 71 e8 f3 4b 36 d2 7c 7e 16 4b 13 63 49 88 67 9f 32 
+received block:
+CBlock(hash=00000000e58dc5, ver=1, hashPrevBlock=00000000ba6302, hashMerkleRoot=efffa6, nTime=1786855775, nBits=1d00ffff, nNonce=2172249199, vtx=1)
+  CTransaction(hash=efffa6, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0132)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x8418422AC1B39CF2E60475)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e58dc5  height=146
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 9a b0 e9 72 f6 8d 1b f6 6c 96 ec a1 96 92 5c 50 9b 17 20 da 49 
+received block:
+CBlock(hash=00000000557c89, ver=1, hashPrevBlock=00000000e58dc5, hashMerkleRoot=a8115f, nTime=1786864392, nBits=1d00ffff, nNonce=1318102233, vtx=1)
+  CTransaction(hash=a8115f, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0135)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xFC06274CAE61B31D1FEC3E)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000557c89  height=147
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 ec fd 72 a4 63 57 d1 dd 08 1f 2f 19 0c 19 1c 71 e0 40 2d f9 86 
+received block:
+CBlock(hash=000000003f2861, ver=1, hashPrevBlock=00000000557c89, hashMerkleRoot=00b640, nTime=1786869888, nBits=1d00ffff, nNonce=1958965904, vtx=1)
+  CTransaction(hash=00b640, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0137)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xEA73E08C130054CB6CE14B)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003f2861  height=148
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 9c 6d 70 70 28 3e 6f 44 0b 3a 0a 68 b9 ec 1b ab 05 86 02 80 22 
+received block:
+CBlock(hash=0000000071eb0f, ver=1, hashPrevBlock=000000003f2861, hashMerkleRoot=efe458, nTime=1786879556, nBits=1d00ffff, nNonce=2425161384, vtx=1)
+  CTransaction(hash=efe458, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x36AC1A2D85A499B0D278C6)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000071eb0f  height=149
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 67 6f 9c 0c 91 86 d2 44 d0 5f 48 79 2c 9f 4d 48 d0 9c 25 f5 95 
+received block:
+CBlock(hash=00000000d7b25b, ver=1, hashPrevBlock=0000000071eb0f, hashMerkleRoot=ba8ba4, nTime=1786880169, nBits=1d00ffff, nNonce=705012965, vtx=1)
+  CTransaction(hash=ba8ba4, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xCF454468ED91641F43A678)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d7b25b  height=150
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 65 f3 b7 a6 f7 62 e9 61 3f a3 3f 30 ca 84 c5 d7 77 89 07 21 26 
+received block:
+CBlock(hash=00000000d25bb4, ver=1, hashPrevBlock=00000000d7b25b, hashMerkleRoot=4a1a40, nTime=1786881524, nBits=1d00ffff, nNonce=1578109758, vtx=1)
+  CTransaction(hash=4a1a40, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xEF0AAEE28B2EB84DBF2763)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d25bb4  height=151
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 54 d9 11 85 dc 0f 3e 0f e8 23 a3 71 7c 8c b8 ca 4e 2c 2b 42 ee 
+received block:
+CBlock(hash=000000007de882, ver=1, hashPrevBlock=00000000d25bb4, hashMerkleRoot=517776, nTime=1786881559, nBits=1d00ffff, nNonce=30397785, vtx=1)
+  CTransaction(hash=517776, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x92CA70E9364AFB53EE0D43)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007de882  height=152
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 13 da d1 84 7e 40 23 25 33 3a 7b 8f 0d 4a 24 38 99 d3 c1 91 f4 
+received block:
+CBlock(hash=0000000056a166, ver=1, hashPrevBlock=000000007de882, hashMerkleRoot=d015f7, nTime=1786886015, nBits=1d00ffff, nNonce=685835601, vtx=1)
+  CTransaction(hash=d015f7, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d013f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6C71E0E4A8049A028C48F6)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000056a166  height=153
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 30 01 e8 4a b4 ab 20 37 6c f8 48 64 27 26 2d 9d df 70 4c 01 00 
+received block:
+CBlock(hash=000000005f47ea, ver=1, hashPrevBlock=0000000056a166, hashMerkleRoot=a49c70, nTime=1786897402, nBits=1d00ffff, nNonce=107378471, vtx=1)
+  CTransaction(hash=a49c70, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0143)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x241B9EB46114A803098C10)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005f47ea  height=154
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 49 cc 85 96 a1 15 e8 99 b1 17 ac c8 40 6f b0 dd de c4 1f fe 32 
+received block:
+CBlock(hash=00000000030b07, ver=1, hashPrevBlock=000000005f47ea, hashMerkleRoot=e5830b, nTime=1786900040, nBits=1d00ffff, nNonce=3020069782, vtx=1)
+  CTransaction(hash=e5830b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0144)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xCBF07D40AD4A5AAA46009E)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000030b07  height=155
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 dc 08 e8 4a ad 5f e6 e8 5b bd 4a 82 d1 d6 4d 81 16 7e 29 cf 6f 
+received block:
+CBlock(hash=00000000cb7152, ver=1, hashPrevBlock=00000000030b07, hashMerkleRoot=270e8b, nTime=1786902661, nBits=1d00ffff, nNonce=2995126473, vtx=1)
+  CTransaction(hash=270e8b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0145)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x0CDED772F2CC9B69BAFE9F)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000cb7152  height=156
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 4e 43 d7 46 29 fb 92 dc 2b 72 f7 d2 2c 95 65 04 c6 65 15 fb 7c 
+received block:
+CBlock(hash=00000000c01924, ver=1, hashPrevBlock=00000000cb7152, hashMerkleRoot=15f146, nTime=1786903034, nBits=1d00ffff, nNonce=410510389, vtx=1)
+  CTransaction(hash=15f146, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0146)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2009AD18752FC0EE2F2B3F)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c01924  height=157
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 5f fd bc 98 49 62 04 4a 53 01 e6 40 8a c5 9a 45 d4 fd 7e 6c 53 
+received block:
+CBlock(hash=000000008f4f04, ver=1, hashPrevBlock=00000000c01924, hashMerkleRoot=1a204d, nTime=1786906501, nBits=1d00ffff, nNonce=3873297063, vtx=1)
+  CTransaction(hash=1a204d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0147)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xFDDFED0007B0BB5C24308F)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000008f4f04  height=158
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 5e 21 85 13 3a a0 0e 2d 17 05 79 8a 03 7a 1a 57 84 f7 8f 9e 99 
+received block:
+CBlock(hash=000000004818c5, ver=1, hashPrevBlock=000000008f4f04, hashMerkleRoot=08f6d9, nTime=1786906612, nBits=1d00ffff, nNonce=91144925, vtx=1)
+  CTransaction(hash=08f6d9, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0148)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9E6684939A28F322FE2A40)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004818c5  height=159
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 52 fd 81 f5 b5 ec ad 84 f7 d1 2a fb d3 d9 93 26 29 6f ad ac f2 
+received block:
+CBlock(hash=000000005d2521, ver=1, hashPrevBlock=000000004818c5, hashMerkleRoot=2cc8c6, nTime=1786911493, nBits=1d00ffff, nNonce=1233988469, vtx=1)
+  CTransaction(hash=2cc8c6, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6F7A5DF4E05A44FDF6D5CA)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005d2521  height=160
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 2a 1c 65 ab 3a b5 7c 30 76 80 43 e6 8d e9 7c 49 da b4 81 51 ed 
+received block:
+CBlock(hash=0000000095a48c, ver=1, hashPrevBlock=000000005d2521, hashMerkleRoot=0fd6c6, nTime=1786912106, nBits=1d00ffff, nNonce=670121108, vtx=1)
+  CTransaction(hash=0fd6c6, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x29804A19491CEC0193DD53)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000095a48c  height=161
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 f2 72 c7 df 70 4a 07 b3 f3 1c d6 9c 11 a2 fd cb 52 78 cf 74 09 
+received block:
+CBlock(hash=00000000b1d895, ver=1, hashPrevBlock=0000000095a48c, hashMerkleRoot=f4e3c0, nTime=1786916843, nBits=1d00ffff, nNonce=1062058122, vtx=1)
+  CTransaction(hash=f4e3c0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xCD2B927D7BBA4807B6B0DC)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b1d895  height=162
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 df 6c 23 fa d6 c9 e5 11 c7 4d 4c 93 8d 85 82 0f 32 29 83 81 6d 
+received block:
+CBlock(hash=00000000928064, ver=1, hashPrevBlock=00000000b1d895, hashMerkleRoot=b01b0e, nTime=1786917940, nBits=1d00ffff, nNonce=1269275155, vtx=1)
+  CTransaction(hash=b01b0e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD92C6F2BAC57C2F32C063B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000928064  height=163
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0b 55 94 0d 56 4f 34 3e 42 32 6d 5c 60 94 07 5c a6 5a 18 73 f0 
+received block:
+CBlock(hash=00000000f3ad9b, ver=1, hashPrevBlock=00000000928064, hashMerkleRoot=fe30d2, nTime=1786920095, nBits=1d00ffff, nNonce=2409436081, vtx=1)
+  CTransaction(hash=fe30d2, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d014f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xAA428D63DDED1B3BA2099E)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000f3ad9b  height=164
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 91 02 08 47 cc 33 0d b7 65 07 d3 30 c0 f8 b1 97 e1 d7 91 0b 1d 
+received block:
+CBlock(hash=00000000d42738, ver=1, hashPrevBlock=00000000f3ad9b, hashMerkleRoot=16dd4a, nTime=1786924227, nBits=1d00ffff, nNonce=442486130, vtx=1)
+  CTransaction(hash=16dd4a, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0151)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDB172BC4CAEB30C8AE6B7B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d42738  height=165
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 87 14 7c 4f 33 3a 15 5b 13 8d 50 57 09 e5 21 c3 16 7d 6b c9 06 
+received block:
+CBlock(hash=00000000d87020, ver=1, hashPrevBlock=00000000d42738, hashMerkleRoot=7ddf84, nTime=1786932215, nBits=1d00ffff, nNonce=524123674, vtx=1)
+  CTransaction(hash=7ddf84, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0154)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA98ED15F7AFA63DC0080D0)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d87020  height=166
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 62 a7 35 bd 62 73 a0 bf a7 45 7e 1f 60 e1 04 0e fe 8b 82 9f 19 
+received block:
+CBlock(hash=00000000aff457, ver=1, hashPrevBlock=00000000d87020, hashMerkleRoot=6f1887, nTime=1786944437, nBits=1d00ffff, nNonce=811803227, vtx=1)
+  CTransaction(hash=6f1887, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0158)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x539ABD8FB05DA7210CA8D4)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000aff457  height=167
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 70 38 e6 e3 c0 43 dc a4 00 48 92 bf 6c 4f fa 71 3f 3f 23 f1 db 
+received block:
+CBlock(hash=00000000e70b70, ver=1, hashPrevBlock=00000000aff457, hashMerkleRoot=82e8fb, nTime=1786946448, nBits=1d00ffff, nNonce=2289712359, vtx=1)
+  CTransaction(hash=82e8fb, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0159)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x40A3CAF35399B65E6B133D)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000e70b70  height=168
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 69 c4 72 ab 6c 19 01 b5 d1 d6 51 39 3d 01 93 95 4e 84 3e 30 de 
+received block:
+CBlock(hash=00000000380c24, ver=1, hashPrevBlock=00000000e70b70, hashMerkleRoot=195fed, nTime=1786947915, nBits=1d00ffff, nNonce=1635822269, vtx=1)
+  CTransaction(hash=195fed, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d015a)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2709DCEECD3F4A49DAC7D9)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000380c24  height=169
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 4a 17 d5 c4 3a 26 a3 1e 1f 1e c8 82 14 67 56 54 9a 44 2f ca 82 
+received block:
+CBlock(hash=000000000570ef, ver=1, hashPrevBlock=00000000380c24, hashMerkleRoot=dd2a4d, nTime=1786951409, nBits=1d00ffff, nNonce=3934743566, vtx=1)
+  CTransaction(hash=dd2a4d, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d015b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x44EB8016F62FD3843AD5A6)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000000570ef  height=170
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 99 af d4 22 3d 33 e2 86 c9 ae e3 88 44 3f 2d 02 8c b5 60 76 4e 
+received block:
+CBlock(hash=000000001c5588, ver=1, hashPrevBlock=000000000570ef, hashMerkleRoot=df10ca, nTime=1786954949, nBits=1d00ffff, nNonce=4078012511, vtx=1)
+  CTransaction(hash=df10ca, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d015c)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x97C6939EE6D23E39830E2B)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001c5588  height=171
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 be 0a 1b bc b4 70 d9 f7 52 15 92 3a fa 02 62 62 16 c7 ec 9d 87 
+received block:
+CBlock(hash=00000000460929, ver=1, hashPrevBlock=000000001c5588, hashMerkleRoot=d4687b, nTime=1786955359, nBits=1d00ffff, nNonce=449683940, vtx=1)
+  CTransaction(hash=d4687b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d015d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x3A40745B280B4CBF107874)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000460929  height=172
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 cd e6 bb 56 5c f2 8f c4 50 f1 40 d4 f2 08 17 de f8 fa 46 63 fe 
+received block:
+CBlock(hash=0000000011a636, ver=1, hashPrevBlock=00000000460929, hashMerkleRoot=023e7b, nTime=1786962172, nBits=1d00ffff, nNonce=3376935306, vtx=1)
+  CTransaction(hash=023e7b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d015f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD95D1E2569A351E12B52A8)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000011a636  height=173
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 69 bb 52 8c 95 91 e8 37 3a f8 d6 4f 01 33 b4 9a ee 93 7b e5 eb 
+received block:
+CBlock(hash=00000000d0a444, ver=1, hashPrevBlock=0000000011a636, hashMerkleRoot=87c1f6, nTime=1786963050, nBits=1d00ffff, nNonce=989426754, vtx=1)
+  CTransaction(hash=87c1f6, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0160)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x35CE33C7FA91847A00EA90)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d0a444  height=174
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 db 9b f8 96 6f 44 8d 11 96 b9 df a4 79 7d b8 ee 68 86 44 ad 29 
+received block:
+CBlock(hash=0000000066a571, ver=1, hashPrevBlock=00000000d0a444, hashMerkleRoot=bdbfe3, nTime=1786963202, nBits=1d00ffff, nNonce=162160594, vtx=1)
+  CTransaction(hash=bdbfe3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0161)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDA274B47A4288AA30ED325)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000066a571  height=175
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b2 7d 3d fe a4 2a 7d 37 28 e9 79 fb 43 60 8f fd bf 02 42 48 ba 
+received block:
+CBlock(hash=00000000665e58, ver=1, hashPrevBlock=0000000066a571, hashMerkleRoot=603734, nTime=1786965354, nBits=1d00ffff, nNonce=2427048556, vtx=1)
+  CTransaction(hash=603734, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0162)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xCC9E290AF7F6C72E714DAB)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000665e58  height=176
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 e4 ea fc cd a7 c4 95 28 65 fb 20 24 65 a2 9d aa ce e5 37 55 cf 
+received block:
+CBlock(hash=000000008356f6, ver=1, hashPrevBlock=00000000665e58, hashMerkleRoot=94ee15, nTime=1786965462, nBits=1d00ffff, nNonce=97785591, vtx=1)
+  CTransaction(hash=94ee15, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0163)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x710510032DC41FA370DADF)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000008356f6  height=177
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 7c 87 9a 4b 9d a7 28 e4 54 db b0 db 21 24 c9 f6 3c d4 d3 bb b6 
+received block:
+CBlock(hash=00000000642c6c, ver=1, hashPrevBlock=000000008356f6, hashMerkleRoot=15966b, nTime=1786969684, nBits=1d00ffff, nNonce=502124002, vtx=1)
+  CTransaction(hash=15966b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0165)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x62485E8689B6B85E4058B5)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000642c6c  height=178
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 28 00 33 62 80 b4 33 02 a6 a6 14 9b 5c 9c a3 a8 94 57 72 d6 d4 
+received block:
+CBlock(hash=0000000035853b, ver=1, hashPrevBlock=00000000642c6c, hashMerkleRoot=4c5afd, nTime=1786974544, nBits=1d00ffff, nNonce=1209564650, vtx=1)
+  CTransaction(hash=4c5afd, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0167)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x56B8181FA8B7BD52B5E6C8)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000035853b  height=179
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 9e ff 71 6b 0c 7e dc 20 a1 3e 79 8c d2 54 57 e2 8a 95 29 5b 27 
+received block:
+CBlock(hash=00000000da5025, ver=1, hashPrevBlock=0000000035853b, hashMerkleRoot=437bcc, nTime=1786976546, nBits=1d00ffff, nNonce=2255990539, vtx=1)
+  CTransaction(hash=437bcc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0168)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9027D84894BB3EB245EBA0)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000da5025  height=180
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 77 a6 a4 6b ee 8a d4 7a e8 3a 28 58 83 62 8d 5a 80 61 04 93 b1 
+received block:
+CBlock(hash=000000004a3c6c, ver=1, hashPrevBlock=00000000da5025, hashMerkleRoot=30f147, nTime=1786976625, nBits=1d00ffff, nNonce=69996815, vtx=1)
+  CTransaction(hash=30f147, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0169)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xF6542F56692934D96B1EB2)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004a3c6c  height=181
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 b8 b8 83 6c 53 01 26 98 dd e9 80 cc 8f af fd 22 ba 8b 3e 37 81 
+received block:
+CBlock(hash=00000000c61643, ver=1, hashPrevBlock=000000004a3c6c, hashMerkleRoot=a92b07, nTime=1786988996, nBits=1d00ffff, nNonce=1139565979, vtx=1)
+  CTransaction(hash=a92b07, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d016d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x065B8D45846E777AA8A1CF)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c61643  height=182
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 9a 03 20 56 74 87 a8 49 a8 f2 2c 80 fd 17 b2 40 fe 99 6b af 28 
+received block:
+CBlock(hash=000000004d5124, ver=1, hashPrevBlock=00000000c61643, hashMerkleRoot=3ddeff, nTime=1786991023, nBits=1d00ffff, nNonce=2306717008, vtx=1)
+  CTransaction(hash=3ddeff, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d016e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xE899FDA1EBE91E1563D48C)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004d5124  height=183
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 38 1e 77 0c ae 1c 62 fb 45 01 89 52 2c ee 6c 90 e4 2d 5f f9 f5 
+received block:
+CBlock(hash=00000000c23b7f, ver=1, hashPrevBlock=000000004d5124, hashMerkleRoot=374d7b, nTime=1786991731, nBits=1d00ffff, nNonce=768983566, vtx=1)
+  CTransaction(hash=374d7b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d016f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA7C2063B6759C556F89509)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c23b7f  height=184
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 0b 06 ea aa f3 52 a5 be 2f 88 b7 4c 62 48 48 f3 e1 90 9d 4d f7 
+received block:
+CBlock(hash=00000000075754, ver=1, hashPrevBlock=00000000c23b7f, hashMerkleRoot=1ec8b5, nTime=1786997277, nBits=1d00ffff, nNonce=1970362058, vtx=1)
+  CTransaction(hash=1ec8b5, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0171)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x48F1C5050FEBD30938BCDC)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000075754  height=185
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 81 3b 2a 91 10 6f 76 7e fd 29 1f 7f 71 80 56 6b 50 d6 d9 a6 15 
+received block:
+CBlock(hash=00000000a98feb, ver=1, hashPrevBlock=00000000075754, hashMerkleRoot=28d800, nTime=1786999530, nBits=1d00ffff, nNonce=2475357909, vtx=1)
+  CTransaction(hash=28d800, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0172)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x7F2E057B87FA98EC9A5181)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000a98feb  height=186
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 f0 19 a4 f7 81 fe f6 40 66 cc 52 9b 5a 24 68 4f 78 75 47 77 32 
+received block:
+CBlock(hash=00000000b1a19b, ver=1, hashPrevBlock=00000000a98feb, hashMerkleRoot=1c80b0, nTime=1787003980, nBits=1d00ffff, nNonce=663972081, vtx=1)
+  CTransaction(hash=1c80b0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0174)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5811F6511BBD3613F51F5C)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b1a19b  height=187
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 c6 0a b9 63 70 d4 94 89 27 78 e8 7f d9 86 59 3b 57 e5 11 e1 df 
+received block:
+CBlock(hash=00000000a26cd5, ver=1, hashPrevBlock=00000000b1a19b, hashMerkleRoot=ad2a2b, nTime=1787005426, nBits=1d00ffff, nNonce=1697951786, vtx=1)
+  CTransaction(hash=ad2a2b, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0175)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6D185E803996713D7BCE4D)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000a26cd5  height=188
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 cc d2 48 c3 8e 44 1f 19 21 e5 ae 86 91 9c 00 51 71 01 ad ed 31 
+received block:
+CBlock(hash=00000000358bd6, ver=1, hashPrevBlock=00000000a26cd5, hashMerkleRoot=423dc1, nTime=1787006073, nBits=1d00ffff, nNonce=743110521, vtx=1)
+  CTransaction(hash=423dc1, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0176)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x10C84A74F3C5324DA9B01B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000358bd6  height=189
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 af 47 19 83 09 6c 46 e2 2e 74 f2 2c af 9f 44 9a 5a a5 60 e3 bd 
+received block:
+CBlock(hash=00000000ae3d9e, ver=1, hashPrevBlock=00000000358bd6, hashMerkleRoot=b71be3, nTime=1787007164, nBits=1d00ffff, nNonce=1260290111, vtx=1)
+  CTransaction(hash=b71be3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d0177)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5C4B317EF68D0FF340675A)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ae3d9e  height=190
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 d9 53 3e 60 ea 84 26 a9 b8 2f 99 5f a5 41 75 b3 19 61 17 46 70 
+received block:
+CBlock(hash=000000008be712, ver=1, hashPrevBlock=00000000ae3d9e, hashMerkleRoot=1d865a, nTime=1787018468, nBits=1d00ffff, nNonce=71341220, vtx=1)
+  CTransaction(hash=1d865a, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d017b)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x9EAEA0B83E10BAB43EE739)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000008be712  height=191
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 f1 a4 e6 6b f2 1b 98 28 99 5d cd 9d 26 71 5a 22 7f 1b d7 be 0b 
+received block:
+CBlock(hash=000000007cc4ee, ver=1, hashPrevBlock=000000008be712, hashMerkleRoot=6e544c, nTime=1787024925, nBits=1d00ffff, nNonce=2966461472, vtx=1)
+  CTransaction(hash=6e544c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d017d)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x7EE994FA81CA2D11FC309F)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000007cc4ee  height=192
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 8e d6 3f c9 b4 2c 5f b5 71 f6 70 61 2d 23 93 9f 9c 8d 5d 6c 83 
+received block:
+CBlock(hash=00000000dbc394, ver=1, hashPrevBlock=000000007cc4ee, hashMerkleRoot=3946fc, nTime=1787027910, nBits=1d00ffff, nNonce=3091003105, vtx=1)
+  CTransaction(hash=3946fc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d017e)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2256A5806EA3B77BDEF493)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000dbc394  height=193
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (215 bytes)  01 00 00 00 10 9f 98 ac 83 fd 42 91 9f b1 ed 12 bc f1 80 3d f0 fe 88 d4 f5 
+received block:
+CBlock(hash=00000000831b8d, ver=1, hashPrevBlock=00000000dbc394, hashMerkleRoot=2e13a3, nTime=1787030949, nBits=1d00ffff, nNonce=3221938484, vtx=1)
+  CTransaction(hash=2e13a3, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d017f)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xFA9BF863B258AFCB132F9D)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000831b8d  height=194
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 d8 19 5a ee 4c 9d 64 91 ad 28 9f 18 94 a0 79 e8 0c c4 a4 18 39 
+received block:
+CBlock(hash=00000000df9afd, ver=1, hashPrevBlock=00000000831b8d, hashMerkleRoot=a3045e, nTime=1787043731, nBits=1d00ffff, nNonce=425670150, vtx=1)
+  CTransaction(hash=a3045e, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028300)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x1E0954A826430F5F15AB51)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000df9afd  height=195
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 b6 7e 6a ee b6 c0 04 86 66 44 40 71 e8 02 96 2b 62 52 d6 c1 e0 
+received block:
+CBlock(hash=0000000087ac1a, ver=1, hashPrevBlock=00000000df9afd, hashMerkleRoot=b2e1ad, nTime=1787047751, nBits=1d00ffff, nNonce=4201768417, vtx=1)
+  CTransaction(hash=b2e1ad, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028400)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xDB14AD4AB5696BC270F153)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000087ac1a  height=196
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 76 d6 b5 10 5f dd 37 72 fc 4c 57 f5 93 7d 58 64 7f 19 fb 8a 00 
+received block:
+CBlock(hash=00000000486541, ver=1, hashPrevBlock=0000000087ac1a, hashMerkleRoot=c2d369, nTime=1787056630, nBits=1d00ffff, nNonce=1176558433, vtx=1)
+  CTransaction(hash=c2d369, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028700)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xB3FD1725FF7E783DCD6213)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000486541  height=197
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 bd 9a 8d fc 86 cc 82 5d 9d 33 b6 cb 28 f1 7f ed 94 94 e6 22 5b 
+received block:
+CBlock(hash=00000000ae36db, ver=1, hashPrevBlock=00000000486541, hashMerkleRoot=f1c926, nTime=1787060853, nBits=1d00ffff, nNonce=456835916, vtx=1)
+  CTransaction(hash=f1c926, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028900)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x815729037579CADA9CFB03)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000ae36db  height=198
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 53 09 88 6f 65 0b c9 ad f7 5a 47 df 0e 92 00 06 3e 9f e4 1c 67 
+received block:
+CBlock(hash=00000000dd0df2, ver=1, hashPrevBlock=00000000ae36db, hashMerkleRoot=34932c, nTime=1787060936, nBits=1d00ffff, nNonce=67617729, vtx=1)
+  CTransaction(hash=34932c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028a00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x6C12C8ACB1D9E5BF24DC62)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000dd0df2  height=199
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 90 9b 20 1f 5b bd ef ee 84 29 60 9e 8a 5b 1d 2c df ed 3b a8 84 
+received block:
+CBlock(hash=000000001040af, ver=1, hashPrevBlock=00000000dd0df2, hashMerkleRoot=e09899, nTime=1787066335, nBits=1d00ffff, nNonce=1873046262, vtx=1)
+  CTransaction(hash=e09899, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028c00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xF73D9844A0FE720804FA56)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001040af  height=200
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 8f 84 67 89 c6 3b 0c c7 4a 4e ac 0c 80 94 2c 52 ae a0 14 32 00 
+received block:
+CBlock(hash=000000005d4492, ver=1, hashPrevBlock=000000001040af, hashMerkleRoot=8bb6d4, nTime=1787068039, nBits=1d00ffff, nNonce=1967632675, vtx=1)
+  CTransaction(hash=8bb6d4, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028d00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xD2212440030B31D61A56A0)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005d4492  height=201
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 5d f3 ae 99 bb 73 77 c1 6b a1 eb 9d f7 a9 66 4a ee 07 7d 76 7f 
+received block:
+CBlock(hash=00000000c72d7d, ver=1, hashPrevBlock=000000005d4492, hashMerkleRoot=7463ca, nTime=1787068664, nBits=1d00ffff, nNonce=681637949, vtx=1)
+  CTransaction(hash=7463ca, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d028e00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x10525EEB1072052A566B09)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000c72d7d  height=202
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 b6 25 8c 31 9f e9 7e 9d 16 61 5c c1 0f 3c 09 bb db 6a 06 1b 25 
+received block:
+CBlock(hash=000000001535b9, ver=1, hashPrevBlock=00000000c72d7d, hashMerkleRoot=c08302, nTime=1787072569, nBits=1d00ffff, nNonce=97165704, vtx=1)
+  CTransaction(hash=c08302, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029000)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xE75564484483D45F549E52)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000001535b9  height=203
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 1f 43 d0 24 17 7a 79 b7 80 1f 27 bc 5f 4a 78 22 2b ed 92 b3 e7 
+received block:
+CBlock(hash=0000000000d897, ver=1, hashPrevBlock=000000001535b9, hashMerkleRoot=13f177, nTime=1787077232, nBits=1d00ffff, nNonce=970094442, vtx=1)
+  CTransaction(hash=13f177, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029200)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x145269035A88197A3B99A5)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000000d897  height=204
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 02 c3 0a 41 25 b3 24 4a 67 b1 39 b2 61 c9 3f 53 77 8c b2 2e f7 
+received block:
+CBlock(hash=00000000966096, ver=1, hashPrevBlock=0000000000d897, hashMerkleRoot=904dd0, nTime=1787077670, nBits=1d00ffff, nNonce=513734590, vtx=1)
+  CTransaction(hash=904dd0, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029300)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x5A03074B55495AD0825252)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000966096  height=205
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 ec 2a 27 4c 26 a1 9b 97 0b d8 8b 88 c0 20 98 85 82 2e 58 2a 63 
+received block:
+CBlock(hash=00000000241252, ver=1, hashPrevBlock=00000000966096, hashMerkleRoot=a1c1b4, nTime=1787083122, nBits=1d00ffff, nNonce=1771210632, vtx=1)
+  CTransaction(hash=a1c1b4, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029500)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x136A2C43B0410389D70C06)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000241252  height=206
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 49 ee 71 71 e5 75 68 54 1e 33 8b 9a d3 4e fd 97 67 29 d4 d4 12 
+received block:
+CBlock(hash=00000000b2bce4, ver=1, hashPrevBlock=00000000241252, hashMerkleRoot=ffbcc1, nTime=1787093751, nBits=1d00ffff, nNonce=3297950227, vtx=1)
+  CTransaction(hash=ffbcc1, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029800)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x2CC53D88E3EC774FB32F03)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b2bce4  height=207
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 b7 06 75 9f 1f 8d ef 30 71 0c 40 de d8 87 35 55 39 77 b8 86 d2 
+received block:
+CBlock(hash=00000000caf06c, ver=1, hashPrevBlock=00000000b2bce4, hashMerkleRoot=5646fa, nTime=1787095318, nBits=1d00ffff, nNonce=1763210729, vtx=1)
+  CTransaction(hash=5646fa, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029900)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xF90AA461E901114C698F04)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000caf06c  height=208
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 ed b6 9d 7b ba e8 da 48 78 98 ea 5e ee 0f 3d fa 05 72 55 c1 36 
+received block:
+CBlock(hash=000000003a02f8, ver=1, hashPrevBlock=00000000caf06c, hashMerkleRoot=40c6e2, nTime=1787098523, nBits=1d00ffff, nNonce=3628825661, vtx=1)
+  CTransaction(hash=40c6e2, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029a00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA25F033B39800F13B2A640)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000003a02f8  height=209
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 c2 30 f5 a7 8d eb 5a 84 31 9e 8c e8 4e 45 04 ad d4 d0 eb 68 21 
+received block:
+CBlock(hash=0000000072f612, ver=1, hashPrevBlock=000000003a02f8, hashMerkleRoot=c3ec05, nTime=1787104286, nBits=1d00ffff, nNonce=2268832690, vtx=1)
+  CTransaction(hash=c3ec05, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029c00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x62E6FA8770B0144BD34878)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000072f612  height=210
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 ec f8 1a 7a 0b ca de ce c6 74 b0 35 a6 aa 85 f9 69 44 c2 a1 1c 
+received block:
+CBlock(hash=0000000066539a, ver=1, hashPrevBlock=0000000072f612, hashMerkleRoot=2621fc, nTime=1787109569, nBits=1d00ffff, nNonce=1782754379, vtx=1)
+  CTransaction(hash=2621fc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d029e00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x054BF9BA3C76D978395085)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000066539a  height=211
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 82 89 f0 67 29 14 19 db 7c fd 79 ac 34 36 65 4c c4 90 1d f1 06 
+received block:
+CBlock(hash=00000000d09e67, ver=1, hashPrevBlock=0000000066539a, hashMerkleRoot=f11306, nTime=1787114294, nBits=1d00ffff, nNonce=1036309200, vtx=1)
+  CTransaction(hash=f11306, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a000)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x32F067E6F9492769A576B9)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d09e67  height=212
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 72 ec 6a 80 08 89 27 07 3c 2d 4c 62 bb 72 b1 1b 97 b7 0e c1 e7 
+received block:
+CBlock(hash=0000000039a670, ver=1, hashPrevBlock=00000000d09e67, hashMerkleRoot=f3dcad, nTime=1787115296, nBits=1d00ffff, nNonce=1087156291, vtx=1)
+  CTransaction(hash=f3dcad, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a100)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x14F0985CC8BC345C1E3655)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000039a670  height=213
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 84 3e 39 ec d4 b8 e0 61 b6 98 d5 35 8c 3c b5 51 18 97 9a 8e 21 
+received block:
+CBlock(hash=00000000dd2ce3, ver=1, hashPrevBlock=0000000039a670, hashMerkleRoot=da9479, nTime=1787117735, nBits=1d00ffff, nNonce=2719820418, vtx=1)
+  CTransaction(hash=da9479, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a200)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x008897A625AE93A3E4B1AD)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000dd2ce3  height=214
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 8e 66 99 c4 89 d6 6a a8 a3 b8 3f 56 76 19 bf 40 73 6e 66 34 4c 
+received block:
+CBlock(hash=00000000b39a51, ver=1, hashPrevBlock=00000000dd2ce3, hashMerkleRoot=aa968c, nTime=1787122655, nBits=1d00ffff, nNonce=1197295858, vtx=1)
+  CTransaction(hash=aa968c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a400)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xB88045A165F8E1775A7B81)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000b39a51  height=215
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 fd d0 5e 31 dd 9f 7b 51 e2 77 ec 5b 01 25 ed 11 7a b9 cd c9 ca 
+received block:
+CBlock(hash=00000000cc4f12, ver=1, hashPrevBlock=00000000b39a51, hashMerkleRoot=e24a39, nTime=1787125482, nBits=1d00ffff, nNonce=3112312248, vtx=1)
+  CTransaction(hash=e24a39, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a500)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x710E9B56B235745F09BFE1)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000cc4f12  height=216
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 64 24 fd 8a ba 9d da 16 89 79 61 5d 66 cc cf d7 af d6 ed a6 0c 
+received block:
+CBlock(hash=0000000047ce4b, ver=1, hashPrevBlock=00000000cc4f12, hashMerkleRoot=605d53, nTime=1787126135, nBits=1d00ffff, nNonce=724034607, vtx=1)
+  CTransaction(hash=605d53, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a600)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x1DA5D9C53E7F19E44AA3F0)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000047ce4b  height=217
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 58 db 4d e3 ce 2c 85 81 21 ef d5 ec 21 f7 3e b8 3b c6 20 e9 88 
+received block:
+CBlock(hash=00000000eadea5, ver=1, hashPrevBlock=0000000047ce4b, hashMerkleRoot=2522fc, nTime=1787133606, nBits=1d00ffff, nNonce=4008983483, vtx=1)
+  CTransaction(hash=2522fc, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a800)
+    CTxOut(nValue=50.00000000, scriptPubKey=0xA87B99CE27B73428FB86A7)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000eadea5  height=218
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 73 9b 70 d3 25 54 b3 eb 8e 1f f6 9f 82 7e 88 07 69 77 b0 13 a8 
+received block:
+CBlock(hash=00000000cd6121, ver=1, hashPrevBlock=00000000eadea5, hashMerkleRoot=59d85c, nTime=1787134066, nBits=1d00ffff, nNonce=505181627, vtx=1)
+  CTransaction(hash=59d85c, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02a900)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x39D22158CB83BB7E33D1A4)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000cd6121  height=219
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 83 3e 01 fe 4f dc 40 e3 fa 30 aa b5 61 b0 31 00 f4 6f 6e d2 1c 
+received block:
+CBlock(hash=000000004ccc5b, ver=1, hashPrevBlock=00000000cd6121, hashMerkleRoot=9eedbd, nTime=1787135972, nBits=1d00ffff, nNonce=2036014226, vtx=1)
+  CTransaction(hash=9eedbd, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02aa00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x938112FC657180690FD3D4)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000004ccc5b  height=220
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (306 bytes)  01 00 00 00 7c 6f ce a1 66 e3 14 19 4c 50 4b 99 4e 7c e1 2a fb e2 e0 2b 62 
+received block:
+CBlock(hash=00000000fc80fe, ver=1, hashPrevBlock=000000004ccc5b, hashMerkleRoot=42b6b9, nTime=1787136965, nBits=1d00ffff, nNonce=2757362010, vtx=1)
+  CTransaction(hash=42b6b9, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 4c604348524e0101000300000000000000007270814b43cb2404d71d9d3eb5fe48082195b3d47dd1499ff2f92b4c6a52aa64c757c74732982d6a5dbe90a8ec4aac9bbd6cb7a79b8ff6ece13636f7400053d1611e8869fde1b7950f631e2dc9888ca2)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x34F8A2CE5FD92F8E7E829B)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000fc80fe  height=221
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (306 bytes)  01 00 00 00 8b 08 0d 36 ee f1 d5 b3 15 41 14 bd 51 61 58 9f 02 2f 78 bf af 
+received block:
+CBlock(hash=0000000055cddf, ver=1, hashPrevBlock=00000000fc80fe, hashMerkleRoot=3c3056, nTime=1787138996, nBits=1d00ffff, nNonce=2885682098, vtx=1)
+  CTransaction(hash=3c3056, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 4c604348524e0101000300000000000000014dc9b6343f7ebd08632cbce1d9c941daead6e6957db3eef0f674bd6fa6c319802981cb67c4c5115cebd240a818505cb8a4d8d6c59b330835045b2f3e11d9205466c1200ad2ca88ba4caf7c8b8ff1ddeb)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x34F8A2CE5FD92F8E7E829B)
+  vMerkleTree: 
+AddToBlockIndex: new best=0000000055cddf  height=222
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 a0 9f 41 69 5b 74 20 e0 49 f1 a3 39 c8 99 07 af 35 74 d1 74 b5 
+received block:
+CBlock(hash=00000000d23755, ver=1, hashPrevBlock=0000000055cddf, hashMerkleRoot=d8cf12, nTime=1787150026, nBits=1d00ffff, nNonce=3223650757, vtx=1)
+  CTransaction(hash=d8cf12, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02af00)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x702DF058985E569DD320E4)
+  vMerkleTree: 
+AddToBlockIndex: new best=00000000d23755  height=223
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+received: block        (216 bytes)  01 00 00 00 a4 af ed 32 disconnecting node 172.23.48.1:59407
+33 0d MainFrameRepaint()
+00 66 90 dd 78 03 fe bf d8 de 68 52 79 c4 59 
+received block:
+CBlock(hash=000000005b168a, ver=1, hashPrevBlock=00000000d23755, hashMerkleRoot=b9f7fe, nTime=1787150360, nBits=1d00ffff, nNonce=358956350, vtx=1)
+  CTransaction(hash=b9f7fe, ver=1, vin.size=1, vout.size=1, nLockTime=0)
+    CTxIn(COutPoint(000000, -1), coinbase 04ffff001d02b000)
+    CTxOut(nValue=50.00000000, scriptPubKey=0x3D2BC9A772B1328E9094E3)
+  vMerkleTree: 
+AddToBlockIndex: new best=000000005b168a  height=224
+MainFrameRepaint()
+ProcessBlock: ACCEPTED
+DBFlush(false)
+StopNode()
+DBFlush(true)
+Bitcoin exiting

@@ -70,3 +70,37 @@ v0.1.0 bundle and `MANIFEST.sha256` remain untouched, exactly as sealed.
 Two earlier candidates with valid PoW lost their height races to the laboratory's own
 miner and are disclosed in the acceptance record. `PASS_LIVE_ANCHORED` was reached by
 adding mined-and-accepted reality to the sealed evidence, never by editing a verdict.
+
+---
+
+# v0.2.0 — The reality sandwich (2026-08-19)
+
+First **real** (non-simulated) evidence acquisition, causally sandwiched between live
+proof-of-work blocks. Normative construction: [`docs/REALITY-SANDWICH.md`](docs/REALITY-SANDWICH.md).
+
+```
+B0  = 00000000fc80fe4f…  height 221   (the v0.1.1 live-anchor block itself)
+        ≺  acquisition: 10 real NTPv4 exchanges, 5 independent operators
+           (NIST, PTB, Google, Microsoft, Apple), challenge nonce embedded in
+           every request and echoed by every server
+        ≺
+C   = 0000000055cddf6e…  height 222   (epoch-1 checkpoint payload, real difficulty-1 work)
+```
+
+New in this release:
+
+- `ctp/sandwich.py` — challenge/nonce derivation, NTP witness profile with
+  deterministic measurement re-derivation from raw packets, declared-origin
+  picosecond frames (SPEC §3), integer-only IAU-2000 ERA expectation
+  (`EXPECTATION_NOT_EVIDENCE`), sandwich bundle format, and the offline verifier
+- `scripts/run_sandwich.py` / `build_sandwich_template.py` /
+  `assemble_sandwich_bundle.py` / `verify_sandwich.py`
+- `tests/test_sandwich.py` — derivation vectors, measurement math, and a full
+  synthetic sandwich round-trip with tamper cases (suite: 25 tests)
+- `vectors/valid/reality-sandwich-bundle.cbor` — the real sandwich, offline-verifiable
+
+The epoch-1 checkpoint chains to the sealed epoch-0 checkpoint through its record
+commitment. The consensus interval from the five witnesses is ±42 ms wide; the causal
+window is one block on each side — the tightest this chain can express. The sandwich
+proves when the evidence was acquired, never that its content is true; every
+non-claim in the normative document applies.

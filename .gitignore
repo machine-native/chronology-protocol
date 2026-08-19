@@ -6,4 +6,9 @@ live/mine/
 live/node-evidence/datadir/database/
 live/node-evidence/datadir/addr.dat
 live/node-evidence/datadir/wallet.dat
+live/node-evidence/sandwich-datadir/database/
+live/node-evidence/sandwich-datadir/addr.dat
+live/node-evidence/sandwich-datadir/wallet.dat
 live/node-evidence/db.log
+live/sandwich-work/keys/
+live/race_sandwich.log

@@ -61,6 +61,16 @@ live laboratory chain, real difficulty-1 work, nNonce 2757362010) carries the se
 released Jan09-derived client. See `live/anchor-evidence/ACCEPTANCE.md` and
 `vectors/valid/evidence-bundle-live-anchored.cbor` (verifier verdict: `PASS`, 13/13).
 
+## The reality sandwich (v0.2.0)
+
+The first real acquisition: `B0 ≺ acquisition ≺ C`. Ten live NTPv4 exchanges against
+five independent operators, each request carrying a nonce derived from B0's block hash
+and echoed by the server, the whole evidence set committed into the epoch-1 checkpoint
+mined into block C at height 222. Construction and non-claims:
+[`docs/REALITY-SANDWICH.md`](docs/REALITY-SANDWICH.md); bundle:
+`vectors/valid/reality-sandwich-bundle.cbor`; verifier: `scripts/verify_sandwich.py`
+(offline, network-free).
+
 ## Scientific claim
 
 This protocol does **not** claim universal absolute time or exact simultaneity across spacetime.
