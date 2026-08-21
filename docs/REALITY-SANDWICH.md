@@ -136,6 +136,14 @@ the physical sky:
   clock margin; its `auth_state` is `OPERATOR_ASSERTED`. The tight time backbone
   comes from the NTP witnesses in the same checkpoint; the causal bounds come from
   the sandwich, not from EXIF.
+- **Rolling in-frame challenge (prepared upgrade).** The next optical run replaces
+  the handwritten code with a phone screen running `tools/rolling-code.html`: a
+  code that changes every slot, `code(slot) = SHA-256("CHRN-ROLL/v1:" + SEED16 +
+  ":" + slot)[:12 hex]` with `slot = floor(unix_time / slot_seconds)`. Frames taken
+  across two or more slots must then show a *sequence* of codes consistent with
+  their EXIF timeline — far harder to composite than one static string. The
+  display and the verifier aid (`scripts/rolling_code.py`) are pinned to identical
+  test vectors. Reading a code off a frame remains a human step, stated as before.
 - Bundle v2 carries a **prediction attachment** (`prediction_json`): the
   open-astrolabe engine's deterministic expectation for the observed body at the
   capture instant and stated location (azimuth/altitude, phase, engine grades).
