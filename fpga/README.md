@@ -10,8 +10,10 @@ chain. Started 2026-08-21.
 | `rtl/sha256_core.v` — compression core, 1 round/cycle | **simulated, all vectors pass** |
 | `sim/tb_sha256_core.v` — testbench | **green** (Icarus Verilog) |
 | `rtl/sha256d_miner.v` — double-hash nonce scanner | **simulated: finds real chain nonces** |
-| UART host link + driver | not written yet |
-| synthesis / bitstream / on-board run | not attempted |
+| `rtl/uart.v` + `rtl/miner_top.v` — UART link | **simulated end-to-end** |
+| `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
+| `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
+| synthesis / bitstream / on-board run | **not attempted — needs Vivado + board** |
 
 Nothing here has run on a board. Per the project's standing rule, "simulated" and
 "synthesised" and "mined a real block" are three different claims and only the first
@@ -80,11 +82,55 @@ never true.
    exhausts cleanly with no false positive. It coarse-filters on trailing zero words
    only — the host still applies the exact compact target, so hardware narrows the
    search and software decides validity.
-2. UART command/report link; host driver via pyserial.
-3. Vivado project + XDC for the Cmod A7-35T, then measure.
+2. ~~UART command/report link; host driver~~ — **done and simulated end-to-end.**
+   `sim/tb_miner_top.v` drives real UART bytes into the top level and requires
+   'F' + nonce 2757362010 + that block's digest to come back out. It does. The host
+   driver's midstate computation was cross-checked against the RTL testbench
+   constant and matches byte-for-byte.
+3. **Build the bitstream** (needs Vivado; see below), then measure the real rate.
 
 Two byte-order traps were hit and are recorded so they are not re-hit: the leading
 zeros of a *displayed* block hash are the *trailing* words of the raw digest, and the
 nonce is a number here but is stored little-endian in the header, so it must be
 byte-swapped on the way into the block. Each bug made the scanner silently find
 nothing — the kind of failure only a real known-answer vector catches.
+
+
+## Building the bitstream
+
+On a machine with Vivado and the Cmod A7-35T:
+
+```bash
+cd fpga
+vivado -mode batch -source build.tcl        # -> build/miner_top.bit
+```
+
+Then check two numbers before believing anything:
+
+- `build/utilisation.rpt` — LUT usage. This determines how many cores could be
+  instanced later, and whether the ~5 MH/s estimate was right.
+- `build/timing.rpt` — worst negative slack must be **positive**. If it is not, the
+  design did not meet timing and any measured rate is meaningless.
+
+Program the board (Vivado Hardware Manager, or `openFPGALoader -b cmod_a7_35t
+build/miner_top.bit`), then bring it up in the honest order:
+
+```bash
+pip install pyserial
+python ../scripts/fpga_host.py ping     --port COM7   # link alive?
+python ../scripts/fpga_host.py selftest --port COM7   # does it find a KNOWN answer?
+```
+
+`selftest` replays the real height-221 work and requires the board to return nonce
+2757362010 and that block's hash. **`mine` mode is deliberately locked until
+selftest passes** — wiring live anchoring to a miner that has never returned a
+known-correct answer would be exactly the kind of shortcut this project does not take.
+
+## Wire protocol
+
+```
+host -> FPGA   'W' + midstate[32] + tail[12] + nonce_start[4]   (big-endian) — start
+host -> FPGA   'S'   abort            'P'   ping
+FPGA -> host   'F' + nonce[4] + digest[32]   candidate (host applies the real target)
+FPGA -> host   'E'                            range exhausted
+```
