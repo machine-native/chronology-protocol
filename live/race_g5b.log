@@ -1,0 +1,11 @@
+=== ROUND 1 08:43:22Z ===
+tip 000000003506989e31b94426d9aff5fc304290f21b33787affc01276cc5568d4 height 265 mtp 1787270213 bits 0x1d00ffff ntime 1787301804
+nonce space exhausted, rebuilding with fresh nTime
+=== ROUND 2 09:02:49Z ===
+tip 000000003506989e31b94426d9aff5fc304290f21b33787affc01276cc5568d4 height 265 mtp 1787270213 bits 0x1d00ffff ntime 1787302971
+nonce space exhausted, rebuilding with fresh nTime
+=== ROUND 3 09:24:06Z ===
+tip 000000005ec9fbf6053ce476c7aac1a44891f8b0bc358647d1408b3271444378 height 268 mtp 1787288485 bits 0x1d00ffff ntime 1787304248
+FOUND nonce=796895470 hash=000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112
+submitted 000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112
+=== SUCCESS: our block 000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112 is the active tip at height 269 ===

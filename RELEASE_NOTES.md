@@ -182,6 +182,12 @@ verdict  SANDWICH_PASS_UNBURIED — all checks incl. S_ROUGHTIME_SIGNATURES;
          scripts/assemble_g5_bundle.py records burial when it lands.
 ```
 
+> ⚠️ **Superseded by v0.4.1: the height-264 anchor above was orphaned.** The block
+> was real and briefly the tip, but lost a chain race. The claim is left standing
+> here with this pointer rather than edited away; the corrected anchor and the full
+> account are in v0.4.1 below and in
+> [`live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md`](live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md).
+
 New in this release:
 
 - `ctp/roughtime.py` — IETF-draft Roughtime client and complete offline verifier:
@@ -197,3 +203,42 @@ New in this release:
 
 Record: [`live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md`](live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md).
 The epoch chain now reads 0 → 1 → 2 → 3, every link committed into proof-of-work.
+
+---
+
+# v0.4.1 — The first chain reorganization, survived (2026-08-21)
+
+**The height-264 anchor published in v0.4.0 was orphaned.** It carried valid
+difficulty-1 work and the public seed advertised it as its tip, but the laboratory's
+miner produced a competing block at the same height and extended it — two blocks beat
+one, and our block left the active chain. This is the anchor chain's first
+reorganization, and the direct consequence of it having had two independent miners
+since 2026-08-19.
+
+```
+orphaned   0000000032580c2f…  height 264   valid PoW, briefly the tip, now an orphan
+re-anchor  000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112
+           height 269, nNonce 796895470
+window     B0 263  ≺  acquisition  ≺  C 269      (six blocks, not adjacent)
+verdict    SANDWICH_PASS — all checks true, buried 3 deep
+bundle     vectors/valid/roughtime-sandwich-bundle.cbor
+           sha256 bf22c1586a2dff27…
+```
+
+**Nothing in the evidence depended on which block won.** The acquisition, every
+Ed25519 and post-quantum signature, and the epoch-3 checkpoint are byte-identical to
+what v0.4.0 published; only the anchor's identity changed. Re-anchoring meant mining
+the *same* checkpoint payload onto the new tip, which widened the causal window and
+left both bounds intact — and the verifier proves it rather than asserting it:
+`S_LINKAGE_B0_TO_C` now walks the five intervening blocks (the winning 264 and its
+265–268) to establish the unbroken path from B0 to the new anchor.
+
+**This is the construction's first encounter with a chain reorganization, and it
+behaved as designed**: a wider window, no lost evidence, every claim re-verified. The
+orphaned block's bytes are preserved in `live/anchor-evidence/orphans/` and the v0.4.0
+release note above is left standing with a pointer to the correction — a claim that
+quietly disappears teaches a reader nothing.
+
+The laboratory's own record of the event, written from the chain bytes rather than from
+this project's perspective, is in the original-bitcoin-laboratory genesis repository
+under `bitcoin-findings/2026-08-21-first-reorganization/`.

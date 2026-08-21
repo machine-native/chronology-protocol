@@ -1,16 +1,16 @@
 {
   "bundle": "vectors\\valid\\roughtime-sandwich-bundle.cbor",
-  "bytes": 593393,
-  "sha256": "9ceed018060d8ad227c37115224e8d2063dfbaeeae51c790932636aa51b5e5bd",
+  "bytes": 594049,
+  "sha256": "bf22c1586a2dff27235f3473283d50388b951ec218fc8fa9d4da8ea6b432fa9b",
   "b0": {
     "hash": "00000000120059e003e8bf7e32d29866a37188aee93a976651b7ce3aa754202d",
     "height": 263
   },
   "block_c": {
-    "hash": "0000000032580c2f20211b668bb643965dda2dff3a7621bf9797599d75de710c",
-    "height": 264
+    "hash": "000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112",
+    "height": 269
   },
-  "burial_depth": 0,
+  "burial_depth": 3,
   "witnesses": 7,
   "checks": {
     "S_B0_POW": true,
@@ -35,5 +35,5 @@
     "S_B1_CHAIN_VALID": true,
     "S_EXPECTATION_RECOMPUTED": true
   },
-  "verdict": "SANDWICH_PASS_UNBURIED"
+  "verdict": "SANDWICH_PASS"
 }

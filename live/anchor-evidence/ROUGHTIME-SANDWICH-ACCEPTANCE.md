@@ -1,4 +1,36 @@
-# Authenticated Time Witnesses — epoch 3, height 264, 2026-08-21
+# Authenticated Time Witnesses — epoch 3, 2026-08-21
+
+> ## ⚠️ CORRECTION — the first anchor attempt was orphaned
+>
+> **`v0.4.0` published this checkpoint as anchored at height 264 in block
+> `0000000032580c2f20211b668bb643965dda2dff3a7621bf9797599d75de710c`. That block
+> lost a chain race and is NOT on the active chain.** The laboratory's miner
+> produced a competing block at the same height
+> (`00000000cda96f0eeff6d3202f446f5bb1fbcd02a46c45242a29a500419e7518`) and
+> extended it to 265, so its branch won. Our block carries valid difficulty-1
+> work and was briefly the tip; it is now an orphan.
+>
+> The statement is corrected here rather than deleted, and `v0.4.0`'s release
+> note is left standing with a pointer to this correction — a claim that quietly
+> disappears teaches a reader nothing.
+>
+> **What the reorganization did and did not touch.** The acquisition, every
+> signature, and the epoch-3 checkpoint are unchanged — not one evidence byte
+> depended on which block won. Only the anchor's identity changed. The sandwich
+> was re-anchored by mining the *same* checkpoint payload onto the new tip:
+>
+> ```
+> re-anchored C   000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112
+>                 height 269, nNonce 796895470, real difficulty-1 work
+> ```
+>
+> The causal window widened from adjacent (263→264) to six blocks (263→269), and
+> the verifier's `S_LINKAGE_B0_TO_C` check now walks the five intervening blocks
+> — the VM's winning 264 and its 265–268 — proving the unbroken path from B0 to
+> the new anchor. Both bounds hold: B0 still precedes the acquisition, and C
+> still commits to the same evidence. **This is the first chain reorganization
+> the construction has survived, and it behaved as designed: a wider window, no
+> lost evidence, and every claim re-verified rather than re-asserted.**
 
 The first CHRN checkpoint containing **cryptographically signed** time evidence: two
 Roughtime servers' Ed25519-signed responses over nonces derived from the sandwich
@@ -17,18 +49,20 @@ B0   00000000120059e003e8bf7e32d29866a37188aee93a976651b7ce3aa754202d   height 2
        NTP (unauthenticated, finer): NIST, PTB, Google, Microsoft, Apple — 2 rounds each
        7 logical witnesses, consensus q=3 of 7, f=1
   ≺
-C    0000000032580c2f20211b668bb643965dda2dff3a7621bf9797599d75de710c   height 264
-       nNonce 1780533975, real difficulty-1 work, parent = B0 (adjacent-block window,
-       won on the first attempt), epoch-3 checkpoint chained to the epoch-2
+C    000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112   height 269
+       nNonce 796895470, real difficulty-1 work. The first attempt at height 264 was
+       orphaned (see the correction above); this is the re-anchor, so the window is
+       263→269 rather than adjacent. Epoch-3 checkpoint chained to the epoch-2
        (astronomical) checkpoint, which chains to epoch 1 and the sealed epoch 0
   ≺
 B1…  NOT YET MINED at publication. Verdict is `SANDWICH_PASS_UNBURIED` — every
-     check passes and both causal bounds hold; only burial depth is 0, because
-     the laboratory's miner had not yet extended the chain (its cadence is
-     irregular: recent inter-block gaps ranged 6 to 184 minutes). Burial is
-     recorded by re-running `scripts/assemble_g5_bundle.py`, which re-fetches
-     the chain and re-verifies; the epoch-1 and epoch-2 bundles were buried
-     2 and 10 deep respectively by that same independent miner.
+     check passes and both causal bounds hold; burial depth is 0 because the
+     re-anchor had only just been mined. Its cadence is irregular (recent gaps
+     ran 6 to 184 minutes, and it produced three blocks in fifteen minutes on
+     the morning of the 21st). Burial is recorded by re-running
+     `scripts/assemble_g5_bundle.py`, which re-fetches the chain and
+     re-verifies; the epoch-1 and epoch-2 bundles were buried 2 and 10 deep
+     respectively by that same independent miner.
 ```
 
 ## What is cryptographically new
