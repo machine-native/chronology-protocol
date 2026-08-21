@@ -61,6 +61,16 @@ live laboratory chain, real difficulty-1 work, nNonce 2757362010) carries the se
 released Jan09-derived client. See `live/anchor-evidence/ACCEPTANCE.md` and
 `vectors/valid/evidence-bundle-live-anchored.cbor` (verifier verdict: `PASS`, 13/13).
 
+## The first astronomical ChronologyProof (v0.3.0)
+
+On 2026-08-20 a real observation of the Moon over New Delhi — ten photographs with a
+challenge code derived from block 252's hash handwritten inside the frames — was
+checkpointed beside five NTP witnesses and mined into height 253, an adjacent-block
+causal window, buried by ten laboratory blocks overnight. The bundle carries the
+open-astrolabe engine's prediction (SW 216.6°, alt 24.0°, 55% lit — which is what the
+frames show) as a labeled expectation. `vectors/valid/astro-sandwich-bundle.cbor`,
+verdict `SANDWICH_PASS`; record in `live/anchor-evidence/ASTRO-SANDWICH-ACCEPTANCE.md`.
+
 ## The reality sandwich (v0.2.0)
 
 The first real acquisition: `B0 ≺ acquisition ≺ C`. Ten live NTPv4 exchanges against

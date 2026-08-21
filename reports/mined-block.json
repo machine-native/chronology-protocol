@@ -1,8 +1,8 @@
 {
   "template": "C:\\Users\\Yoga\\Desktop\\workspace\\vscode_workspace_machine-native-foundation\\chronology-protocol\\reports\\live-template.json",
-  "block_hash": "0000000055cddf6e969747b574d17435af0799c839a3f149e020745b69419fa0",
-  "nonce": 2885682098,
+  "block_hash": "00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee",
+  "nonce": 605453534,
   "raw_block_bytes": 306,
-  "raw_block_sha256": "ce160c11b09fa20f33fe3695eae60a8479bbee60bbc1f72b0404a3b8e7691b33",
+  "raw_block_sha256": "161068d476e3f0d42adc578e981bd7958aa4b608f2929bb36d23fc38251c09f1",
   "status": "MINED_LOCALLY_NOT_YET_NODE_ACCEPTED"
 }

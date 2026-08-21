@@ -138,6 +138,45 @@ def machine_state_digest() -> DigestPair:
     return digest_pair(DOM_STATE, blob)
 
 
+# ---- optical (camera) witness profile — sandwich v2 --------------------------
+def camera_evidence_blob(photo_digests: dict, exif_times_utc_ns: dict, camera_model: str,
+                         place: str, claimed_utc_ns: int, uncertainty_ns: int,
+                         q: bytes, b0_hash_hex: str, session_id: bytes) -> bytes:
+    """Evidence blob for a handheld photographic observation.
+
+    photo_digests: {filename: sha256 bytes} for every original frame.
+    exif_times_utc_ns: {filename: DateTimeOriginal as UTC nanoseconds} (self-asserted
+    by the camera clock; the sandwich, not EXIF, carries the causal claim).
+    The challenge is bound two ways: recorded here, and HANDWRITTEN inside the
+    frames — the latter is human-verifiable content, not machine cryptography,
+    and the verifier only re-checks the recorded binding.
+    """
+    # times carried in UTC nanoseconds: absolute picoseconds would exceed the
+    # canonical-CBOR uint64 ceiling (SPEC ps values are frame-relative, not absolute)
+    return cbor.dumps({
+        1: "CAMERA-PHOTO/v1", 2: dict(sorted(photo_digests.items())),
+        3: dict(sorted(exif_times_utc_ns.items())), 4: camera_model, 5: place,
+        6: claimed_utc_ns, 7: uncertainty_ns,
+        10: q, 11: bytes.fromhex(b0_hash_hex), 12: session_id,
+    })
+
+
+def camera_unsigned(blob: bytes, witness_name: str, genesis_id, origin_unix_s: int,
+                    monotonic_ns: int) -> UnsignedObservation:
+    o = cbor.loads(blob)
+    wid = digest_pair(DOM_WITNESS, ("CAMERA:" + witness_name).encode()).sha256
+    ev = digest_pair(DOM_EVIDENCE, blob)
+    rel = o[6] * 1000 - origin_unix_s * PS
+    src = SourceObservation("CAMERA-PHOTO/v1", rel, o[7] * 1000, "OPERATOR_ASSERTED", ev)
+    state = machine_state_digest()
+    return UnsignedObservation(
+        witness_id=wid, genesis_id=genesis_id, sequence=0, previous=None,
+        monotonic_ps=monotonic_ns * 1000,
+        interval=Interval(rel - o[7] * 1000, rel + o[7] * 1000),
+        reference_frame=frame_for_origin(origin_unix_s), sources=[src],
+        hardware_state=state, firmware_state=state)
+
+
 def ntp_unsigned(seq: int, ex: dict, meas: dict, blob: bytes, genesis_id, previous,
                  origin_unix_s: int) -> UnsignedObservation:
     wid = digest_pair(DOM_WITNESS, ("NTP:" + ex["host"]).encode()).sha256
@@ -194,13 +233,19 @@ class SandwichBundle:
     expectation: dict
     genesis: ProtocolGenesis
     version: int = 1
+    photo_manifest: Optional[dict] = None     # v2: {filename: sha256 bytes}
+    prediction_json: Optional[bytes] = None   # v2: UTF-8 JSON, model expectation, never evidence
 
     def as_obj(self):
-        return {1: self.version, 2: self.b0_raw, 3: self.b0_height, 4: self.session_id,
-                5: list(self.evidence), 6: [o.as_obj() for o in self.history],
-                7: self.checkpoint.as_obj(), 8: self.block_c_raw,
-                9: list(self.path_headers), 10: list(self.b1_headers),
-                11: self.expectation, 12: self.genesis.as_obj()}
+        o = {1: self.version, 2: self.b0_raw, 3: self.b0_height, 4: self.session_id,
+             5: list(self.evidence), 6: [x.as_obj() for x in self.history],
+             7: self.checkpoint.as_obj(), 8: self.block_c_raw,
+             9: list(self.path_headers), 10: list(self.b1_headers),
+             11: self.expectation, 12: self.genesis.as_obj()}
+        if self.version >= 2:
+            o[13] = dict(sorted((self.photo_manifest or {}).items()))
+            o[14] = self.prediction_json or b""
+        return o
 
     def canonical(self):
         return cbor.dumps(self.as_obj())
@@ -208,12 +253,13 @@ class SandwichBundle:
     @classmethod
     def from_bytes(cls, raw: bytes):
         o = cbor.loads(raw)
-        if o[1] != 1:
+        if o[1] not in (1, 2):
             raise ValueError("unsupported sandwich bundle version")
         return cls(o[2], o[3], o[4], list(o[5]),
                    [SignedObservation.from_obj(x) for x in o[6]],
                    SignedCheckpoint.from_obj(o[7]), o[8], list(o[9]), list(o[10]),
-                   o[11], ProtocolGenesis.from_obj(o[12]), o[1])
+                   o[11], ProtocolGenesis.from_obj(o[12]), o[1],
+                   o.get(13), o.get(14))
 
 
 def _header_pow_ok(header: bytes) -> bool:
@@ -229,26 +275,40 @@ def verify_sandwich(b: SandwichBundle):
 
     q = challenge(b0_hash, b.session_id)
 
-    # evidence blobs: nonce embedding, echo, binding to q/B0/session
+    # evidence blobs, typed: NTP gets nonce-echo re-derivation; camera gets
+    # manifest + challenge binding (its handwritten in-frame code is
+    # human-verifiable content, deliberately outside machine checks)
     ev_index = {}
-    ok_nonce, ok_bind, ok_meas = True, True, True
+    ok_nonce, ok_bind, ok_camera, ok_meas = True, True, True, True
     for blob in b.evidence:
         try:
             o = cbor.loads(blob)
-            host, seq, req, resp = o[2], o[9], o[4], o[5]
-            n = exchange_nonce(q, host, seq)
-            if req[40:48] != n or resp[24:32] != n or (resp[0] & 0x07) != 4 or not (1 <= resp[1] <= 15):
-                ok_nonce = False
             if o[10] != q or o[11] != bytes.fromhex(b0_hash) or o[12] != b.session_id:
                 ok_bind = False
-            ex = {"host": host, "ip": o[3], "request": req, "response": resp,
-                  "t1_utc_ns": o[8], "t1_mono_ns": o[6], "t4_mono_ns": o[7]}
-            meas = derive_measurement(ex)
-            ev_index[digest_pair(DOM_EVIDENCE, blob)] = (seq, host, meas)
+            typ = o[1]
+            if typ == "NTP/v4-UDP":
+                host, seq, req, resp = o[2], o[9], o[4], o[5]
+                n = exchange_nonce(q, host, seq)
+                if req[40:48] != n or resp[24:32] != n or (resp[0] & 0x07) != 4 or not (1 <= resp[1] <= 15):
+                    ok_nonce = False
+                ex = {"host": host, "ip": o[3], "request": req, "response": resp,
+                      "t1_utc_ns": o[8], "t1_mono_ns": o[6], "t4_mono_ns": o[7]}
+                meas = derive_measurement(ex)
+                ev_index[digest_pair(DOM_EVIDENCE, blob)] = ("NTP/v4-UDP", seq, meas)
+            elif typ == "CAMERA-PHOTO/v1":
+                if b.version < 2 or (b.photo_manifest or {}) != o[2] or not o[2]:
+                    ok_camera = False
+                ev_index[digest_pair(DOM_EVIDENCE, blob)] = (
+                    "CAMERA-PHOTO/v1", 0,
+                    {"claimed_ps": o[6] * 1000, "uncertainty_ps": o[7] * 1000})
+            else:
+                ok_bind = False
         except Exception:
             ok_nonce = ok_bind = False
     checks["S_NONCE_ECHO"] = ok_nonce
     checks["S_CHALLENGE_BINDING"] = ok_bind
+    if b.version >= 2:
+        checks["S_CAMERA_BINDING"] = ok_camera
 
     # every observation's source evidence must resolve to a blob whose
     # deterministically re-derived measurement matches the signed claim,
@@ -270,9 +330,9 @@ def verify_sandwich(b: SandwichBundle):
             if key not in ev_index or origin_s is None:
                 ok_meas = False
                 continue
-            seq, host, meas = ev_index[key]
+            typ, seq, meas = ev_index[key]
             rel = meas["claimed_ps"] - origin_s * PS
-            if (seq != u.sequence or src.claimed_ps != rel
+            if (typ != src.source_type or seq != u.sequence or src.claimed_ps != rel
                     or src.uncertainty_ps != meas["uncertainty_ps"]
                     or u.interval != Interval(rel - meas["uncertainty_ps"],
                                               rel + meas["uncertainty_ps"])):

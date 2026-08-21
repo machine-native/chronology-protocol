@@ -132,3 +132,31 @@ origins. A float-reference regression test pins this forever (suite: 26).
   block attestations after calendar aggregation (`ots upgrade` with any standard
   client). Two of four calendars were unreachable (expired TLS certificates on their
   side) — stated, and two independent attestations were obtained.
+
+---
+
+# v0.3.0 — The first astronomical ChronologyProof (2026-08-21)
+
+**Sandwich v2: a real optical observation of the sky, inside the causal bounds.** On
+the evening of 2026-08-20 the operator photographed the gibbous Moon over New Delhi
+with a fresh challenge code — the first 16 hex digits of q, derived from block 252's
+hash five minutes earlier — handwritten on paper inside the frames. Ten original
+frames (EXIF intact, sha256-manifested) became a `CAMERA-PHOTO/v1` witness beside
+five fresh NTP witnesses in the epoch-2 checkpoint, chained to epochs 1 and 0, mined
+into height 253 (parent = B0: an adjacent-block causal window again) and buried by
+ten overnight laboratory blocks.
+
+```
+B0 252  ≺  photos 15:24 UTC (code in frame)  ≺  C 253  ≺  254…263
+bundle   vectors/valid/astro-sandwich-bundle.cbor
+         sha256 32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc
+verdict  SANDWICH_PASS — all checks, incl. S_CAMERA_BINDING and S_PHOTO_FILES
+```
+
+The bundle carries the open-astrolabe engine's expectation for the capture instant —
+Moon at SW 216.6°, altitude 24.0°, 55.2% illuminated, `reference` grade — as
+`prediction_json`, labeled `EXPECTATION_NOT_EVIDENCE`. The frames show exactly that.
+The prediction-vs-photo comparison is human-verifiable by design in this profile;
+a plate-solved astrometric residual is named future work, not claimed. Full record:
+[`live/anchor-evidence/ASTRO-SANDWICH-ACCEPTANCE.md`](live/anchor-evidence/ASTRO-SANDWICH-ACCEPTANCE.md);
+normative profile: `docs/REALITY-SANDWICH.md` §6. Suite: 27 tests.

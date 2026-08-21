@@ -1,0 +1,41 @@
+{
+  "bundle": "vectors\\valid\\astro-sandwich-bundle.cbor",
+  "bytes": 473536,
+  "sha256": "32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc",
+  "b0": {
+    "hash": "0000000058e3ceb8b0a3f332d9ec7248884d7693125f7e80972fbd8bccc6f6b9",
+    "height": 252
+  },
+  "block_c": {
+    "hash": "00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee",
+    "height": 253
+  },
+  "burial_depth": 10,
+  "challenge": "d2b79b45d60f408a3aab7c9bbb5c507b092d150f38f5f2e00a8889b6de56de52",
+  "photos": 10,
+  "witnesses": 6,
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_CAMERA_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS"
+}

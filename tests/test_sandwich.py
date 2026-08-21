@@ -158,6 +158,68 @@ def _synthetic_sandwich(tmp: Path):
         genesis=genesis)
 
 
+def test_v2_camera_witness_roundtrip_and_tamper(tmp_path):
+    try:
+        ensure_available()
+    except PQUnavailable:
+        pytest.skip("OpenSSL with ML-DSA/SLH-DSA unavailable")
+    from ctp.sandwich import camera_evidence_blob, camera_unsigned
+    genesis = build_protocol_genesis((ROOT / "SPEC.md").read_bytes(),
+                                     (ROOT / "INVARIANTS.md").read_bytes())
+    gid = genesis.genesis_id()
+    b0 = _mine_easy(anchor_payload(0, b"\x00" * 32, b"\x00" * 48), "11" * 32, 1_787_000_000)
+    session = bytes(range(32))
+    q = challenge(b0["hash"], session)
+    origin_s = 1_787_000_000 - (1_787_000_000 % 86400)
+
+    history, latest, blobs = [], [], []
+    for host in ("a.example", "b.example", "c.example", "d.example"):
+        keys = _pq_keys(tmp_path, host)
+        prev = None
+        for seq in (0, 1):
+            ex = synthetic_exchange(host, exchange_nonce(q, host, seq), 1_787_000_100 + seq)
+            meas = derive_measurement(ex)
+            blob = evidence_blob(seq, ex, q, b0["hash"], session)
+            u = ntp_unsigned(seq, ex, meas, blob, gid, prev, origin_s)
+            s = sign_observation(u, keys)
+            prev = u.lineage_id()
+            history.append(s)
+            blobs.append(blob)
+            if seq == 1:
+                latest.append(s)
+    manifest = {"a.jpg": bytes(32), "b.jpg": bytes(range(32))}
+    cam_blob = camera_evidence_blob(manifest, {"a.jpg": 1_787_000_050 * 10**9},
+                                    "TestCam", "Testville",
+                                    1_787_000_050 * 10**9, 120 * 10**9,
+                                    q, b0["hash"], session)
+    cam = sign_observation(camera_unsigned(cam_blob, "testcam", gid, origin_s, 1), _pq_keys(tmp_path, "cam"))
+    history.append(cam)
+    latest.append(cam)
+    blobs.append(cam_blob)
+
+    cp = build_checkpoint(2, latest, f=1)
+    scp = sign_checkpoint(cp, _pq_keys(tmp_path, "coord2"))
+    commitment = scp.record_commitment()
+    c = _mine_easy(anchor_payload(2, commitment.sha256, commitment.shake384), b0["hash"], 1_787_000_200)
+    b1 = _mine_easy(anchor_payload(3, b"\x02" * 32, b"\x02" * 48), c["hash"], 1_787_000_300)
+    mid = (cp.interval.lower + cp.interval.upper) // 2
+    bundle = SandwichBundle(
+        b0_raw=b0["raw"], b0_height=1, session_id=session, evidence=blobs,
+        history=history, checkpoint=scp, block_c_raw=c["raw"], path_headers=[],
+        b1_headers=[b1["header"]], expectation=era_expectation(origin_s, mid),
+        genesis=genesis, version=2, photo_manifest=manifest,
+        prediction_json=b'{"label":"EXPECTATION_NOT_EVIDENCE"}')
+    raw = bundle.canonical()
+    checks, verdict, facts = verify_sandwich(SandwichBundle.from_bytes(raw))
+    assert verdict == "SANDWICH_PASS", checks
+    assert checks["S_CAMERA_BINDING"]
+
+    tampered = SandwichBundle.from_bytes(raw)
+    tampered.photo_manifest = {"a.jpg": bytes(32)}     # drop a frame from the manifest
+    checks2, verdict2, _ = verify_sandwich(tampered)
+    assert verdict2 == "FAIL" and not checks2["S_CAMERA_BINDING"]
+
+
 def test_synthetic_sandwich_roundtrip_and_tamper(tmp_path):
     try:
         ensure_available()

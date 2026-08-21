@@ -93,7 +93,35 @@ observation) has a deterministic prediction to be compared against **inside the 
 sandwich**. Model output never becomes evidence by being written down; only an
 observation can meet it.
 
-## 6. Non-claims
+## 6. Optical witness profile — sandwich v2 (CAMERA-PHOTO/v1)
+
+Version 2 adds a photographic witness alongside the NTP profile, for observations of
+the physical sky:
+
+- Before capture, the acquiring party derives the challenge q from a fresh B0 and
+  **handwrites a code prefix of q inside the photographed scene**. This binding is
+  *human-verifiable content* — anyone can open the frames and read the code — and is
+  deliberately outside machine verification: a determined forger could composite it,
+  and the profile says so. The machine-checked binding is the recorded one (q, B0,
+  session inside the evidence blob committed to by block C).
+- The evidence blob carries the sha256 of every original frame, per-frame EXIF capture
+  times (self-asserted by the camera clock, labeled so), camera model, and stated
+  location. Bundle v2 duplicates the frame manifest at top level (`photo_manifest`)
+  and the verifier requires the two to match; with `--photos DIR` it also re-hashes
+  the actual files.
+- The camera observation's interval spans the capture session plus an honest handheld
+  clock margin; its `auth_state` is `OPERATOR_ASSERTED`. The tight time backbone
+  comes from the NTP witnesses in the same checkpoint; the causal bounds come from
+  the sandwich, not from EXIF.
+- Bundle v2 carries a **prediction attachment** (`prediction_json`): the
+  open-astrolabe engine's deterministic expectation for the observed body at the
+  capture instant and stated location (azimuth/altitude, phase, engine grades).
+  Labeled `EXPECTATION_NOT_EVIDENCE`, exactly like the ERA field. In this first
+  optical profile the prediction-vs-photo comparison (position in frame, phase) is
+  **human-verifiable, not machine-measured** — a calibrated astrometric residual
+  (plate-solving) is named future work, not claimed.
+
+## 7. Non-claims
 
 - No claim that any NTP server told the truth — only that its answers were acquired
   inside the window and are preserved bit-exactly.

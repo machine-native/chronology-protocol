@@ -2,9 +2,11 @@
 """Standalone offline verifier for a reality-sandwich bundle.
 
 Usage:
-  python scripts/verify_sandwich.py [BUNDLE.cbor]
+  python scripts/verify_sandwich.py [BUNDLE.cbor] [--photos DIR]
 
 Needs no network. Needs OpenSSL 3.5+ only for the post-quantum signature checks.
+With --photos, every file in a v2 bundle's photo manifest must exist in DIR and
+hash to its recorded sha256 (S_PHOTO_FILES).
 Exit 0 iff the verdict is SANDWICH_PASS or SANDWICH_PASS_UNBURIED.
 """
 from pathlib import Path
@@ -13,9 +15,22 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from ctp.sandwich import SandwichBundle, verify_sandwich
 
-path = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "vectors" / "valid" / "reality-sandwich-bundle.cbor"
+args = [a for a in sys.argv[1:] if not a.startswith("--")]
+photos_dir = None
+if "--photos" in sys.argv:
+    photos_dir = Path(sys.argv[sys.argv.index("--photos") + 1])
+path = Path(args[0]) if args else ROOT / "vectors" / "valid" / "reality-sandwich-bundle.cbor"
 raw = path.read_bytes()
-checks, verdict, facts = verify_sandwich(SandwichBundle.from_bytes(raw))
+b = SandwichBundle.from_bytes(raw)
+checks, verdict, facts = verify_sandwich(b)
+if photos_dir is not None and b.version >= 2:
+    ok = bool(b.photo_manifest)
+    for name, digest in (b.photo_manifest or {}).items():
+        f = photos_dir / name
+        ok = ok and f.is_file() and hashlib.sha256(f.read_bytes()).digest() == digest
+    checks["S_PHOTO_FILES"] = ok
+    if not ok and verdict.startswith("SANDWICH_PASS"):
+        verdict = "FAIL"
 print(json.dumps({"bundle": str(path), "sha256": hashlib.sha256(raw).hexdigest(),
                   "facts": facts, "checks": checks, "verdict": verdict}, indent=2))
 raise SystemExit(0 if verdict.startswith("SANDWICH_PASS") else 1)

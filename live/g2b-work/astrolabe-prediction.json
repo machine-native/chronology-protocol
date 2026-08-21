@@ -1,0 +1,33 @@
+{
+ "label": "EXPECTATION_NOT_EVIDENCE",
+ "instant_utc": "2026-08-20T15:24:33.600Z",
+ "observer": {
+  "place": "New Delhi, India",
+  "lat_deg": 28.6139,
+  "lon_deg_east": 77.209,
+  "elevation_m": 216,
+  "location_source": "operator-stated city; coordinates are the city reference point"
+ },
+ "engine": "open-astrolabe astrolabe-engine v2.0.0 (git f41723e) public surface + its declared backend astronomy-engine",
+ "time_scales": {
+  "jd_ut": 2461273.1420555557,
+  "delta_t_s": 75.46607679307166,
+  "jd_tt": 2461273.142929006,
+  "gast_deg": 200.12064022708174,
+  "last_deg_delhi": 277.32964022708177
+ },
+ "moon": {
+  "predicted_azimuth_deg": 216.59505217507706,
+  "predicted_altitude_deg": 24.036768972711457,
+  "compass": "SW",
+  "topocentric_ra_deg": 239.77288796377684,
+  "topocentric_dec_deg": -26.685932707573752,
+  "illuminated_fraction": 0.5517101221005006,
+  "engine_topocentric_tropical_lon_deg": 243.10843041758525,
+  "engine_observer_mode": "topocentric",
+  "engine_grade": "reference",
+  "engine_tolerance_arcsec": 10
+ },
+ "sun_altitude_deg": -24.379423534801433,
+ "notes": "pointing prediction (az/alt, refraction-corrected) from the engine's declared backend; ecliptic state and grades from the engine's own provider surface"
+}
