@@ -9,7 +9,8 @@ chain. Started 2026-08-21.
 |---|---|
 | `rtl/sha256_core.v` — compression core, 1 round/cycle | **simulated, all vectors pass** |
 | `sim/tb_sha256_core.v` — testbench | **green** (Icarus Verilog) |
-| double-hash nonce scanner + UART host link | not written yet |
+| `rtl/sha256d_miner.v` — double-hash nonce scanner | **simulated: finds real chain nonces** |
+| UART host link + driver | not written yet |
 | synthesis / bitstream / on-board run | not attempted |
 
 Nothing here has run on a board. Per the project's standing rule, "simulated" and
@@ -73,8 +74,17 @@ never true.
 
 ## Next
 
-1. `sha256d_miner.v` — sequence two compressions, scan nonces, coarse-filter on
-   leading zero words; the host performs the exact target check (authority stays
-   with the tested software path).
+1. ~~`sha256d_miner.v`~~ — **done and simulated.** Given the real height-221 work
+   (host-computed midstate + 12-byte tail) and a nonce window bracketing the answer,
+   it returns nonce 2757362010 and the chain's own hash; a window stopping short
+   exhausts cleanly with no false positive. It coarse-filters on trailing zero words
+   only — the host still applies the exact compact target, so hardware narrows the
+   search and software decides validity.
 2. UART command/report link; host driver via pyserial.
 3. Vivado project + XDC for the Cmod A7-35T, then measure.
+
+Two byte-order traps were hit and are recorded so they are not re-hit: the leading
+zeros of a *displayed* block hash are the *trailing* words of the raw digest, and the
+nonce is a number here but is stored little-endian in the header, so it must be
+byte-swapped on the way into the block. Each bug made the scanner silently find
+nothing — the kind of failure only a real known-answer vector catches.
