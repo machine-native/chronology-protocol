@@ -95,6 +95,13 @@ cryptographic (see `docs/REALITY-SANDWICH.md` §6).
 
 ## 5. Check the anchors against the live chain (needs network)
 
+> **If this step fails, it does not invalidate anything above.** Steps 1–4 and step 6
+> are the load-bearing ones and they need no server of ours. This step talks to a
+> seed node we operate, and a seed can be down, blocked, or gone — as one was on
+> 2026-08-21. The evidence bundles and their Bitcoin attestations remain checkable
+> regardless; that separation is the whole design. Check current seed reachability
+> with `python live/check_seeds.py`.
+
 Ask the chain itself, over its own wire protocol, rather than believing this repository:
 
 ```bash
