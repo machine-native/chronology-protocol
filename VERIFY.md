@@ -97,10 +97,14 @@ cryptographic (see `docs/REALITY-SANDWICH.md` §6).
 
 > **If this step fails, it does not invalidate anything above.** Steps 1–4 and step 6
 > are the load-bearing ones and they need no server of ours. This step talks to a
-> seed node we operate, and a seed can be down, blocked, or gone — as one was on
-> 2026-08-21. The evidence bundles and their Bitcoin attestations remain checkable
-> regardless; that separation is the whole design. Check current seed reachability
-> with `python live/check_seeds.py`.
+> seed node we operate, and a seed can be down, blocked, or unreachable from where
+> you are sitting. The evidence bundles and their Bitcoin attestations remain
+> checkable regardless; that separation is the whole design.
+>
+> Before concluding a seed is down, check whether the path is at fault: run
+> `python live/check_seeds.py`, and test an unrelated host too. On 2026-08-21 this
+> project briefly recorded the seed as down when the real cause was a local network
+> fault — the seed was serving normally throughout.
 
 Ask the chain itself, over its own wire protocol, rather than believing this repository:
 
