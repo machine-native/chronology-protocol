@@ -138,6 +138,23 @@ def machine_state_digest() -> DigestPair:
     return digest_pair(DOM_STATE, blob)
 
 
+# ---- Roughtime witness profile — signed time evidence ------------------------
+def rt_unsigned(seq: int, ex: dict, meas: dict, blob: bytes, genesis_id, previous,
+                origin_unix_s: int) -> UnsignedObservation:
+    wid = digest_pair(DOM_WITNESS, ("ROUGHTIME:" + ex["host"]).encode()).sha256
+    ev = digest_pair(DOM_EVIDENCE, blob)
+    rel = meas["claimed_ps"] - origin_unix_s * PS
+    src = SourceObservation("ROUGHTIME/v1", rel, meas["uncertainty_ps"],
+                            "SERVER_SIGNED_ED25519", ev)
+    state = machine_state_digest()
+    return UnsignedObservation(
+        witness_id=wid, genesis_id=genesis_id, sequence=seq, previous=previous,
+        monotonic_ps=ex["t1_mono_ns"] * 1000,
+        interval=Interval(rel - meas["uncertainty_ps"], rel + meas["uncertainty_ps"]),
+        reference_frame=frame_for_origin(origin_unix_s), sources=[src],
+        hardware_state=state, firmware_state=state)
+
+
 # ---- optical (camera) witness profile — sandwich v2 --------------------------
 def camera_evidence_blob(photo_digests: dict, exif_times_utc_ns: dict, camera_model: str,
                          place: str, claimed_utc_ns: int, uncertainty_ns: int,
@@ -280,6 +297,7 @@ def verify_sandwich(b: SandwichBundle):
     # human-verifiable content, deliberately outside machine checks)
     ev_index = {}
     ok_nonce, ok_bind, ok_camera, ok_meas = True, True, True, True
+    ok_rt, saw_rt, saw_camera = True, False, False
     for blob in b.evidence:
         try:
             o = cbor.loads(blob)
@@ -296,19 +314,42 @@ def verify_sandwich(b: SandwichBundle):
                 meas = derive_measurement(ex)
                 ev_index[digest_pair(DOM_EVIDENCE, blob)] = ("NTP/v4-UDP", seq, meas)
             elif typ == "CAMERA-PHOTO/v1":
+                saw_camera = True
                 if b.version < 2 or (b.photo_manifest or {}) != o[2] or not o[2]:
                     ok_camera = False
                 ev_index[digest_pair(DOM_EVIDENCE, blob)] = (
                     "CAMERA-PHOTO/v1", 0,
                     {"claimed_ps": o[6] * 1000, "uncertainty_ps": o[7] * 1000})
+            elif typ == "ROUGHTIME/v1":
+                saw_rt = True
+                from .roughtime import (rt_nonce, verify_response, derive_rt_measurement,
+                                        decode_message, MAGIC, T_NONC)
+                import struct as _struct
+                host, seq = o[2], o[9]
+                n = rt_nonce(q, host, seq)
+                req = o[4]
+                req_body = req[12:12 + _struct.unpack("<I", req[8:12])[0]] if req[:8] == MAGIC else req
+                if decode_message(req_body).get(T_NONC) != n:
+                    ok_rt = False
+                    continue
+                try:
+                    verified = verify_response(o[5], n, o[13])
+                except ValueError:
+                    ok_rt = False
+                    continue
+                ex = {"host": host, "t1_mono_ns": o[6], "t4_mono_ns": o[7]}
+                meas = derive_rt_measurement(ex, verified)
+                ev_index[digest_pair(DOM_EVIDENCE, blob)] = ("ROUGHTIME/v1", seq, meas)
             else:
                 ok_bind = False
         except Exception:
             ok_nonce = ok_bind = False
     checks["S_NONCE_ECHO"] = ok_nonce
     checks["S_CHALLENGE_BINDING"] = ok_bind
-    if b.version >= 2:
-        checks["S_CAMERA_BINDING"] = ok_camera
+    if saw_camera or (b.version >= 2 and b.photo_manifest):
+        checks["S_CAMERA_BINDING"] = ok_camera and saw_camera
+    if saw_rt:
+        checks["S_ROUGHTIME_SIGNATURES"] = ok_rt
 
     # every observation's source evidence must resolve to a blob whose
     # deterministically re-derived measurement matches the signed claim,

@@ -1,0 +1,31 @@
+{
+  "host": "bitcoin.bitcoin-lab.org",
+  "port": 18026,
+  "block_hash": "0000000032580c2f20211b668bb643965dda2dff3a7621bf9797599d75de710c",
+  "raw_sha256": "44c9aa533af678fbfa17aadc05dee39dbeb2d5fc04c0779278002168e358ad1c",
+  "events": [
+    {
+      "event": "VERSION_SENT",
+      "protocol_version": 101
+    },
+    {
+      "event": "MESSAGE_RECEIVED",
+      "command": "version",
+      "bytes": 46
+    },
+    {
+      "event": "BLOCK_SENT",
+      "bytes": 306
+    },
+    {
+      "event": "MESSAGE_RECEIVED",
+      "command": "addr",
+      "bytes": 27
+    }
+  ],
+  "status": "BLOCK_SENT_ACCEPTANCE_NOT_YET_PROVEN",
+  "required_acceptance_evidence": [
+    "unmodified node log showing block acceptance or block-index inclusion",
+    "independent chain view showing the same block hash on the active chain"
+  ]
+}

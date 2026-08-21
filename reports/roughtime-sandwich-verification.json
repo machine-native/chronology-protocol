@@ -1,0 +1,39 @@
+{
+  "bundle": "vectors\\valid\\roughtime-sandwich-bundle.cbor",
+  "bytes": 593393,
+  "sha256": "9ceed018060d8ad227c37115224e8d2063dfbaeeae51c790932636aa51b5e5bd",
+  "b0": {
+    "hash": "00000000120059e003e8bf7e32d29866a37188aee93a976651b7ce3aa754202d",
+    "height": 263
+  },
+  "block_c": {
+    "hash": "0000000032580c2f20211b668bb643965dda2dff3a7621bf9797599d75de710c",
+    "height": 264
+  },
+  "burial_depth": 0,
+  "witnesses": 7,
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_ROUGHTIME_SIGNATURES": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS_UNBURIED"
+}

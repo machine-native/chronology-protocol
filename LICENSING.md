@@ -2,7 +2,7 @@
 
 **As of v0.1.1, this repository is licensed under the Apache License, Version 2.0.**
 
-Copyright (c) Parth Mauria Saxena. See [`LICENSE`](LICENSE) for the full text.
+Copyright (c) 2026 Parth Mauria Saxena. See [`LICENSE`](LICENSE) for the full text.
 
 History: the sealed v0.1.0 package deliberately granted no public license, pending a
 licensing decision before public distribution (the original text of this file recorded

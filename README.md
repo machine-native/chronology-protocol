@@ -61,6 +61,16 @@ live laboratory chain, real difficulty-1 work, nNonce 2757362010) carries the se
 released Jan09-derived client. See `live/anchor-evidence/ACCEPTANCE.md` and
 `vectors/valid/evidence-bundle-live-anchored.cbor` (verifier verdict: `PASS`, 13/13).
 
+## Authenticated time witnesses (v0.4.0)
+
+Epoch 3 (height 264) carries **server-signed** time evidence: two Roughtime servers
+Ed25519-sign a Merkle root containing a nonce derived from the sandwich challenge, so
+the lower causal bound is cryptographic rather than merely echoed. They ride beside
+the five NTP witnesses in one consensus (q=3 of 7) — signed-but-coarse (±2–4 s) and
+unsigned-but-fine (±30–200 ms) consolidated without changing the consensus rule.
+`ctp/roughtime.py` verifies the whole chain offline; profile and precision trade in
+`docs/REALITY-SANDWICH.md` §3b.
+
 ## The first astronomical ChronologyProof (v0.3.0)
 
 On 2026-08-20 a real observation of the Moon over New Delhi — ten photographs with a
@@ -102,5 +112,5 @@ cryptographic and causal lineage. Calendars and civil timescales are projections
 
 ## Licensing status
 
-Apache License 2.0, granted at v0.1.1 for public distribution. Copyright (c) Parth
-Mauria Saxena. See `LICENSE` and `LICENSING.md`.
+Apache License 2.0, granted at v0.1.1 for public distribution. Copyright (c) 2026 Parth Mauria
+Saxena. See `LICENSE` and `LICENSING.md`.

@@ -67,6 +67,29 @@ exactly as trustworthy as their sources — no more.
 - The epoch-1 checkpoint chains to the sealed epoch-0 checkpoint via its record
   commitment (`previous`), and is signed ML-DSA-87 + SLH-DSA-SHAKE-256s as always.
 
+## 3b. Roughtime witness profile (ROUGHTIME/v1) — authenticated time evidence
+
+The signed upgrade of the NTP profile, over the IETF Roughtime wire (draft-11 framing,
+confirmed against roughtime.cloudflare.com and time.txryan.com, 2026-08-21):
+
+- The 32-byte request nonce is derived from the challenge:
+  `SHA-512("CHRONOLOGY/SANDWICH-RT-NONCE/v1" || 0x00 || q || host || seq)[0:32]`.
+  The server's Ed25519-signed response covers a Merkle tree that includes this nonce —
+  **the lower causal bound is server-signed**, not merely echoed.
+- Offline verification re-derives everything from the recorded bytes: Merkle inclusion
+  (`SHA-512(0x00||nonce)[:32]` leaves, `SHA-512(0x01||L||R)[:32]` nodes), the response
+  signature (`"RoughTime v1 response signature\0"` context, delegated key), the
+  delegation (`"RoughTime v1 delegation signature--\0"` context, long-term key), and
+  the midpoint's containment in the delegation window. Ed25519 via the OpenSSL CLI —
+  no new dependencies.
+- `auth_state = "SERVER_SIGNED_ED25519"`. Long-term keys ride in the evidence blob;
+  the key→operator mapping comes from a pinned ecosystem snapshot (provenance stated
+  in the blob's profile doc) — the signature chain is proven, the operator identity
+  behind a key is metadata.
+- Precision trade, stated: current servers serve one-second-granularity midpoints
+  (uncertainty ±2–4 s vs NTP's ±30–200 ms). Signed-but-coarse beside
+  unsigned-but-fine is exactly why both witness classes sit in one checkpoint.
+
 ## 4. Bundle and verification
 
 `SandwichBundle` (deterministic restricted CBOR): version, B0 raw block + height,
@@ -88,7 +111,7 @@ The bundle carries the Earth Rotation Angle computed from the consensus midpoint
 IAU 2000 formula (`ERA(Tu) = 2π(0.7790572732640 + 1.00273781191135448·Tu)`, integer
 nano-turns, |UT1−UTC| ≤ 0.9 s folded into the stated uncertainty). It is labeled
 `EXPECTATION_NOT_EVIDENCE` and the verifier recomputes it rather than trusting it.
-It exists so a future astronomical witness (an open-astrolabe-driven optical
+It exists so a future astronomical witness (a model-driven optical
 observation) has a deterministic prediction to be compared against **inside the same
 sandwich**. Model output never becomes evidence by being written down; only an
 observation can meet it.

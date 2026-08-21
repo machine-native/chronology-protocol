@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Race loop for the live-anchor gate: rebuild against the current tip, mine, submit,
+# Race loop for a sandwich epoch: rebuild against the current tip, mine, submit,
 # and check whether our block became the tip. Repeats until it does (or MAX_ROUNDS).
 # The laboratory VM mines the same chain at ~64 min/block average; each of our rounds
 # takes ~1-7 min, so odds favor us in any given round.
 set -u
+PAYLOAD="${1:?usage: race_sandwich.sh PAYLOAD_HEX_FILE}"
 cd "$(dirname "$0")/.."
 export PATH=/c/msys64/mingw64/bin:$PATH
 MAX_ROUNDS=8
@@ -19,7 +20,7 @@ for round in $(seq 1 $MAX_ROUNDS); do
   HEIGHT=$(python -c "import json;c=json.load(open('live/tip-context.json'));print(c['tip_height'])")
   NTIME=$(python -c "import time;print(int(time.time()))")
   echo "tip $PREV height $HEIGHT mtp $MTP bits $BITS ntime $NTIME"
-  python scripts/build_sandwich_template.py "$PREV" "$MTP" "$BITS" "$NTIME" > /dev/null || { echo "template failed"; continue; }
+  python scripts/build_sandwich_template.py "$PREV" "$MTP" "$BITS" "$NTIME" "$PAYLOAD" > /dev/null || { echo "template failed"; continue; }
   H=$(python -c "import json;print(json.load(open('reports/live-template.json'))['header_nonce0'])")
 
   rm -f live/mine/range*.out

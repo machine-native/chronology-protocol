@@ -110,8 +110,9 @@ non-claim in the normative document applies.
 # v0.2.1 — Cross-checked expectation, corrected constant, real-Bitcoin sidecar anchors (2026-08-19)
 
 **A cross-check did its job, and the error is stated rather than buried.** The
-astrolabe-engine (open-astrolabe, the ecosystem's validated celestial model — Sun/Moon
-at `reference` grade, 10″, validated against JPL Horizons and IMCCE) was run against
+astrolabe-engine (an independent celestial-model implementation whose Sun/Moon
+positions carry its own `reference` grade, 10″, validated against JPL Horizons and
+IMCCE; cited by name, version and commit in the bundle) was run against
 the sandwich's consensus instant. Its GAST disagreed with the bundle's stored ERA by
 ~100°: the v0.2.0 integer implementation had `ERA_A_NANO` a factor of 1000 too large
 (pico-turns written as nano-turns). Corrected, the two now agree to the physics:
@@ -160,3 +161,39 @@ The prediction-vs-photo comparison is human-verifiable by design in this profile
 a plate-solved astrometric residual is named future work, not claimed. Full record:
 [`live/anchor-evidence/ASTRO-SANDWICH-ACCEPTANCE.md`](live/anchor-evidence/ASTRO-SANDWICH-ACCEPTANCE.md);
 normative profile: `docs/REALITY-SANDWICH.md` §6. Suite: 27 tests.
+
+---
+
+# v0.4.0 — Authenticated time witnesses (2026-08-21)
+
+**The lower causal bound becomes cryptographic.** Under the NTP profile a server
+*echoes* the challenge-derived nonce; under the new `ROUGHTIME/v1` profile the server
+**Ed25519-signs** a Merkle root containing it. Epoch 3 puts both classes in one
+checkpoint: two signed Roughtime witnesses (Cloudflare, txryan) beside the five NTP
+witnesses, consensus q=3 of 7, anchored at height 264 with parent = B0 — the fourth
+consecutive adjacent-block causal window, won on the first attempt.
+
+```
+B0 263  ≺  signed acquisition 06:17 UTC  ≺  C 264 (epoch 3)
+bundle   vectors/valid/roughtime-sandwich-bundle.cbor
+verdict  SANDWICH_PASS_UNBURIED — all checks incl. S_ROUGHTIME_SIGNATURES;
+         burial depth 0 at publication (the laboratory miner had not yet
+         extended the chain; its gaps run 6-184 min). Re-running
+         scripts/assemble_g5_bundle.py records burial when it lands.
+```
+
+New in this release:
+
+- `ctp/roughtime.py` — IETF-draft Roughtime client and complete offline verifier:
+  challenge-derived nonce, Merkle inclusion, response signature, delegation
+  signature against pinned long-term keys, delegation-window containment. Ed25519
+  through the OpenSSL CLI, so no new Python dependencies. Every wire constant was
+  pinned empirically against live servers before being hard-coded.
+- `scripts/run_g5.py`, `scripts/assemble_g5_bundle.py`, `tests/test_roughtime.py`
+  (synthetic round-trip with four tamper cases). Suite: 29 tests.
+- `scripts/ots_upgrade.py` (from v0.3.1) and the normative profile in
+  `docs/REALITY-SANDWICH.md` §3b, including the honest precision trade: signed
+  evidence is currently ±2–4 s against NTP's ±30–200 ms.
+
+Record: [`live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md`](live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md).
+The epoch chain now reads 0 → 1 → 2 → 3, every link committed into proof-of-work.
