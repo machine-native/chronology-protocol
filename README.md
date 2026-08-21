@@ -63,7 +63,8 @@ released Jan09-derived client. See `live/anchor-evidence/ACCEPTANCE.md` and
 
 ## Authenticated time witnesses (v0.4.0)
 
-Epoch 3 (height 264) carries **server-signed** time evidence: two Roughtime servers
+Epoch 3 (height 269, after its first anchor at 264 was orphaned in the chain's first
+reorganization — see v0.4.1) carries **server-signed** time evidence: two Roughtime servers
 Ed25519-sign a Merkle root containing a nonce derived from the sandwich challenge, so
 the lower causal bound is cryptographic rather than merely echoed. They ride beside
 the five NTP witnesses in one consensus (q=3 of 7) — signed-but-coarse (±2–4 s) and
@@ -90,6 +91,14 @@ mined into block C at height 222. Construction and non-claims:
 [`docs/REALITY-SANDWICH.md`](docs/REALITY-SANDWICH.md); bundle:
 `vectors/valid/reality-sandwich-bundle.cbor`; verifier: `scripts/verify_sandwich.py`
 (offline, network-free).
+
+## Verify this yourself
+
+Everything here is checkable from bytes, by you, without trusting us: **[VERIFY.md](VERIFY.md)**
+walks from `git clone` to a verdict on all four anchored epochs, then out to the public
+Bitcoin blocks that attest them. It states the one hard dependency (OpenSSL 3.5+) up
+front and names the platform where the official OpenTimestamps client is currently
+broken, rather than letting you discover either the hard way.
 
 ## Scientific claim
 
