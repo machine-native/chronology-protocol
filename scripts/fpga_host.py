@@ -111,31 +111,61 @@ def cmd_ping(a):
 
 
 def cmd_selftest(a):
-    """Replay work whose answer the live chain already proved."""
+    """Replay work whose answer the live chain already proved.
+
+    --depth sets how many nonces before the known answer the scan starts. The
+    default of 4 is the shallowest useful check: it proves the board computes
+    SHA-256d correctly and reports over UART, but it barely exercises the nonce
+    scanner at all. A deep run is a far stronger claim -- the board must walk a
+    long range, reject every wrong nonce, and stop on exactly the right one --
+    and it doubles as the throughput measurement, since the elapsed time is over
+    a known number of nonces.
+    """
     vecs = json.loads((ROOT / "fpga" / "sim" / "golden-vectors.json").read_text())
     v = vecs[0]
     hdr = bytes.fromhex(v["header_hex"])
     ser = open_port(a.port, a.baud)
     if not ping(ser):
         raise SystemExit("no link")
-    start = (v["nonce"] - 3) & M32
+    depth = max(1, a.depth)
+    start = (v["nonce"] - depth + 1) & M32
+    span = depth
     print(f"replaying height {v['height']}: expecting nonce {v['nonce']}")
+    if depth > 1000:
+        print(f"scanning {span:,} nonces up to it — the board must reject every "
+              f"one of the first {span-1:,}")
     t0 = time.time()
     got, status = scan(ser, hdr, start, int(v["bits"], 16), a.timeout)
+    dt = time.time() - t0
     if got and got[0] == v["nonce"] and got[1] == v["hash"]:
         print(f"SELFTEST PASS — board returned nonce {got[0]} and hash {got[1]}")
-        print(f"  ({time.time()-t0:.2f}s for {v['nonce']-start+1} nonces)")
+        print(f"  ({dt:.2f}s for {span:,} nonces)")
+        if span >= 100_000 and dt > 0:
+            rate = span / dt / 1e6
+            print(f"  measured rate: {rate:.4f} MH/s")
+            print(f"  full 2^32 sweep at this rate: {2**32/(rate*1e6)/3600:.1f} hours")
+        elif span < 100_000:
+            print("  too few nonces to measure a rate; use --depth 1000000")
     else:
         print(f"SELFTEST FAIL — status {status}, got {got}")
         sys.exit(1)
 
 
 def cmd_mine(a):
-    # Deliberately not implemented until the board passes selftest on real
-    # hardware. Wiring live anchoring to an unproven miner would risk submitting
-    # work built on a path that has never returned a known-correct answer.
-    raise SystemExit("mine mode unlocks after 'selftest' passes on the board; "
-                     "use live/race_sandwich.sh for CPU mining meanwhile")
+    # The board passed selftest on real hardware on 2026-08-22, so the original
+    # precondition is met. What blocks this now is simply that the mode is not
+    # written: it needs live chain-tip fetching, coinbase construction and block
+    # submission, none of which exist here yet.
+    #
+    # There is also no hurry. The board as built runs at roughly 0.09 MH/s
+    # against this laptop's measured 4.0 MH/s, so it would lose every race it
+    # entered. It becomes worth wiring up after the MMCM and multi-core work,
+    # or for continuous low-power mining where always-on beats fast-but-rarely.
+    raise SystemExit(
+        "mine mode is not implemented yet.\n"
+        "  selftest has passed on hardware, so the safety precondition is met;\n"
+        "  what is missing is chain-tip fetch, coinbase build and submission.\n"
+        "  Use live/race_sandwich.sh for CPU mining meanwhile.")
 
 
 def main():
@@ -146,6 +176,11 @@ def main():
         s.add_argument("--port", required=True)
         s.add_argument("--baud", type=int, default=115200)
         s.add_argument("--timeout", type=float, default=120)
+        if name == "selftest":
+            s.add_argument("--depth", type=int, default=4,
+                           help="nonces to scan before the known answer. 4 checks "
+                                "the hash only; 1000000 exercises the scanner and "
+                                "measures the real hash rate.")
         s.set_defaults(func=fn)
     a = p.parse_args()
     a.func(a)

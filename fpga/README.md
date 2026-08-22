@@ -14,11 +14,37 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| on-board run (selftest) | pins corrected 2026-08-22; awaiting the next hardware run |
+| on-board run (selftest) | **PASS on hardware 2026-08-22** |
+| `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
 
-Nothing here has run on a board. Per the project's standing rule, "simulated" and
-"synthesised" and "mined a real block" are three different claims and only the first
-is currently true.
+Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
+"mined a real block" are four different claims. The first three are now true. **The
+fourth is not**, and nothing here should be read as saying otherwise.
+
+### Ran on real silicon — 2026-08-22
+
+```
+DONE pin        1
+ping            link OK
+selftest        PASS
+  nonce         2757362010
+  hash          00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b
+```
+
+That nonce and that hash are **height 221 of the live anchor chain** — a block this
+project mined in software, now reproduced by an FPGA it also built. A third independent
+implementation of the consensus hash, after Python and C, and the first in hardware.
+
+What that does **not** yet establish, stated because the run is flattering and the bar
+should go up rather than down when it is:
+
+- The scan covered **4 nonces**. It proves SHA-256d is computed correctly and reported
+  over UART; it barely exercises the nonce scanner. Run
+  `selftest --depth 1000000` for a scan the board must walk properly — and which
+  measures the real rate.
+- **No throughput has been measured.** The 0.091 MH/s figure below is still arithmetic.
+  The deep selftest replaces it with a measurement.
+- **No block has been mined by this board.** `mine` mode is not written.
 
 ### Bring-up fault, found 2026-08-22: the UART port directions were inverted
 
@@ -183,7 +209,7 @@ nonce:
 
 | configuration | MH/s | vs this laptop (4.0 MH/s measured) |
 |---|---|---|
-| **as built** — 12 MHz, 1 core | **0.091** | **44× slower** |
+| **as built** — 12 MHz, 1 core | **0.091** *(still arithmetic — measure it)* | **44× slower** |
 | + MMCM at 75 MHz, 1 core | 0.57 | 7× slower |
 | + MMCM at 75 MHz, 9 cores | 5.11 | slightly faster |
 
@@ -314,9 +340,18 @@ enumerates ports and flags the FTDI one, checks the port opens, then sweeps baud
 to separate "alive but mismatched" from "nothing there."
 
 `selftest` replays the real height-221 work and requires the board to return nonce
-2757362010 and that block's hash. **`mine` mode is deliberately locked until
-selftest passes** — wiring live anchoring to a miner that has never returned a
-known-correct answer would be exactly the kind of shortcut this project does not take.
+2757362010 and that block's hash. **It passed on 2026-08-22.**
+
+Run it deep to exercise the scanner and measure the real rate:
+
+```bash
+python ../scripts/fpga_host.py selftest --port COM4 --depth 1000000
+```
+
+`mine` mode was locked until selftest passed, because wiring live anchoring to a miner
+that had never returned a known-correct answer would be the kind of shortcut this
+project does not take. That precondition is now met; the mode is simply not written
+yet — it needs chain-tip fetch, coinbase construction and submission.
 
 ## Wire protocol
 
