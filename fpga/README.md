@@ -14,6 +14,7 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
+| MMCM + parallel cores | **written and simulated**; not yet built or measured |
 | on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
 | measured throughput | **0.0906 MH/s** — 99.7% of the cycle-limited ceiling |
 | `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
@@ -203,6 +204,15 @@ iverilog -g2012 -o sim/tb.vvp rtl/sha256_core.v sim/tb_sha256_core.v
 vvp sim/tb.vvp
 ```
 
+The top-level testbench needs `-DNO_MMCM`, which swaps the Xilinx clocking primitive
+for the input clock directly — Icarus cannot elaborate `MMCME2_BASE`. The logic under
+test is identical; only the timebase changes.
+
+```bash
+iverilog -g2012 -DNO_MMCM -o sim/top.vvp sim/tb_miner_top.v     rtl/miner_top.v rtl/uart.v rtl/sha256d_miner.v rtl/sha256_core.v
+vvp sim/top.vvp
+```
+
 ## Measured after synthesis — the estimate was wrong twice over
 
 Vivado has now built it (`timing.rpt`, `utilisation.rpt`, `drc.rpt` in this folder,
@@ -241,8 +251,60 @@ saying otherwise would repeat the error this section already exists to correct.
 
 The good news is that the path to the ~5 MH/s figure is now *measured* rather than
 guessed: the core is smaller than estimated so **9 fit** instead of 6, and timing has
-enough slack for a 6× clock multiplier. Both are ordinary additions — an MMCM primitive
-and a parallel instantiation with a nonce-range splitter — neither yet written.
+enough slack for a 6× clock multiplier.
+
+**Both are now written and simulated** — an MMCM and an interleaved core array — but
+neither has been built or measured, so every number for them below remains a projection.
+
+## Scaling up: MMCM and a parallel core array
+
+Two changes, both parameterised so the configuration is a build argument rather than an
+RTL edit:
+
+```bash
+vivado -mode batch -source build.tcl -tclargs 8 60    # 8 cores at 60 MHz (default)
+vivado -mode batch -source build.tcl -tclargs 9 75    # the aggressive target
+```
+
+**The clock.** An MMCM multiplies the board's 12 MHz through a fixed 600 MHz VCO and
+divides back down, so the requested frequency must divide 600 exactly — the build script
+refuses anything else rather than letting the MMCM silently synthesise something other
+than `CLK_HZ`, which would corrupt the baud divisor and the heartbeat together. Reset is
+held until the MMCM reports lock, since running logic on a frequency that is still
+settling corrupts state in ways that then look like logic bugs.
+
+**The cores.** `NUM_CORES` scanners run in parallel, **interleaved**: core *i* starts at
+`nonce_start + i` and strides by `NUM_CORES`, so between them they cover every nonce
+exactly once with no shared state and no coordination during the search.
+
+Interleaving rather than slicing the range into contiguous blocks is deliberate, and the
+reason is measurement honesty. With slicing, an answer *D* nonces ahead is found by one
+core while the rest grind through unrelated regions — so wall-clock tracks a **single
+core's** rate while appearing to measure the whole array. Interleaved, reaching that
+answer takes *D / (N × per-core rate)*, which is what aggregate throughput should mean.
+
+Two cores can report in the same cycle, since they scan disjoint nonces and both
+candidates are genuine. The lowest index wins; the other is dropped. That costs nothing
+real — the host re-checks every reported nonce against the exact target anyway, and a
+dropped candidate at difficulty 1 is a retry, not a lost block.
+
+### What the build must confirm
+
+A single core closed at roughly **76 MHz fmax**, and filling the fabric costs some of
+that, so core count and clock trade against each other. The defaults are 8 cores at
+60 MHz because that leaves real margin; 9 at 75 is the number the projection below
+assumes and may not close. **Read the WNS the build prints.** If it is negative, the
+bitstream is not usable and any rate measured from it is meaningless.
+
+| configuration | projected MH/s | note |
+|---|---|---|
+| 8 cores at 60 MHz | 3.64 | the default; conservative timing |
+| 9 cores at 75 MHz | 5.11 | the original target; may not close |
+
+These scale 132 cycles per nonce per core — a constant hardware has now confirmed to
+within 0.3%. That makes them arithmetic on a measured quantity rather than on a guess,
+which is the only reason they are worth printing at all. They remain projections until a
+board runs `selftest --depth 5000000` and returns a number.
 
 **What the bitstream is for right now is correctness, not speed**: proving that silicon
 reproduces a proof-of-work answer this project already established. That is what

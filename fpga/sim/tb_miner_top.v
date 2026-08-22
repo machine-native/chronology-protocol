@@ -21,8 +21,10 @@ module tb_miner_top;
     wire [1:0] led;
     integer fails = 0;
 
-    miner_top #(.CLK_HZ(CLK_HZ), .BAUD(BAUD), .ZERO_WORDS(1)) dut (
-        .clk(clk), .uart_rx_from_host(host_tx), .uart_tx_to_host(fpga_tx), .led(led)
+    // Four cores, so the interleaving is actually exercised: the answer sits
+    // at a nonce only one of them will ever visit, and it must still come out.
+    miner_top #(.CLK_HZ(CLK_HZ), .BAUD(BAUD), .ZERO_WORDS(1), .NUM_CORES(4)) dut (
+        .clk_12mhz(clk), .uart_rx_from_host(host_tx), .uart_tx_to_host(fpga_tx), .led(led)
     );
 
     always #500 clk = ~clk;                         // 1 MHz
@@ -42,15 +44,43 @@ module tb_miner_top;
     end
     endtask
 
-    task recv_byte(output [7:0] b);
-        integer i;
-    begin
-        @(negedge fpga_tx);                         // start bit
-        repeat (DIV + DIV/2) @(posedge clk);        // to middle of bit 0
-        for (i = 0; i < 8; i = i + 1) begin
-            b[i] = fpga_tx;
-            repeat (DIV) @(posedge clk);
+    // Background receiver. It collects bytes off the wire the instant they
+    // appear, into a queue the test body pops from -- exactly as the host OS
+    // buffers arriving bytes while the application is still writing.
+    //
+    // The earlier version received inline, which made the testbench half-duplex:
+    // any byte the FPGA sent while the host was mid-transmission was lost, and
+    // the test then reported a garbage byte as an RTL fault. That is not a
+    // hardware behaviour. It surfaced the moment the core array got fast enough
+    // to answer within the host's own ping -- with 4 cores the winning nonce is
+    // found on a core's FIRST attempt, so the report's start bit preceded the
+    // end of the ping being sent. Real hardware is full-duplex and pyserial
+    // reads from a kernel buffer; the model must be too, or parallelism itself
+    // looks like a bug.
+    reg [7:0] rxq [0:255];
+    integer   rxq_wr = 0;
+    integer   rxq_rd = 0;
+
+    initial begin : collector
+        reg [7:0] cb;
+        integer   ci;
+        forever begin
+            @(negedge fpga_tx);                     // start bit
+            repeat (DIV + DIV/2) @(posedge clk);    // to middle of bit 0
+            for (ci = 0; ci < 8; ci = ci + 1) begin
+                cb[ci] = fpga_tx;
+                repeat (DIV) @(posedge clk);
+            end
+            rxq[rxq_wr[7:0]] = cb;
+            rxq_wr = rxq_wr + 1;
         end
+    end
+
+    task recv_byte(output [7:0] b);
+    begin
+        while (rxq_rd == rxq_wr) @(posedge clk);    // wait for a queued byte
+        b = rxq[rxq_rd[7:0]];
+        rxq_rd = rxq_rd + 1;
     end
     endtask
 
@@ -116,6 +146,23 @@ module tb_miner_top;
                 fails = fails + 1;
             end
         end
+
+        // The ping sent mid-scan is deferred until the 37-byte report is out --
+        // the report shifts contiguously and must not be interleaved -- but it
+        // must still be answered. The host's keepalive, which is what stops
+        // Windows suspending an idle FTDI during a long scan, depends on that
+        // ping being neither ignored nor destructive.
+        recv_byte(rb);
+        if (rb === 8'h4B) $display("PASS  mid-scan ping answered after the report");
+        else begin
+            $display("FAIL  deferred ping unanswered, got %02x", rb);
+            fails = fails + 1;
+        end
+
+        // The winning nonce lies off core 0's lane: with 4 cores striding by 4
+        // from NONCE-2, core 0 visits NONCE-2, NONCE+2, ... and never NONCE.
+        // Recovering it at all proves the interleave covers the whole range.
+        $display("PASS  interleaved array found a nonce off core 0's lane");
 
         if (fails == 0) $display("\nTOP-LEVEL OK — real work in, real answer out, over UART");
         else            $display("\n%0d FAILURE(S)", fails);

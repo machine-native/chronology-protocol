@@ -72,12 +72,49 @@ def test_port_names_state_their_direction():
 
 
 def test_clock_pin_and_period_agree_with_a_12mhz_board():
-    """A wrong CLK_HZ corrupts the baud divisor and produces garbage, not silence."""
+    """The INPUT clock is 12 MHz; the MMCM derives the logic clock from it."""
     text = XDC.read_text()
-    assert re.search(r"PACKAGE_PIN\s+L17.*?get_ports\s*\{\s*clk\s*\}", text, re.S)
+    assert re.search(r"PACKAGE_PIN\s+L17.*?get_ports\s*\{\s*clk_12mhz\s*\}", text, re.S)
     period = re.search(r"create_clock.*?-period\s+([\d.]+)", text, re.S)
     assert period, "no create_clock constraint for the board oscillator"
-    # 12 MHz -> 83.33 ns. Anything else means the RTL default of 12_000_000 is
-    # lying, and every UART bit period computed from it is wrong.
+    # 12 MHz -> 83.33 ns. This constrains the MMCM's INPUT; get it wrong and the
+    # MMCM synthesises a different frequency than CLK_HZ claims, which corrupts
+    # every UART bit period derived from it.
     assert abs(float(period.group(1)) - 83.33) < 0.5, period.group(1)
-    assert "CLK_HZ     = 12_000_000" in TOP.read_text()
+    src = TOP.read_text()
+    assert "CLKIN1_PERIOD   (83.333)" in src, "MMCM input period must match the board"
+
+
+def test_mmcm_frequency_is_reachable_from_the_fixed_vco():
+    """CLK_HZ must divide the VCO exactly, or the MMCM produces something else.
+
+    The logic clock, the baud divisor and the heartbeat are all derived from
+    CLK_HZ. If the MMCM cannot actually synthesise it, every one of those is
+    wrong together -- and the symptom is a UART emitting garbage, which is a
+    long way from the cause.
+    """
+    src = TOP.read_text()
+    vco = re.search(r"MMCM_VCO_MHZ = ([\d.]+)", src)
+    clk = re.search(r"parameter integer CLK_HZ\s*=\s*([\d_]+)", src)
+    assert vco and clk, "MMCM VCO or CLK_HZ default not found"
+    vco_mhz = float(vco.group(1))
+    clk_mhz = int(clk.group(1).replace("_", "")) / 1e6
+    assert vco_mhz % clk_mhz == 0, (
+        f"{clk_mhz} MHz does not divide the {vco_mhz} MHz VCO exactly"
+    )
+    # 600-1200 MHz is the Artix-7 -1 VCO range; 12 MHz x 50 = 600 sits at the
+    # bottom of it, which is legal. Outside it the MMCM will not lock at all.
+    assert 600.0 <= vco_mhz <= 1200.0, vco_mhz
+
+
+def test_cores_interleave_rather_than_slice():
+    """Each core must stride by NUM_CORES, or coverage is wrong or duplicated."""
+    src = TOP.read_text()
+    assert ".NONCE_STRIDE(NUM_CORES)" in src, (
+        "cores must stride by NUM_CORES so that together they cover every nonce "
+        "exactly once; a stride of 1 makes every core scan the same nonces"
+    )
+    assert ".nonce_start(nonce_start + g[31:0])" in src, (
+        "core i must start at nonce_start + i, or the lanes overlap and some "
+        "nonces are never visited at all"
+    )

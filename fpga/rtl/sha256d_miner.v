@@ -23,7 +23,14 @@
 `default_nettype none
 
 module sha256d_miner #(
-    parameter integer ZERO_WORDS = 1        // 1 -> ~2^32 filter, matches difficulty-1
+    parameter integer ZERO_WORDS   = 1,     // 1 -> ~2^32 filter, matches difficulty-1
+    // Nonce increment. With N cores each given a stride of N and a start offset
+    // of its own index, the cores interleave: together they cover every nonce
+    // exactly once, with no overlap and no coordination. Contiguous slicing
+    // would work too, but then reaching an answer D nonces away is one core's
+    // job and the other N-1 grind through unrelated ranges -- which makes a
+    // benchmark measure a single core while looking like it measures the array.
+    parameter integer NONCE_STRIDE = 1
 ) (
     input  wire         clk,
     input  wire         rst,
@@ -109,11 +116,11 @@ module sha256d_miner #(
                         busy      <= 1'b0;
                         phase     <= 2'd0;
                     end else begin
-                        nonce         <= nonce + 32'd1;
-                        remaining     <= remaining - 32'd1;
+                        nonce         <= nonce + NONCE_STRIDE[31:0];
+                        remaining     <= remaining - 32'd1;   // nonces done here
                         phase         <= 2'd1;
                         core_state_in <= midstate;
-                        core_block_in <= block2(tail, nonce + 32'd1);
+                        core_block_in <= block2(tail, nonce + NONCE_STRIDE[31:0]);
                         core_start    <= 1'b1;
                     end
                 end

@@ -17,22 +17,44 @@ create_project -in_memory -part $part
 read_verilog [glob ./rtl/*.v]
 read_xdc     ./constraints/cmod_a7.xdc
 
-# The board's oscillator is 12 MHz; the RTL defaults match, but state it once
-# here so a change is visible in one place.
+# Core count and clock frequency are the two knobs worth sweeping, so they are
+# command-line arguments rather than RTL edits:
 #
-# These are passed to synth_design directly rather than set on the fileset.
-# `set_property generic ... [current_fileset]` is a project-flow idiom, and in
-# an -in_memory project it can be accepted without taking effect -- which would
-# silently fall back to the RTL defaults. They happen to be identical today, so
-# the failure would be invisible now and load-bearing the moment someone changes
-# one. -generic is the documented path for this flow and errors if misused.
-set generics [list CLK_HZ=12000000 BAUD=115200 ZERO_WORDS=1]
-puts "generics  : $generics"
+#     vivado -mode batch -source build.tcl -tclargs <cores> <MHz>
+#     vivado -mode batch -source build.tcl -tclargs 8 60       (the default)
+#
+# The board oscillator is 12 MHz; an MMCM multiplies it to CLK_HZ via a fixed
+# 600 MHz VCO, so the frequency must divide 600 exactly. A single core closed at
+# roughly 76 MHz fmax, and filling the fabric costs some of that, so core count
+# and clock trade against each other. That trade is why this is swept rather
+# than assumed -- read the WNS printed at the end and step back if it goes
+# negative.
+#
+# Generics go to synth_design directly rather than onto the fileset.
+# `set_property generic ... [current_fileset]` is a project-flow idiom that an
+# -in_memory project can accept without effect, which would silently fall back
+# to the RTL defaults -- invisible while they happen to match, load-bearing the
+# moment they do not. -generic is the documented path here and errors if misused.
+set cores 8
+set mhz   60
+if {[llength $argv] >= 1} { set cores [lindex $argv 0] }
+if {[llength $argv] >= 2} { set mhz   [lindex $argv 1] }
+
+if {[expr {600 % $mhz}] != 0} {
+    puts "\nERROR: $mhz MHz does not divide the 600 MHz VCO exactly."
+    puts "Use one of: 50 60 75 100 120 150\n"
+    exit 1
+}
+set clk_hz [expr {$mhz * 1000000}]
+
+puts "cores     : $cores"
+puts "clock     : $mhz MHz  (CLK_HZ=$clk_hz)"
 
 synth_design -top $top -part $part \
-    -generic CLK_HZ=12000000 \
+    -generic CLK_HZ=$clk_hz \
     -generic BAUD=115200 \
-    -generic ZERO_WORDS=1
+    -generic ZERO_WORDS=1 \
+    -generic NUM_CORES=$cores
 write_checkpoint -force $outdir/post_synth.dcp
 report_utilization -file $outdir/utilisation_synth.rpt
 
@@ -60,8 +82,16 @@ write_bitstream -force $outdir/${top}.bit
 set wns [get_property SLACK [get_timing_paths -delay_type max]]
 set whs [get_property SLACK [get_timing_paths -delay_type min]]
 
+# Projected throughput for the configuration actually built. 132 cycles per
+# nonce per core was confirmed against hardware to within 0.3%, so this is
+# arithmetic on a measured constant rather than on a guess -- but it is still a
+# projection, and the selftest below is what turns it into a measurement.
+set mhs [expr {double($cores) * $clk_hz / 132.0 / 1000000.0}]
+
 puts "\n=== BUILD COMPLETE ==="
 puts "bitstream : $outdir/${top}.bit"
+puts "config    : $cores cores at $mhz MHz"
+puts [format "projected : %.2f MH/s  -- confirm with: fpga_host.py selftest --depth 5000000" $mhs]
 puts "WNS setup : $wns ns   (margin against the clock period)"
 puts "WHS hold  : $whs ns   (small positive is normal)"
 if {$whs < 0} {

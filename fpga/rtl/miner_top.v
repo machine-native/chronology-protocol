@@ -21,11 +21,18 @@
 `default_nettype none
 
 module miner_top #(
-    parameter integer CLK_HZ     = 12_000_000,   // Cmod A7 on-board oscillator
+    // Frequency the LOGIC runs at, synthesised by the MMCM from the board's
+    // 12 MHz oscillator. Drives the baud divisor and the heartbeat, so it must
+    // match what the MMCM actually produces -- both are derived from it below,
+    // so there is one knob and no way for them to disagree.
+    parameter integer CLK_HZ     = 60_000_000,
     parameter integer BAUD       = 115200,
-    parameter integer ZERO_WORDS = 1
+    parameter integer ZERO_WORDS = 1,
+    // Parallel scanners. Each is given stride NUM_CORES and start offset equal
+    // to its own index, so together they cover every nonce exactly once.
+    parameter integer NUM_CORES  = 8
 ) (
-    input  wire clk,
+    input  wire clk_12mhz,
     // Named for what they carry, not for whose datasheet is being quoted.
     // Digilent's `uart_rxd_out` / `uart_txd_in` are relative to the HOST side,
     // and reading them as bridge-relative is equally grammatical -- an ambiguity
@@ -43,11 +50,53 @@ module miner_top #(
     output wire uart_tx_to_host,     // J18
     output wire [1:0] led
 );
+    // ---- clocking ----------------------------------------------------------
+    // The board oscillator is 12 MHz, which caps the array at 0.09 MH/s no
+    // matter how many cores are instanced. An MMCM multiplies it up: VCO is
+    // fixed at 600 MHz (12 x 50, inside the -1 part's 600-1200 MHz range) and
+    // CLKOUT0 divides that down to CLK_HZ. One parameter therefore sets the
+    // clock, the baud divisor and the heartbeat period together.
+    //
+    // MMCME2_BASE is a Xilinx primitive that Icarus cannot elaborate, so
+    // simulation bypasses it and runs the logic straight off the input clock.
+    // The RTL below is identical either way; only the timebase changes.
+    localparam real MMCM_VCO_MHZ = 600.0;
+    localparam real CLKOUT_DIV   = MMCM_VCO_MHZ / (CLK_HZ / 1000000.0);
+
+    wire clk;
+    wire mmcm_locked;
+`ifdef NO_MMCM
+    assign clk         = clk_12mhz;
+    assign mmcm_locked = 1'b1;
+`else
+    wire clk_raw, clk_fb;
+    MMCME2_BASE #(
+        .CLKIN1_PERIOD   (83.333),          // 12 MHz
+        .DIVCLK_DIVIDE   (1),
+        .CLKFBOUT_MULT_F (50.0),            // -> 600 MHz VCO
+        .CLKOUT0_DIVIDE_F(CLKOUT_DIV),
+        .BANDWIDTH       ("OPTIMIZED")
+    ) mmcm (
+        .CLKIN1(clk_12mhz), .CLKFBIN(clk_fb), .CLKFBOUT(clk_fb),
+        .CLKOUT0(clk_raw),  .LOCKED(mmcm_locked),
+        .RST(1'b0), .PWRDWN(1'b0)
+    );
+    BUFG bufg_sys (.I(clk_raw), .O(clk));
+`endif
+
+    // Reset is held until the MMCM locks. Running logic on an unlocked clock
+    // means running on a frequency that is still moving, which is a good way to
+    // corrupt state that then looks like a logic bug.
     reg rst = 1'b1;
     reg [7:0] rst_cnt = 8'd0;
     always @(posedge clk) begin
-        if (rst_cnt != 8'hFF) begin rst_cnt <= rst_cnt + 8'd1; rst <= 1'b1; end
-        else rst <= 1'b0;
+        if (!mmcm_locked) begin
+            rst_cnt <= 8'd0; rst <= 1'b1;
+        end else if (rst_cnt != 8'hFF) begin
+            rst_cnt <= rst_cnt + 8'd1; rst <= 1'b1;
+        end else begin
+            rst <= 1'b0;
+        end
     end
 
     wire [7:0] rx_data;
@@ -110,19 +159,87 @@ module miner_top #(
     reg scan_go;
     always @(posedge clk) scan_go <= start_scan;   // one cycle after registers land
 
-    // ---- the scanner -------------------------------------------------------
-    wire         busy, found, exhausted;
-    wire [31:0]  golden_nonce;
-    wire [255:0] golden_hash;
-    wire         abort = rx_valid && (rx_data == 8'h53) && !loading;
+    // ---- the scanner array -------------------------------------------------
+    // NUM_CORES independent scanners, interleaved: core i starts at
+    // nonce_start + i and steps by NUM_CORES. Between them they cover every
+    // nonce exactly once, in order, with no shared state and no arbitration
+    // during the search -- each core simply never looks at another's nonces.
+    //
+    // Interleaving rather than slicing the range into contiguous blocks is
+    // deliberate. With slicing, an answer D nonces ahead is found by one core
+    // while the rest grind through unrelated regions, so wall-clock tracks a
+    // SINGLE core's rate while appearing to measure the array. Interleaved, the
+    // array reaches a target D nonces away in D/(N x per-core rate), which is
+    // what "aggregate throughput" should mean.
+    wire abort = rx_valid && (rx_data == 8'h53) && !loading;
 
-    sha256d_miner #(.ZERO_WORDS(ZERO_WORDS)) miner (
-        .clk(clk), .rst(rst | abort), .start(scan_go),
-        .midstate(midstate), .tail(tail),
-        .nonce_start(nonce_start), .nonce_count(32'd0),
-        .busy(busy), .found(found), .golden_nonce(golden_nonce),
-        .golden_hash(golden_hash), .exhausted(exhausted)
-    );
+    wire [NUM_CORES-1:0]     c_busy, c_found, c_exhausted;
+    wire [32*NUM_CORES-1:0]  c_nonce;
+    wire [256*NUM_CORES-1:0] c_hash;
+
+    genvar g;
+    generate
+        for (g = 0; g < NUM_CORES; g = g + 1) begin : core_array
+            sha256d_miner #(
+                .ZERO_WORDS  (ZERO_WORDS),
+                .NONCE_STRIDE(NUM_CORES)
+            ) miner (
+                .clk(clk), .rst(rst | abort), .start(scan_go),
+                .midstate(midstate), .tail(tail),
+                .nonce_start(nonce_start + g[31:0]),
+                .nonce_count(32'd0),
+                .busy        (c_busy[g]),
+                .found       (c_found[g]),
+                .golden_nonce(c_nonce[32*g  +: 32]),
+                .golden_hash (c_hash [256*g +: 256]),
+                .exhausted   (c_exhausted[g])
+            );
+        end
+    endgenerate
+
+    wire busy = |c_busy;
+
+    // Winner selection. Two cores can report in the same cycle -- they scan
+    // disjoint nonces, so both would be genuine candidates -- and only one
+    // report can be shifted out. Scanning downwards makes the lowest index win,
+    // which is arbitrary but deterministic; the loser's nonce is simply dropped.
+    // That costs nothing real: the host re-checks any reported nonce against
+    // the exact target anyway, and a missed candidate at difficulty 1 is a
+    // retry, not a lost block.
+    integer ci;
+    reg          found;
+    reg [31:0]   golden_nonce;
+    reg [255:0]  golden_hash;
+    always @(*) begin
+        found        = 1'b0;
+        golden_nonce = 32'd0;
+        golden_hash  = 256'd0;
+        for (ci = NUM_CORES-1; ci >= 0; ci = ci - 1) begin
+            if (c_found[ci]) begin
+                found        = 1'b1;
+                golden_nonce = c_nonce[32*ci  +: 32];
+                golden_hash  = c_hash [256*ci +: 256];
+            end
+        end
+    end
+
+    // Exhaustion is a one-cycle pulse per core and the cores finish at
+    // different times, so each is latched and the array reports exhausted only
+    // once every core has. (With nonce_count = 0 the cores run to the 2^32 wrap
+    // and this never fires; it is kept correct for when a bounded range is used.)
+    reg [NUM_CORES-1:0] exh_latch;
+    reg                 all_exh_d;
+    wire                all_exh = &exh_latch;
+    always @(posedge clk) begin
+        if (rst || abort || scan_go) begin
+            exh_latch <= {NUM_CORES{1'b0}};
+            all_exh_d <= 1'b0;
+        end else begin
+            exh_latch <= exh_latch | c_exhausted;
+            all_exh_d <= all_exh;
+        end
+    end
+    wire exhausted = all_exh && !all_exh_d;   // rising edge -> one pulse
 
     // ---- reporting ---------------------------------------------------------
     // A found result is latched and shifted out as 1 + 4 + 32 = 37 bytes.

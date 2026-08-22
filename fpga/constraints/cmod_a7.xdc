@@ -2,8 +2,8 @@
 # Only the pins this design uses are enabled.
 
 ## 12 MHz on-board oscillator
-set_property -dict { PACKAGE_PIN L17  IOSTANDARD LVCMOS33 } [get_ports { clk }];
-create_clock -add -name sys_clk_pin -period 83.33 -waveform {0 41.66} [get_ports { clk }];
+set_property -dict { PACKAGE_PIN L17  IOSTANDARD LVCMOS33 } [get_ports { clk_12mhz }];
+create_clock -add -name sys_clk_pin -period 83.33 -waveform {0 41.66} [get_ports { clk_12mhz }];
 
 ## USB-UART bridge (FT2232H).
 ##
