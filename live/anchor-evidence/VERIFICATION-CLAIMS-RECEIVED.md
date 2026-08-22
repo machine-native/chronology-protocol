@@ -1,10 +1,12 @@
 # Verification claims received
 
-Reports from parties who ran the verifier. **None of these closes the project's
-independent-verification criterion**, which additionally requires the verifier to
-publish their result somewhere they control, so the chain of custody does not run
-through this project. Each is recorded here for exactly what it is: a claim we
-received, with its artifacts identified so a reader can weigh it.
+Reports from parties who ran the verifier, each recorded for exactly what it is.
+
+The criterion this project set for itself requires two things: the artifact identified
+(pack or commit, transcript, timestamp, toolchain), **and** the verifier publishing
+their result somewhere they control, so the chain of custody does not run through this
+project. **Claim #2 satisfies both.** Claim #1 satisfies only the first and is recorded
+as a claim received, at the reporting party's own insistence.
 
 The bar and the reason for it are in the withdrawn record,
 [`INDEPENDENT-VERIFICATION-01.md`](INDEPENDENT-VERIFICATION-01.md).
@@ -80,6 +82,77 @@ directly from the OpenTimestamps proof format," and points at `python -S` as the
 
 This is the third real defect found by outside review in two days. The first two were
 an undeclared dependency and a stale test count.
+
+---
+
+## Claim #2 — 2026-08-22 — **independent verification, publicly filed** ✅
+
+**Classification: D-8 SATISFIED.** The first verification of this record by a party
+outside the project, published by that party from an account they control.
+
+**Issue [#1](https://github.com/machine-native/chronology-protocol/issues/1)** —
+opened 2026-08-22T08:28:23Z by GitHub user **`naxytra`**.
+
+### What a reader can check without asking anyone
+
+- The issue is public, and GitHub timestamps it independently of this project.
+- `naxytra` is **not** a member of the `machine-native` organisation and **not** a
+  collaborator on this repository — verifiable through GitHub's own API. They had
+  no write access to anything they verified.
+- They cloned the repository themselves at commit
+  `fc5933df265dd20ee9876d64511c6f0d3f604832`, rather than receiving a copy.
+- Every digest in their report matches this repository byte-for-byte.
+
+### What rests on the author's statement, and is recorded as such
+
+That `naxytra` is a different person from the project author. **No reader can verify
+that from the outside**, and it is inherent to reports of this kind — a single report
+from a low-history account is weaker evidence than several from established ones.
+It is stated here rather than glossed, and the remedy is more verifiers, not stronger
+wording. The author has stated that `naxytra` is an independent entity.
+
+### Their result
+
+```
+host          Ubuntu 24.04.3 LTS, OpenSSL 3.0.13 (too old for the PQ algorithms)
+run inside    docker ubuntu:25.10 — Python 3.13.7, OpenSSL 3.5.3
+commit        fc5933df265dd20ee9876d64511c6f0d3f604832
+
+MANIFEST.sha256                     all OK
+pytest                              48 passed
+evidence-bundle.cbor                PASS_PRE_POW
+evidence-bundle-live-anchored.cbor  PASS            (13/13)
+reality-sandwich-bundle.cbor        SANDWICH_PASS   (20/20, burial 2)
+astro-sandwich + --photos           SANDWICH_PASS   (22/22, S_PHOTO_FILES true)
+roughtime-sandwich-bundle.cbor      SANDWICH_PASS   (21/21)
+all five .ots proofs                digests match on disk
+```
+
+**They also confirmed a Bitcoin attestation against a third party.** For block 963190
+the proof requires merkle root `6fb556ef0dab354f…46e3d`; blockstream.info returned
+exactly that. No code of ours participates in that comparison.
+
+**And they confirmed a recent fix in the wild.** Running natively on the host's
+OpenSSL 3.0.13, the verifier reported `INDETERMINATE_TOOLCHAIN` with checks marked
+`UNAVAILABLE` and an explicit "NOT A FAILURE OF THE EVIDENCE" note — rather than the
+`FAIL` an earlier reviewer received, which had wrongly implied the evidence was bad.
+
+### What they explicitly declined to claim
+
+No mining attempted. Live-chain step not run. Only one of five Bitcoin attestations
+independently checked. PQ verification performed in a container, not against the
+host toolchain. No source-code audit — an execution result, not a review.
+
+### Status after this report
+
+```
+implementation diversity        yes
+verification diversity          YES — first independent verification (this report)
+independent mining              still no
+```
+
+Mining remains open to anyone. Every block on the anchor chain was mined by this
+project; the next accepted block belongs to whoever finds it.
 
 ---
 

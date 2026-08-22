@@ -102,21 +102,28 @@ Ten minutes, entirely offline, no accounts, nothing of ours running on your mach
 Mining is equally open: every block on the anchor chain so far was mined by this
 project, and the next accepted block belongs to whoever finds it.
 
-## Independent verification — claimed, then withdrawn
+## Independently verified
 
-A record published on 2026-08-22 claiming the first independent verification of this
-project was **withdrawn the same day**: its provenance was never established, and a
-party in a position to be the verifier stated they had not run it. The full account of
-what was claimed, why it was withdrawn, and what would make a future verification
-auditable is kept at
-[`live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md`](live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md).
+**2026-08-22 — [issue #1](https://github.com/machine-native/chronology-protocol/issues/1).**
+A party outside this project cloned the repository themselves at commit `fc5933d`, ran
+the full offline verifier, and published the result from their own GitHub account:
+`48 passed`, `PASS_PRE_POW`, `PASS`, three × `SANDWICH_PASS` including the photograph
+digests, and every OpenTimestamps digest matching. They also confirmed one Bitcoin
+attestation directly against a public block explorer — a comparison no code of ours
+takes part in.
 
-**No independent verification of this record has been established.** One party has
-since run the verifier and reported a full pass, with artifacts identified — recorded
-as [a claim received](live/anchor-evidence/VERIFICATION-CLAIMS-RECEIVED.md), not as a
-closed criterion, because they could not publish it from an identity of their own and
-said so themselves. If you run [VERIFY.md](VERIFY.md) and publish the result somewhere
-you control, yours would be the first to close it. Mining is equally open: the next
+They stated their limits precisely: no mining attempted, the live-chain step not run,
+one of five attestations independently checked, and the post-quantum verification run
+in a container because Ubuntu 24.04 LTS ships an OpenSSL too old for it.
+
+Scope, full result, and what a reader can and cannot check for themselves:
+[`live/anchor-evidence/VERIFICATION-CLAIMS-RECEIVED.md`](live/anchor-evidence/VERIFICATION-CLAIMS-RECEIVED.md).
+An earlier claim was recorded and then **withdrawn** for lacking exactly this
+provenance; that history is kept at
+[`INDEPENDENT-VERIFICATION-01.md`](live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md).
+
+**More verifiers still wanted** — one report is a start, not a consensus. And mining
+remains open: every block on the anchor chain was mined by this project, so the next
 accepted block belongs to whoever finds it.
 
 ## Verify this yourself
