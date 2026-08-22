@@ -303,25 +303,45 @@ measured        3.5911 MH/s      (projected 3.64 -- 98.7%)
 **39.6× faster than the single-core build**, and 90% of this laptop's measured
 4.0 MH/s — near parity, not past it.
 
-**The 75 MHz target is dead.** Measured fmax with 8 cores is 70.4 MHz; 75 MHz needs a
-13.33 ns path and this one is 14.199 ns. The original 5.11 MH/s projection assumed
-9 cores at 75 MHz and **that configuration cannot close on this part**. Filling the
-fabric cost roughly 6 MHz against the single-core build's ~76 MHz, which is the ordinary
-price of congestion and was not accounted for.
+**The 75 MHz target is dead**, and the reason is not the one first given here.
 
-More cores at 60 MHz remains open, and is now the only route left:
+Three builds now report their critical path, and it barely moves with core count:
+
+| cores | clock | setup slack | critical path | implied fmax |
+|---|---|---|---|---|
+| 1 | 12 MHz | +69.588 ns | 13.745 ns | 72.8 MHz |
+| 8 | 60 MHz | +2.468 ns | 14.199 ns | 70.4 MHz |
+| 12 | 60 MHz | +2.804 ns | 13.863 ns | 72.1 MHz |
+
+**Twelve cores timed better than eight.** The first version of this section blamed
+congestion — "filling the fabric cost roughly 6 MHz" — and that was wrong, written from
+a single data point. The spread across 1, 8 and 12 cores is about 3%, which is placement
+variance, not a trend. The limit is the **SHA-256 core's own critical path** at roughly
+14 ns, and it is nearly independent of how many copies are instanced.
+
+That is a better result than the congestion story would have been: it means core count
+is cheap and frequency is the hard ceiling. 75 MHz needs 13.33 ns and no build has come
+under 13.7, so 9 cores at 75 MHz remains impossible — but 9 was never the interesting
+number.
+
+**69.565 MHz closes everywhere.** It needs 14.375 ns, which every build above satisfies.
+It is reachable because `CLKOUT0_DIVIDE_F` moves in steps of 0.125 (600/8.625), and it
+is precisely the frequency the earlier "must divide 600 exactly" check would have
+rejected — a self-inflicted restriction that happened to forbid the one useful setting
+between 60 and 75.
 
 | configuration | projected MH/s | status |
 |---|---|---|
 | 8 cores at 60 MHz | 3.64 | **measured 3.5911** |
-| 12 cores at 60 MHz | 5.45 | untested; timing may not hold |
-| 16 cores at 60 MHz | 7.27 | untested; likely too congested |
-| ~~9 cores at 75 MHz~~ | ~~5.11~~ | **ruled out — fmax is 70.4 MHz** |
+| 12 cores at 60 MHz | 5.45 | **built, timing met** — not yet measured |
+| 12 cores at 69.565 MHz | 6.32 | closes on paper; untested |
+| 16 cores at 69.565 MHz | 8.43 | untested |
+| ~~9 cores at 75 MHz~~ | ~~5.11~~ | **impossible — no build beats 13.7 ns** |
 
-Every projection here scales 132 cycles per nonce per core, a constant hardware has
-confirmed twice: to 0.3% single-core and 1.3% across eight. That is arithmetic on a
-measured quantity, which is the only reason it is worth printing — and it stays a
-projection until a board returns a number.
+Every projection scales 132 cycles per nonce per core, a constant hardware has confirmed
+twice: to 0.3% single-core and 1.3% across eight. That is arithmetic on a measured
+quantity, which is the only reason it is worth printing — and it stays a projection until
+a board returns a number.
 
 **What the bitstream is for right now is correctness, not speed**: proving that silicon
 reproduces a proof-of-work answer this project already established. That is what
