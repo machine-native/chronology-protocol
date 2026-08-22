@@ -158,8 +158,10 @@ ots verify vectors/valid/evidence-bundle.cbor.ots
 
 ⚠️ **On Windows that client currently crashes** (`ots` depends on python-bitcoinlib,
 which loads libssl through ctypes and fails there). It works on Linux and macOS. So
-that no platform is stuck, this repository also ships a reader that uses only the
-`opentimestamps` library and asks you to do the final comparison yourself:
+that no platform is stuck, this repository also ships a **standard-library-only reader,
+implemented directly from the OpenTimestamps proof format** (`ctp/ots.py`, no
+third-party imports at all — check it with `python -S`), which asks you to do the final
+comparison yourself:
 
 ```bash
 python scripts/ots_info.py vectors/valid/evidence-bundle.cbor.ots

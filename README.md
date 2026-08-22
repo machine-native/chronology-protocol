@@ -101,9 +101,13 @@ what was claimed, why it was withdrawn, and what would make a future verificatio
 auditable is kept at
 [`live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md`](live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md).
 
-**No independent verification of this record has been established.** If you run
-[VERIFY.md](VERIFY.md), publishing your result somewhere you control would be the first.
-Mining is equally open: the next accepted block belongs to whoever finds it.
+**No independent verification of this record has been established.** One party has
+since run the verifier and reported a full pass, with artifacts identified — recorded
+as [a claim received](live/anchor-evidence/VERIFICATION-CLAIMS-RECEIVED.md), not as a
+closed criterion, because they could not publish it from an identity of their own and
+said so themselves. If you run [VERIFY.md](VERIFY.md) and publish the result somewhere
+you control, yours would be the first to close it. Mining is equally open: the next
+accepted block belongs to whoever finds it.
 
 ## Verify this yourself
 

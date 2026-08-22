@@ -1,0 +1,533 @@
+Chronology Protocol independent execution transcript
+=================================================
+run_started_utc: 2026-08-22T06:49:01Z
+environment: ChatGPT execution sandbox
+
+INPUT IDENTIFICATION
+827ca54eddb0026f80c966c9ff5758d2aaebd9c1393d3588499417612142740b  /mnt/data/MESSAGE-TO-VERIFIER.md
+128666ddcd1d21d5cdbb8fc85d3096c9d3e52aa36f05cc87f68bc5ad4ff3ce2b  /mnt/data/chronology-protocol-verification-pack(1).zip
+
+PROVENANCE.json
+{
+  "built_utc": "2026-08-22T06:43:05Z",
+  "repository": "github.com/machine-native/chronology-protocol",
+  "commit": "b70395c11edc12bc6831ff94910dc50830651c0c",
+  "described": "v0.4.1-14-gb70395c",
+  "dirty": false
+}
+
+TOOLCHAIN
+Python 3.13.5
+pytest 9.0.2
+OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)
+
+MANIFEST
+CLAIMS.md: OK
+ctp/__init__.py: OK
+ctp/bitcoin_jan09.py: OK
+ctp/bundle.py: OK
+ctp/cbor.py: OK
+ctp/genesis.py: OK
+ctp/hashsuite.py: OK
+ctp/interval.py: OK
+ctp/merkle.py: OK
+ctp/model.py: OK
+ctp/ots.py: OK
+ctp/p2p_v01.py: OK
+ctp/pq.py: OK
+ctp/radio.py: OK
+ctp/renewal.py: OK
+ctp/roughtime.py: OK
+ctp/sandwich.py: OK
+ctp/simulate.py: OK
+ctp/verify.py: OK
+docs/RADIO-RELAY.md: OK
+docs/REALITY-SANDWICH.md: OK
+INVARIANTS.md: OK
+LICENSE: OK
+live/anchor-evidence/ACCEPTANCE.md: OK
+live/anchor-evidence/ASTRO-SANDWICH-ACCEPTANCE.md: OK
+live/anchor-evidence/astrolabe-expectation.json: OK
+live/anchor-evidence/finalize-height221.json: OK
+live/anchor-evidence/independent-verification-01-transcript.txt: OK
+live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md: OK
+live/anchor-evidence/live-template-height221.json: OK
+live/anchor-evidence/mined-block-height221.hex: OK
+live/anchor-evidence/orphans/orphan-epoch3-h264.hex: OK
+live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md: OK
+live/anchor-evidence/SANDWICH-ACCEPTANCE.md: OK
+live/anchor-evidence/submit-height221.json: OK
+live/anchor-evidence/tip-context-post-submit.json: OK
+live/chain-blocks.hex: OK
+live/g2b-work/photos/10308.jpg: OK
+live/g2b-work/photos/10309.jpg: OK
+live/g2b-work/photos/10310.jpg: OK
+live/g2b-work/photos/10311.jpg: OK
+live/g2b-work/photos/10312.jpg: OK
+live/g2b-work/photos/10313.jpg: OK
+live/g2b-work/photos/10314.jpg: OK
+live/g2b-work/photos/10315.jpg: OK
+live/g2b-work/photos/10316.jpg: OK
+live/g2b-work/photos/10317.jpg: OK
+Makefile: OK
+native/mine_sha256d.c: OK
+NOTICE: OK
+PROVENANCE.json: OK
+pyproject.toml: OK
+README.md: OK
+README.txt: OK
+RELEASE_NOTES.md: OK
+scripts/assemble_g2b_bundle.py: OK
+scripts/assemble_g5_bundle.py: OK
+scripts/assemble_sandwich_bundle.py: OK
+scripts/build_archive.py: OK
+scripts/build_live_template.py: OK
+scripts/build_sandwich_template.py: OK
+scripts/finalize_mined_block.py: OK
+scripts/fpga_host.py: OK
+scripts/ots_info.py: OK
+scripts/ots_stamp.py: OK
+scripts/ots_upgrade.py: OK
+scripts/radio_relay.py: OK
+scripts/release_audit.py: OK
+scripts/rolling_code.py: OK
+scripts/run_g2b.py: OK
+scripts/run_g5.py: OK
+scripts/run_milestone1.py: OK
+scripts/run_sandwich.py: OK
+scripts/submit_block_v01.py: OK
+scripts/verify_bundle.py: OK
+scripts/verify_sandwich.py: OK
+SECURITY.md: OK
+SPEC.md: OK
+tests/test_anchor_payload.py: OK
+tests/test_bitcoin_anchor_parse.py: OK
+tests/test_bitcoin_genesis.py: OK
+tests/test_bundle_cbor.py: OK
+tests/test_cbor.py: OK
+tests/test_interval.py: OK
+tests/test_ots.py: OK
+tests/test_p2p_v01.py: OK
+tests/test_pow_math.py: OK
+tests/test_pq.py: OK
+tests/test_protocol_genesis.py: OK
+tests/test_radio.py: OK
+tests/test_renewal.py: OK
+tests/test_rolling_code.py: OK
+tests/test_roughtime.py: OK
+tests/test_sandwich.py: OK
+tests/test_witness_chain.py: OK
+THREAT-MODEL.md: OK
+vectors/valid/anchor-payload.hex: OK
+vectors/valid/astro-sandwich-bundle.cbor: OK
+vectors/valid/astro-sandwich-bundle.cbor.ots: OK
+vectors/valid/candidate-block-nonce0.hex: OK
+vectors/valid/candidate-header-nonce0.hex: OK
+vectors/valid/evidence-bundle-live-anchored.cbor: OK
+vectors/valid/evidence-bundle-live-anchored.cbor.ots: OK
+vectors/valid/evidence-bundle.cbor: OK
+vectors/valid/evidence-bundle.cbor.ots: OK
+vectors/valid/reality-sandwich-bundle.cbor: OK
+vectors/valid/reality-sandwich-bundle.cbor.ots: OK
+vectors/valid/roughtime-sandwich-bundle.cbor: OK
+vectors/valid/roughtime-sandwich-bundle.cbor.ots: OK
+VERIFY.md: OK
+
+TEST SUITE
+...........................................                              [100%]
+43 passed in 26.97s
+
+COLLECTED TESTS
+tests/test_anchor_payload.py::test_exact_fit
+tests/test_bitcoin_anchor_parse.py::test_anchor_extract_and_structure
+tests/test_bitcoin_anchor_parse.py::test_median_time_past_context
+tests/test_bitcoin_genesis.py::test_known_project_genesis
+tests/test_bundle_cbor.py::test_noncanonical_integer_rejected
+tests/test_bundle_cbor.py::test_float_rejected_decode
+tests/test_cbor.py::test_roundtrip_and_order
+tests/test_cbor.py::test_float_forbidden
+tests/test_interval.py::test_byzantine_outlier
+tests/test_interval.py::test_order
+tests/test_interval.py::test_exact_integer_regions
+tests/test_interval.py::test_disconnected_quorum_is_conflict
+tests/test_ots.py::test_every_proof_parses_and_matches_its_bundle
+tests/test_ots.py::test_bitcoin_attestations_are_present_and_well_formed
+tests/test_ots.py::test_rejects_garbage_rather_than_guessing
+tests/test_ots.py::test_reader_needs_no_third_party_packages
+tests/test_p2p_v01.py::test_message_frame_no_checksum
+tests/test_p2p_v01.py::test_ipv4_mapped_address
+tests/test_p2p_v01.py::test_version_payload_v01_shape
+tests/test_pow_math.py::test_target_and_genesis_pow
+tests/test_pq.py::test_pq_roundtrip
+tests/test_protocol_genesis.py::test_genesis_binds_normative_bytes
+tests/test_radio.py::test_fragment_roundtrip_real_block
+tests/test_radio.py::test_out_of_order_and_duplicate_fragments
+tests/test_radio.py::test_lost_fragment_never_delivers_until_repeat
+tests/test_radio.py::test_corrupted_payload_is_rejected_not_delivered
+tests/test_radio.py::test_forged_block_without_work_is_rejected
+tests/test_radio.py::test_non_chrb_traffic_ignored
+tests/test_radio.py::test_airtime_is_plausible
+tests/test_renewal.py::test_real_pq_renewal_roundtrip
+tests/test_rolling_code.py::test_pinned_vectors_match_the_html_implementation
+tests/test_rolling_code.py::test_seed_validation
+tests/test_rolling_code.py::test_adjacent_slots_differ
+tests/test_roughtime.py::test_roughtime_synthetic_verify_and_tamper
+tests/test_roughtime.py::test_request_shape
+tests/test_sandwich.py::test_challenge_and_nonce_derivation_deterministic
+tests/test_sandwich.py::test_frame_origin_roundtrip
+tests/test_sandwich.py::test_measurement_derivation_math
+tests/test_sandwich.py::test_era_expectation_integer_and_sane
+tests/test_sandwich.py::test_era_expectation_matches_float_reference
+tests/test_sandwich.py::test_v2_camera_witness_roundtrip_and_tamper
+tests/test_sandwich.py::test_synthetic_sandwich_roundtrip_and_tamper
+tests/test_witness_chain.py::test_chain_linkage_without_crypto
+
+43 tests collected in 0.03s
+
+
+COMMAND: python scripts/verify_bundle.py vectors/valid/evidence-bundle.cbor
+{
+  "bundle": "vectors/valid/evidence-bundle.cbor",
+  "sha256": "9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854",
+  "checks": {
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": false
+  },
+  "verdict": "PASS_PRE_POW"
+}
+
+COMMAND: python scripts/verify_bundle.py vectors/valid/evidence-bundle-live-anchored.cbor
+{
+  "bundle": "vectors/valid/evidence-bundle-live-anchored.cbor",
+  "sha256": "9fbccb5b37e5c3798f557d9de91f1d60a16b86dd817544e2967fdf729d6561a4",
+  "checks": {
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true
+  },
+  "verdict": "PASS"
+}
+
+COMMAND: python scripts/verify_sandwich.py vectors/valid/reality-sandwich-bundle.cbor
+{
+  "bundle": "vectors/valid/reality-sandwich-bundle.cbor",
+  "sha256": "61d409059c8ccb891acd84b663ee898ff025e67178af6216843b2a0e3835be71",
+  "facts": {
+    "b0_hash": "00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b",
+    "b0_height": 221,
+    "block_c_hash": "0000000055cddf6e969747b574d17435af0799c839a3f149e020745b69419fa0",
+    "burial_depth": 2,
+    "challenge": "6bfc8e3da4f18f8c59fae11bce0e311b1d19bac6ca1bd6e1e1ff77c3205aeb34"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+
+COMMAND: python scripts/verify_sandwich.py vectors/valid/astro-sandwich-bundle.cbor
+{
+  "bundle": "vectors/valid/astro-sandwich-bundle.cbor",
+  "sha256": "32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc",
+  "facts": {
+    "b0_hash": "0000000058e3ceb8b0a3f332d9ec7248884d7693125f7e80972fbd8bccc6f6b9",
+    "b0_height": 252,
+    "block_c_hash": "00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee",
+    "burial_depth": 10,
+    "challenge": "d2b79b45d60f408a3aab7c9bbb5c507b092d150f38f5f2e00a8889b6de56de52"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_CAMERA_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+
+COMMAND: python scripts/verify_sandwich.py vectors/valid/roughtime-sandwich-bundle.cbor
+{
+  "bundle": "vectors/valid/roughtime-sandwich-bundle.cbor",
+  "sha256": "bf22c1586a2dff27235f3473283d50388b951ec218fc8fa9d4da8ea6b432fa9b",
+  "facts": {
+    "b0_hash": "00000000120059e003e8bf7e32d29866a37188aee93a976651b7ce3aa754202d",
+    "b0_height": 263,
+    "block_c_hash": "000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112",
+    "burial_depth": 3,
+    "challenge": "20319c97f751973d3cffdedf80c415971c3c2a62ab849deef92f2aad10dd456f"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_ROUGHTIME_SIGNATURES": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+
+COMMAND: python scripts/verify_sandwich.py vectors/valid/astro-sandwich-bundle.cbor --photos live/g2b-work/photos
+{
+  "bundle": "vectors/valid/astro-sandwich-bundle.cbor",
+  "sha256": "32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc",
+  "facts": {
+    "b0_hash": "0000000058e3ceb8b0a3f332d9ec7248884d7693125f7e80972fbd8bccc6f6b9",
+    "b0_height": 252,
+    "block_c_hash": "00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee",
+    "burial_depth": 10,
+    "challenge": "d2b79b45d60f408a3aab7c9bbb5c507b092d150f38f5f2e00a8889b6de56de52"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_CAMERA_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true,
+    "S_PHOTO_FILES": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+
+OFFLINE OTS READER (normal Python)
+astro-sandwich-bundle.cbor.ots
+  file digest (sha256): 32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc
+  astro-sandwich-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963408
+    that block's merkle root must be: c764eb133a3e932ad4313a70e0957f44d3572d925fbc09c8d963721e8608a46f
+  BITCOIN block 963413
+    that block's merkle root must be: 7143b2dadb3286585a2a93630225275aaff549e204586b393ae382959cf91890
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+evidence-bundle-live-anchored.cbor.ots
+  file digest (sha256): 9fbccb5b37e5c3798f557d9de91f1d60a16b86dd817544e2967fdf729d6561a4
+  evidence-bundle-live-anchored.cbor on disk matches this proof: True
+  BITCOIN block 963190
+    that block's merkle root must be: 6fb556ef0dab354fe0e7ad5f2f1262f18490f1fed0c2a915c9c5abb3de346e3d
+  BITCOIN block 963207
+    that block's merkle root must be: 386b55af90bb5139e52c8b34500823b16f8eb053e1f04748a32004e3101567da
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+evidence-bundle.cbor.ots
+  file digest (sha256): 9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854
+  evidence-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963190
+    that block's merkle root must be: 6fb556ef0dab354fe0e7ad5f2f1262f18490f1fed0c2a915c9c5abb3de346e3d
+  BITCOIN block 963207
+    that block's merkle root must be: 386b55af90bb5139e52c8b34500823b16f8eb053e1f04748a32004e3101567da
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+reality-sandwich-bundle.cbor.ots
+  file digest (sha256): 61d409059c8ccb891acd84b663ee898ff025e67178af6216843b2a0e3835be71
+  reality-sandwich-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963190
+    that block's merkle root must be: 6fb556ef0dab354fe0e7ad5f2f1262f18490f1fed0c2a915c9c5abb3de346e3d
+  BITCOIN block 963207
+    that block's merkle root must be: 386b55af90bb5139e52c8b34500823b16f8eb053e1f04748a32004e3101567da
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+roughtime-sandwich-bundle.cbor.ots
+  file digest (sha256): bf22c1586a2dff27235f3473283d50388b951ec218fc8fa9d4da8ea6b432fa9b
+  roughtime-sandwich-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963431
+    that block's merkle root must be: 19f12f74695e5de964683351a08bdd0f9918ae87d780c11f44897975b0575dfd
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+
+OFFLINE OTS READER (python -S; site packages disabled)
+astro-sandwich-bundle.cbor.ots
+  file digest (sha256): 32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc
+  astro-sandwich-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963408
+    that block's merkle root must be: c764eb133a3e932ad4313a70e0957f44d3572d925fbc09c8d963721e8608a46f
+  BITCOIN block 963413
+    that block's merkle root must be: 7143b2dadb3286585a2a93630225275aaff549e204586b393ae382959cf91890
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+evidence-bundle-live-anchored.cbor.ots
+  file digest (sha256): 9fbccb5b37e5c3798f557d9de91f1d60a16b86dd817544e2967fdf729d6561a4
+  evidence-bundle-live-anchored.cbor on disk matches this proof: True
+  BITCOIN block 963190
+    that block's merkle root must be: 6fb556ef0dab354fe0e7ad5f2f1262f18490f1fed0c2a915c9c5abb3de346e3d
+  BITCOIN block 963207
+    that block's merkle root must be: 386b55af90bb5139e52c8b34500823b16f8eb053e1f04748a32004e3101567da
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+evidence-bundle.cbor.ots
+  file digest (sha256): 9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854
+  evidence-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963190
+    that block's merkle root must be: 6fb556ef0dab354fe0e7ad5f2f1262f18490f1fed0c2a915c9c5abb3de346e3d
+  BITCOIN block 963207
+    that block's merkle root must be: 386b55af90bb5139e52c8b34500823b16f8eb053e1f04748a32004e3101567da
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+reality-sandwich-bundle.cbor.ots
+  file digest (sha256): 61d409059c8ccb891acd84b663ee898ff025e67178af6216843b2a0e3835be71
+  reality-sandwich-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963190
+    that block's merkle root must be: 6fb556ef0dab354fe0e7ad5f2f1262f18490f1fed0c2a915c9c5abb3de346e3d
+  BITCOIN block 963207
+    that block's merkle root must be: 386b55af90bb5139e52c8b34500823b16f8eb053e1f04748a32004e3101567da
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+roughtime-sandwich-bundle.cbor.ots
+  file digest (sha256): bf22c1586a2dff27235f3473283d50388b951ec218fc8fa9d4da8ea6b432fa9b
+  roughtime-sandwich-bundle.cbor on disk matches this proof: True
+  BITCOIN block 963431
+    that block's merkle root must be: 19f12f74695e5de964683351a08bdd0f9918ae87d780c11f44897975b0575dfd
+  PENDING at https://bob.btc.calendar.opentimestamps.org (not yet in a Bitcoin block; run ots_upgrade.py later)
+  PENDING at https://btc.calendar.catallaxy.com (not yet in a Bitcoin block; run ots_upgrade.py later)
+  check it yourself: compare each merkle root above against that block
+  height on any Bitcoin node or explorer you trust. Nothing here asks
+  you to trust us.
+
+
+OTS IMPORTS
+ctp/ots.py:30:from __future__ import annotations
+ctp/ots.py:31:import hashlib
+ctp/ots.py:32:from dataclasses import dataclass, field
+scripts/ots_info.py:24:import hashlib
+scripts/ots_info.py:25:import sys
+scripts/ots_info.py:26:from pathlib import Path
+scripts/ots_info.py:31:from ctp.ots import parse_file, OTSError
+tests/test_ots.py:1:import subprocess
+tests/test_ots.py:2:import sys
+tests/test_ots.py:3:from pathlib import Path
+tests/test_ots.py:5:import pytest
+tests/test_ots.py:10:from ctp.ots import parse, parse_file, OTSError, MAGIC
+
+HISTORICAL WITHDRAWN TRANSCRIPT DIGEST (artifact inside supplied pack)
+9d7b0be65cbd3d28f60c73abb240774501c6f0bff7bbdc4eb6d7613927694d09  live/anchor-evidence/independent-verification-01-transcript.txt
+
+DOCUMENTATION NOTE
+VERIFY.md lines 161-162 still say the fallback reader uses the opentimestamps library; actual ctp/ots.py + scripts/ots_info.py use only stdlib/local modules and pass under python -S.
+
+PUBLIC-REPOSITORY / PUBLIC-BITCOIN LIMIT
+This sandbox could not independently fetch the public Git commit bytes over raw/container network, nor query an arbitrary Bitcoin RPC/explorer API from the execution runtime. Therefore pack-vs-public-commit byte identity and external Bitcoin block merkle-root comparison are not claimed by this transcript.
+
+run_finished_utc: 2026-08-22T06:49:56Z
