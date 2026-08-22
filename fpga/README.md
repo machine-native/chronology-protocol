@@ -20,16 +20,54 @@ Nothing here has run on a board. Per the project's standing rule, "simulated" an
 "synthesised" and "mined a real block" are three different claims and only the first
 is currently true.
 
-**Open bring-up fault (2026-08-22).** A board reported as programmed returns nothing to
-`ping`. Every remotely checkable cause has been eliminated: the UART pin directions
-match Digilent's convention (`uart_rxd_out` is an FPGA *input*), the pin assignments and
-the 12 MHz clock pin match the board's master constraints, the baud divisor is
-104 for a 0.16% error, and the end-to-end simulation drives real UART bytes through the
-top level and passes. The design has met timing but has never been observed running.
+### Open bring-up fault (2026-08-22) — narrowed by measurement
 
-Two instruments were added rather than continuing to guess: a **1 Hz heartbeat LED**,
+A board that is definitely running returns nothing over the serial link, in either
+direction. What is now **observed rather than assumed**:
+
+```
+DONE pin                 1            device configured
+DRC                      0 checks     fully routed, clean
+setup slack (WNS)      +69.588 ns     enormous margin
+hold slack  (WHS)       +0.024 ns     normal and met
+bonded IOBs              5            clk, both UART pins, both LEDs
+heartbeat LED            blinking     bitstream running, 12 MHz clock confirmed
+serial at 115200         silent
+serial at 6 other rates  silent       so not a baud mismatch
+COM port                 opens        so the bridge enumerates
+```
+
+The heartbeat did its job: it retired "the bitstream is not loaded", which had been the
+leading theory and was wrong. A blinking heartbeat also confirms `CLK_HZ` matches the
+crystal, which retires the baud-divisor theory independently of the baud sweep.
+
+**What remains is the pin direction.** Digilent's net names, `uart_rxd_out` and
+`uart_txd_in`, can be read as relative to the *bridge* (making `uart_rxd_out` an FPGA
+input, as declared here) or relative to the *host* (making it an output). Both readings
+are grammatical, silence in both directions is exactly what a swap produces, and this
+was treated as settled on the strength of one search result. It was a coin-flip wearing
+a citation.
+
+`rtl/pinprobe.v` settles it by measurement instead. It reads **both** pins as inputs —
+driving neither, so it is safe to run without knowing the answer — with weak internal
+pulldowns. The bridge's transmit pin idles actively high and beats the pulldown; its
+receive pin is undriven and loses to it. The pin that reads high is the FPGA's RX.
+
+```bash
+vivado -mode batch -source build_pinprobe.tcl   # builds and programs in one pass
+```
+
+Then read the LEDs: fast flicker means high, slow blink means low, and both always
+blink so a dark board still unambiguously means "no bitstream".
+
+Two instruments were added rather than continuing to guess: the **heartbeat LED**,
 which separates "no bitstream" from "no link", and **`scripts/fpga_diag.py`**, which
 separates "wrong baud" from "silence". Both are described under bring-up below.
+
+Three theories have now been tested and killed — inverted pins (checked against the
+documentation *before* editing, and the code was already right by that reading), an
+erased volatile bitstream, and a baud mismatch. Each was plausible and each was wrong,
+which is the argument for instruments over reasoning at this stage.
 
 ## The vectors are ours
 
@@ -53,20 +91,23 @@ vvp sim/tb.vvp
 
 ## Measured after synthesis — the estimate was wrong twice over
 
-Vivado has now built it (`timing.rpt`, `utilisation.rpt` in this folder). Timing closes
-comfortably: **WNS +70.246 ns, zero failing endpoints, all constraints met.**
-
-> These two reports are from the build of 2026-08-22 and **predate the heartbeat
-> counter**, which adds roughly 32 flip-flops and a comparator. The figures below are
-> therefore very slightly low rather than wrong, and are left as measured instead of
-> being adjusted by arithmetic. They will be replaced by the next build's own output.
+Vivado has now built it (`timing.rpt`, `utilisation.rpt`, `drc.rpt` in this folder,
+regenerated 2026-08-22 with the heartbeat included). Timing closes comfortably:
+**setup slack +69.588 ns, hold +0.024 ns, zero failing endpoints, zero DRC violations.**
 
 ```
-LUTs           1,593 of 20,800   (7.7% — smaller than the 2,600 estimated)
-registers      3,200 of 41,600   (7.7%)
+LUTs           1,615 of 20,800   (7.8% — smaller than the 2,600 estimated)
+registers      3,224 of 41,600   (7.8%)
+bonded IOBs        5             clk, two UART pins, two LEDs
 critical path  13.08 ns          ->  fmax roughly 76 MHz
 clocking       no MMCM/PLL — running straight off the board oscillator
 ```
+
+> Read setup and hold as two separate numbers. An earlier version of `build.tcl`
+> printed the single worst slack across both and reported **0.024 ns** for this build,
+> which reads as alarmingly marginal; the real setup margin is **69.588 ns** and the
+> 0.024 is a hold path, where small positive slack is normal. One number answering two
+> questions is how a healthy build gets mistaken for a broken one.
 
 That last line is the problem, and it is mine. **The Cmod A7's oscillator is 12 MHz**,
 while the earlier estimate below assumed 100 MHz and never said so. At 132 cycles per

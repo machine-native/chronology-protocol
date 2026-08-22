@@ -1,9 +1,9 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2025.2 (win64) Build 6299465 Fri Nov 14 19:35:11 GMT 2025
-| Date         : Sat Aug 22 18:47:19 2026
+| Date         : Sat Aug 22 20:39:30 2026
 | Host         : DESKTOP-0GQRA3J running 64-bit major release  (build 9200)
-| Command      : report_timing_summary -file C:/Users/CoreX/Documents/chronology-protocol_fpga/fpga/build/timing.rpt
+| Command      : report_timing_summary -file C:/Users/CoreX/Documents/chronology-protocol/chronology-protocol/fpga/build/timing.rpt
 | Design       : miner_top
 | Device       : 7a35t-cpg236
 | Speed File   : -1  PRODUCTION 1.23 2018-06-13
@@ -138,7 +138,7 @@ Table of Contents
 
     WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
     -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-     70.246        0.000                      0                 7025        0.025        0.000                      0                 7025       40.680        0.000                       0                  3233  
+     69.588        0.000                      0                 7070        0.024        0.000                      0                 7070       40.680        0.000                       0                  3257  
 
 
 All user specified timing constraints are met.
@@ -161,7 +161,7 @@ sys_clk_pin  {0.000 41.660}     83.330          12.000
 
 Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
 -----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
-sys_clk_pin        70.246        0.000                      0                 7025        0.025        0.000                      0                 7025       40.680        0.000                       0                  3233  
+sys_clk_pin        69.588        0.000                      0                 7070        0.024        0.000                      0                 7070       40.680        0.000                       0                  3257  
 
 
 ------------------------------------------------------------------------------------------------
@@ -192,28 +192,28 @@ Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing 
 From Clock:  sys_clk_pin
   To Clock:  sys_clk_pin
 
-Setup :            0  Failing Endpoints,  Worst Slack       70.246ns,  Total Violation        0.000ns
-Hold  :            0  Failing Endpoints,  Worst Slack        0.025ns,  Total Violation        0.000ns
+Setup :            0  Failing Endpoints,  Worst Slack       69.588ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.024ns,  Total Violation        0.000ns
 PW    :            0  Failing Endpoints,  Worst Slack       40.680ns,  Total Violation        0.000ns
 ---------------------------------------------------------------------------------------------------
 
 
 Max Delay Paths
 --------------------------------------------------------------------------------------
-Slack (MET) :             70.246ns  (required time - arrival time)
+Slack (MET) :             69.588ns  (required time - arrival time)
   Source:                 scan_go_reg/C
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@41.660ns period=83.330ns})
-  Destination:            miner/core_state_in_reg[150]/S
-                            (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@41.660ns period=83.330ns})
+  Destination:            miner/core_state_in_reg[180]/CE
+                            (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@41.660ns period=83.330ns})
   Path Group:             sys_clk_pin
   Path Type:              Setup (Max at Slow Process Corner)
   Requirement:            83.330ns  (sys_clk_pin rise@83.330ns - sys_clk_pin rise@0.000ns)
-  Data Path Delay:        12.365ns  (logic 0.916ns (7.408%)  route 11.449ns (92.592%))
-  Logic Levels:           3  (LUT2=1 LUT5=1 LUT6=1)
-  Clock Path Skew:        -0.051ns (DCD - SCD + CPR)
-    Destination Clock Delay (DCD):    4.969ns = ( 88.299 - 83.330 ) 
-    Source Clock Delay      (SCD):    5.286ns
-    Clock Pessimism Removal (CPR):    0.266ns
+  Data Path Delay:        13.532ns  (logic 0.766ns (5.661%)  route 12.766ns (94.339%))
+  Logic Levels:           2  (LUT2=1 LUT6=1)
+  Clock Path Skew:        -0.006ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    4.975ns = ( 88.305 - 83.330 ) 
+    Source Clock Delay      (SCD):    5.167ns
+    Clock Pessimism Removal (CPR):    0.186ns
   Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
     Total System Jitter     (TSJ):    0.071ns
     Total Input Jitter      (TIJ):    0.000ns
@@ -229,18 +229,16 @@ Slack (MET) :             70.246ns  (required time - arrival time)
     L17                  IBUF (Prop_ibuf_I_O)         1.476     1.476 r  clk_IBUF_inst/O
                          net (fo=1, routed)           1.972     3.448    clk_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.096     3.544 r  clk_IBUF_BUFG_inst/O
-                         net (fo=3232, routed)        1.742     5.286    clk_IBUF_BUFG
-    SLICE_X10Y102        FDRE                                         r  scan_go_reg/C
+                         net (fo=3256, routed)        1.623     5.167    clk_IBUF_BUFG
+    SLICE_X6Y95          FDRE                                         r  scan_go_reg/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X10Y102        FDRE (Prop_fdre_C_Q)         0.518     5.804 r  scan_go_reg/Q
-                         net (fo=138, routed)         4.246    10.050    miner/scan_go
-    SLICE_X7Y117         LUT2 (Prop_lut2_I0_O)        0.124    10.174 r  miner/core_start_i_6/O
-                         net (fo=33, routed)          2.226    12.399    miner/core/busy014_out
-    SLICE_X11Y102        LUT6 (Prop_lut6_I5_O)        0.124    12.523 r  miner/core/core_start_i_1/O
-                         net (fo=521, routed)         0.874    13.398    miner/core/rst_reg
-    SLICE_X10Y100        LUT5 (Prop_lut5_I4_O)        0.150    13.548 r  miner/core/core_state_in[255]_i_1/O
-                         net (fo=256, routed)         4.103    17.650    miner/core_n_5
-    SLICE_X31Y114        FDSE                                         r  miner/core_state_in_reg[150]/S
+    SLICE_X6Y95          FDRE (Prop_fdre_C_Q)         0.518     5.685 r  scan_go_reg/Q
+                         net (fo=138, routed)         4.328    10.013    miner/scan_go
+    SLICE_X16Y114        LUT2 (Prop_lut2_I0_O)        0.124    10.137 r  miner/core_start_i_6/O
+                         net (fo=33, routed)          1.549    11.686    miner/core/busy014_out
+    SLICE_X24Y100        LUT6 (Prop_lut6_I5_O)        0.124    11.810 r  miner/core/core_start_i_1/O
+                         net (fo=521, routed)         6.888    18.698    miner/core_n_1
+    SLICE_X10Y113        FDRE                                         r  miner/core_state_in_reg[180]/CE
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -250,16 +248,16 @@ Slack (MET) :             70.246ns  (required time - arrival time)
     L17                  IBUF (Prop_ibuf_I_O)         1.406    84.736 r  clk_IBUF_inst/O
                          net (fo=1, routed)           1.868    86.604    clk_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.091    86.695 r  clk_IBUF_BUFG_inst/O
-                         net (fo=3232, routed)        1.604    88.299    miner/clk_IBUF_BUFG
-    SLICE_X31Y114        FDSE                                         r  miner/core_state_in_reg[150]/C
-                         clock pessimism              0.266    88.565    
-                         clock uncertainty           -0.035    88.530    
-    SLICE_X31Y114        FDSE (Setup_fdse_C_S)       -0.633    87.897    miner/core_state_in_reg[150]
+                         net (fo=3256, routed)        1.610    88.305    miner/clk_IBUF_BUFG
+    SLICE_X10Y113        FDRE                                         r  miner/core_state_in_reg[180]/C
+                         clock pessimism              0.186    88.491    
+                         clock uncertainty           -0.035    88.455    
+    SLICE_X10Y113        FDRE (Setup_fdre_C_CE)      -0.169    88.286    miner/core_state_in_reg[180]
   -------------------------------------------------------------------
-                         required time                         87.897    
-                         arrival time                         -17.650    
+                         required time                         88.286    
+                         arrival time                         -18.698    
   -------------------------------------------------------------------
-                         slack                                 70.246    
+                         slack                                 69.588    
 
 
 
@@ -267,20 +265,20 @@ Slack (MET) :             70.246ns  (required time - arrival time)
 
 Min Delay Paths
 --------------------------------------------------------------------------------------
-Slack (MET) :             0.025ns  (arrival time - required time)
-  Source:                 work_reg[6][5]/C
+Slack (MET) :             0.024ns  (arrival time - required time)
+  Source:                 midstate_reg[192]/C
                             (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@41.660ns period=83.330ns})
-  Destination:            midstate_reg[205]/D
-                            (rising edge-triggered cell FDRE clocked by sys_clk_pin  {rise@0.000ns fall@41.660ns period=83.330ns})
+  Destination:            miner/core_state_in_reg[192]/D
+                            (rising edge-triggered cell FDSE clocked by sys_clk_pin  {rise@0.000ns fall@41.660ns period=83.330ns})
   Path Group:             sys_clk_pin
   Path Type:              Hold (Min at Fast Process Corner)
   Requirement:            0.000ns  (sys_clk_pin rise@0.000ns - sys_clk_pin rise@0.000ns)
-  Data Path Delay:        0.353ns  (logic 0.141ns (39.922%)  route 0.212ns (60.078%))
+  Data Path Delay:        0.281ns  (logic 0.164ns (58.266%)  route 0.117ns (41.734%))
   Logic Levels:           0  
-  Clock Path Skew:        0.265ns (DCD - SCD - CPR)
-    Destination Clock Delay (DCD):    2.065ns
-    Source Clock Delay      (SCD):    1.545ns
-    Clock Pessimism Removal (CPR):    0.255ns
+  Clock Path Skew:        0.182ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    1.984ns
+    Source Clock Delay      (SCD):    1.551ns
+    Clock Pessimism Removal (CPR):    0.250ns
 
     Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
   -------------------------------------------------------------------    -------------------
@@ -291,12 +289,12 @@ Slack (MET) :             0.025ns  (arrival time - required time)
     L17                  IBUF (Prop_ibuf_I_O)         0.244     0.244 r  clk_IBUF_inst/O
                          net (fo=1, routed)           0.634     0.878    clk_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.026     0.904 r  clk_IBUF_BUFG_inst/O
-                         net (fo=3232, routed)        0.641     1.545    clk_IBUF_BUFG
-    SLICE_X36Y108        FDRE                                         r  work_reg[6][5]/C
+                         net (fo=3256, routed)        0.647     1.551    clk_IBUF_BUFG
+    SLICE_X8Y100         FDRE                                         r  midstate_reg[192]/C
   -------------------------------------------------------------------    -------------------
-    SLICE_X36Y108        FDRE (Prop_fdre_C_Q)         0.141     1.686 r  work_reg[6][5]/Q
-                         net (fo=1, routed)           0.212     1.898    p_32_out[205]
-    SLICE_X34Y109        FDRE                                         r  midstate_reg[205]/D
+    SLICE_X8Y100         FDRE (Prop_fdre_C_Q)         0.164     1.715 r  midstate_reg[192]/Q
+                         net (fo=1, routed)           0.117     1.833    miner/core_state_in_reg[255]_0[192]
+    SLICE_X9Y98          FDSE                                         r  miner/core_state_in_reg[192]/D
   -------------------------------------------------------------------    -------------------
 
                          (clock sys_clk_pin rise edge)
@@ -306,15 +304,15 @@ Slack (MET) :             0.025ns  (arrival time - required time)
     L17                  IBUF (Prop_ibuf_I_O)         0.432     0.432 r  clk_IBUF_inst/O
                          net (fo=1, routed)           0.689     1.120    clk_IBUF
     BUFGCTRL_X0Y0        BUFG (Prop_bufg_I_O)         0.029     1.149 r  clk_IBUF_BUFG_inst/O
-                         net (fo=3232, routed)        0.915     2.065    clk_IBUF_BUFG
-    SLICE_X34Y109        FDRE                                         r  midstate_reg[205]/C
-                         clock pessimism             -0.255     1.810    
-    SLICE_X34Y109        FDRE (Hold_fdre_C_D)         0.063     1.873    midstate_reg[205]
+                         net (fo=3256, routed)        0.834     1.984    miner/clk_IBUF_BUFG
+    SLICE_X9Y98          FDSE                                         r  miner/core_state_in_reg[192]/C
+                         clock pessimism             -0.250     1.734    
+    SLICE_X9Y98          FDSE (Hold_fdse_C_D)         0.075     1.809    miner/core_state_in_reg[192]
   -------------------------------------------------------------------
-                         required time                         -1.873    
-                         arrival time                           1.898    
+                         required time                         -1.809    
+                         arrival time                           1.833    
   -------------------------------------------------------------------
-                         slack                                  0.025    
+                         slack                                  0.024    
 
 
 
@@ -329,8 +327,8 @@ Sources:            { clk }
 
 Check Type        Corner  Lib Pin     Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location       Pin
 Min Period        n/a     BUFG/I      n/a            2.155         83.330      81.175     BUFGCTRL_X0Y0  clk_IBUF_BUFG_inst/I
-Low Pulse Width   Slow    SRL16E/CLK  n/a            0.980         41.670      40.690     SLICE_X10Y98   miner/core/w_reg[11][0]_srl3___miner_core_w_reg_r_1/CLK
-High Pulse Width  Slow    SRL16E/CLK  n/a            0.980         41.660      40.680     SLICE_X10Y98   miner/core/w_reg[11][0]_srl3___miner_core_w_reg_r_1/CLK
+Low Pulse Width   Slow    SRL16E/CLK  n/a            0.980         41.670      40.690     SLICE_X14Y100  miner/core/w_reg[11][0]_srl3___miner_core_w_reg_r_1/CLK
+High Pulse Width  Slow    SRL16E/CLK  n/a            0.980         41.660      40.680     SLICE_X14Y100  miner/core/w_reg[11][0]_srl3___miner_core_w_reg_r_1/CLK
 
 
 

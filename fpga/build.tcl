@@ -48,14 +48,25 @@ report_drc              -file $outdir/drc.rpt
 
 write_bitstream -force $outdir/${top}.bit
 
-# Report the one number that decides whether this build is usable, rather than
-# leaving it in a file the reader may not open. A negative slack here means the
-# design does not meet timing and any hardware result from it is meaningless.
-set wns [get_property SLACK [get_timing_paths -delay_type min_max]]
+# Report the numbers that decide whether this build is usable, rather than
+# leaving them in a file the reader may not open.
+#
+# Setup and hold must be read SEPARATELY. An earlier version of this script
+# asked for -delay_type min_max and printed the single worst slack, which
+# reported 0.024 ns on a build whose real setup margin was 69.588 ns -- the
+# 0.024 was the hold path, where small positive slack is normal and expected.
+# One number for two different questions is how a healthy build gets mistaken
+# for a marginal one.
+set wns [get_property SLACK [get_timing_paths -delay_type max]]
+set whs [get_property SLACK [get_timing_paths -delay_type min]]
 
 puts "\n=== BUILD COMPLETE ==="
 puts "bitstream : $outdir/${top}.bit"
-puts "WNS       : $wns ns"
+puts "WNS setup : $wns ns   (margin against the clock period)"
+puts "WHS hold  : $whs ns   (small positive is normal)"
+if {$whs < 0} {
+    puts "\nWARNING: HOLD VIOLATION -- the design will not work in hardware.\n"
+}
 if {$wns < 0} {
     puts "\nWARNING: NEGATIVE SLACK -- this design does not meet timing."
     puts "Do not trust hardware results from this bitstream.\n"
