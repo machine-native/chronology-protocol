@@ -95,7 +95,25 @@ def anchors():
     return rows, len(chain)
 
 
-def readme(att, anch, chain_len, built_utc) -> str:
+def git_provenance() -> dict:
+    """Pin the deposit to an exact repository state.
+
+    An independent verifier pointed out that a pack's contents mean little
+    without knowing which commit produced them. Recorded here so the deposit
+    can be compared against a public repository rather than trusted.
+    """
+    def run(*args):
+        try:
+            return subprocess.run(["git", *args], cwd=ROOT, capture_output=True,
+                                  text=True, check=True).stdout.strip()
+        except Exception:
+            return "unavailable"
+    return {"commit": run("rev-parse", "HEAD"),
+            "described": run("describe", "--tags", "--always", "--dirty"),
+            "dirty": run("status", "--porcelain") != ""}
+
+
+def readme(att, anch, chain_len, built_utc, prov=None) -> str:
     lines = []
     A = lines.append
     A("WHAT THIS IS")
@@ -107,6 +125,12 @@ def readme(att, anch, chain_len, built_utc) -> str:
     A("by anyone, forever, without trusting the people who made them.")
     A("")
     A(f"Deposit built:  {built_utc}")
+    if prov:
+        A(f"Repository:     commit {prov['commit']}")
+        A(f"                {prov['described']}" + ("  (WORKING TREE DIRTY)" if prov["dirty"] else ""))
+        A("                github.com/machine-native/chronology-protocol")
+        A("                Compare this deposit against that commit to establish that")
+        A("                it is the published record and not something assembled for you.")
     A("Author:         Parth Mauria Saxena (parthod0x)")
     A("Licence:        Apache-2.0 (see LICENSE)")
     A("")
