@@ -1,8 +1,14 @@
 from pathlib import Path
 import tempfile
+import pytest
 from ctp.pq import *
+from ctp.pq import PQUnavailable, ensure_available
 def test_pq_roundtrip():
-    ensure_available()
+    # An old OpenSSL means this test could not run, not that it failed.
+    try:
+        ensure_available()
+    except PQUnavailable as e:
+        pytest.skip(f"OpenSSL lacks the required PQ algorithms: {e}")
     msg=b"chronology-pq-test"
     with tempfile.TemporaryDirectory() as td:
         td=Path(td)

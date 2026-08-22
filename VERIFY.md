@@ -57,7 +57,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: `47 passed`, and — more to the point — **zero failures**. The count grows as
+Expected: `48 passed`, and — more to the point — **zero failures**. The count grows as
 profiles are added, so treat the number as informational and the failure count as the
 result. This exercises the canonical encoder, the interval algebra, the PQ signatures,
 the Roughtime verifier, the OpenTimestamps proof reader, and full synthetic sandwich
@@ -71,6 +71,12 @@ python scripts/verify_bundle.py vectors/valid/evidence-bundle.cbor
 
 Expected: every check `true` except `BITCOIN_POW`, verdict **`PASS_PRE_POW`** — this is
 the original sealed package, whose candidate block was deliberately never mined.
+
+> **If you see `INDETERMINATE_TOOLCHAIN` and checks marked `UNAVAILABLE`, the evidence
+> is fine and your OpenSSL is too old.** The verifier deliberately refuses to report
+> `FAIL` for a check it could not perform: "cannot check" and "checked and failed" are
+> different answers, and only one of them is about the evidence. Exit code 2 means
+> indeterminate, 1 means a real failure. Install OpenSSL 3.5+ (see §0) and re-run.
 
 ## 3. Verify the live-anchored bundle (offline)
 

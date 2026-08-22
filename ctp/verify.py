@@ -5,6 +5,14 @@ from .interval import consensus
 from .bitcoin_jan09 import anchor_payload, anchor_scriptsig, verify_project_genesis, block_hash, verify_candidate_structure
 
 def verify_bundle(history, signed_checkpoint, bitcoin_candidate_raw=None, candidate_median_time_past=None, genesis=None):
+    """Verify an evidence bundle.
+
+    Returns (checks, verdict). A check is True, False, or the string "UNAVAILABLE"
+    when this machine's toolchain cannot perform it. If any check is UNAVAILABLE
+    the verdict is INDETERMINATE_TOOLCHAIN — never FAIL, because failing to check
+    is not the same as checking and finding a failure.
+    """
+    from .pq import PQUnavailable
     checks={}
     checks["PROJECT_GENESIS_REPRODUCES"]=verify_project_genesis()
     if genesis is not None:
@@ -15,7 +23,10 @@ def verify_bundle(history, signed_checkpoint, bitcoin_candidate_raw=None, candid
         )
     else:
         checks["PROTOCOL_GENESIS_BINDING"]=False
-    checks["ALL_OBSERVATION_PQ_SIGNATURES"]=all(verify_signed_observation(o) for o in history)
+    try:
+        checks["ALL_OBSERVATION_PQ_SIGNATURES"]=all(verify_signed_observation(o) for o in history)
+    except PQUnavailable:
+        checks["ALL_OBSERVATION_PQ_SIGNATURES"]="UNAVAILABLE"
 
     chain_ok,latest=verify_witness_chains(history)
     checks["WITNESS_CHAINS"]=chain_ok
@@ -30,7 +41,10 @@ def verify_bundle(history, signed_checkpoint, bitcoin_candidate_raw=None, candid
 
     c=consensus([o.unsigned.interval for o in latest],cp.f) if latest else {"q":-1,"verdict":"BAD"}
     checks["CONSENSUS_RULE"]=c["q"]==cp.q and c["verdict"]==cp.verdict and c.get("interval")==cp.interval
-    checks["CHECKPOINT_PQ_SIGNATURES"]=verify_signed_checkpoint(signed_checkpoint)
+    try:
+        checks["CHECKPOINT_PQ_SIGNATURES"]=verify_signed_checkpoint(signed_checkpoint)
+    except PQUnavailable:
+        checks["CHECKPOINT_PQ_SIGNATURES"]="UNAVAILABLE"
 
     cr=signed_checkpoint.record_commitment()
     payload=anchor_payload(cp.epoch,cr.sha256,cr.shake384)
@@ -46,6 +60,10 @@ def verify_bundle(history, signed_checkpoint, bitcoin_candidate_raw=None, candid
         from .bitcoin_jan09 import target_from_bits
         pow_present=int(h,16)<=target_from_bits(bits)
         checks["BITCOIN_POW"]=pow_present
+
+    # "UNAVAILABLE" is neither pass nor fail: the check did not happen.
+    if any(v == "UNAVAILABLE" for v in checks.values()):
+        return checks, "INDETERMINATE_TOOLCHAIN"
 
     non_pow=all(v for k,v in checks.items() if k!="BITCOIN_POW")
     verdict="FAIL"

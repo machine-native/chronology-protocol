@@ -73,3 +73,36 @@ def test_reader_needs_no_third_party_packages():
     r = subprocess.run([sys.executable, "-S", "-c", code], capture_output=True, text=True)
     assert r.returncode == 0, f"read path pulled in a third-party import:\n{r.stderr}"
     assert r.stdout.startswith("OK")
+
+
+def test_unavailable_toolchain_is_never_reported_as_failure():
+    """Regression: an old OpenSSL must yield INDETERMINATE_TOOLCHAIN, not FAIL.
+
+    An outside verifier on OpenSSL 3.0 saw every bundle report verdict FAIL with
+    the PQ signature checks false, because a toolchain that could not run the
+    algorithm produced the same False as a forged signature. They could have
+    reasonably concluded the evidence was bad. "Cannot check" and "checked and
+    failed" must never collapse into the same answer.
+    """
+    import ctp.pq as pq
+    from ctp.bundle import EvidenceBundle
+    from ctp.verify import verify_bundle
+
+    bundle_path = ROOT / "vectors" / "valid" / "evidence-bundle-live-anchored.cbor"
+    if not bundle_path.is_file():
+        pytest.skip("bundle not present")
+
+    saved = dict(pq._ALG_CACHE)
+    try:
+        pq._ALG_CACHE[pq.ML_DSA_87] = False
+        pq._ALG_CACHE[pq.SLH_DSA_SHAKE_256S] = False
+        b = EvidenceBundle.from_bytes(bundle_path.read_bytes())
+        checks, verdict = verify_bundle(b.history, b.checkpoint, b.candidate_block,
+                                        b.candidate_median_time_past, b.genesis)
+        assert verdict == "INDETERMINATE_TOOLCHAIN", verdict
+        assert checks["ALL_OBSERVATION_PQ_SIGNATURES"] == "UNAVAILABLE"
+        assert checks["CHECKPOINT_PQ_SIGNATURES"] == "UNAVAILABLE"
+        assert verdict != "FAIL"
+    finally:
+        pq._ALG_CACHE.clear()
+        pq._ALG_CACHE.update(saved)

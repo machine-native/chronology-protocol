@@ -417,8 +417,9 @@ def verify_sandwich(b: SandwichBundle):
         ok_exp = era_expectation(origin_s, mid_rel) == b.expectation
     checks["S_EXPECTATION_RECOMPUTED"] = ok_exp
 
-    all_ok = all(checks.values())
-    if not all_ok:
+    if any(v == "UNAVAILABLE" for v in checks.values()):
+        verdict = "INDETERMINATE_TOOLCHAIN"     # could not check, ≠ checked and failed
+    elif not all(checks.values()):
         verdict = "FAIL"
     elif burial >= 1:
         verdict = "SANDWICH_PASS"

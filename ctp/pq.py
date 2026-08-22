@@ -45,7 +45,37 @@ def sign(algorithm: str, private_pem: Path, message: bytes) -> bytes:
         _run(["openssl", "pkeyutl", "-sign", "-inkey", str(private_pem), "-in", str(msg), "-out", str(sig)])
         return sig.read_bytes()
 
+_ALG_CACHE = {}
+
+
+def algorithm_available(algorithm: str) -> bool:
+    """Can this OpenSSL verify `algorithm` at all? Cached; never raises."""
+    if algorithm not in _ALG_CACHE:
+        try:
+            out = _run(["openssl", "list", "-signature-algorithms"]).decode(errors="replace")
+            _ALG_CACHE[algorithm] = algorithm in out
+        except Exception:
+            _ALG_CACHE[algorithm] = False
+    return _ALG_CACHE[algorithm]
+
+
 def verify(algorithm: str, public_pem: Path, message: bytes, signature: bytes) -> bool:
+    """True if the signature verifies, False if it does not.
+
+    Raises PQUnavailable if this OpenSSL cannot perform the check at all.
+
+    That distinction is load-bearing and was once absent: an outside verifier on
+    OpenSSL 3.0 saw every bundle report verdict FAIL with the signature checks
+    false, because a toolchain that could not run the algorithm produced the same
+    False as a forged signature. The verifier was asserting "these signatures are
+    invalid" when the truth was "I cannot check these signatures" — exactly the
+    kind of overstatement this project refuses everywhere else. Never conflate
+    "unable to check" with "checked and failed".
+    """
+    if not algorithm_available(algorithm):
+        raise PQUnavailable(
+            f"this OpenSSL cannot verify {algorithm}; signature status is unknown, "
+            "not invalid. OpenSSL 3.5+ is required.")
     with tempfile.TemporaryDirectory() as td:
         p = Path(td)
         msg = p/"msg.bin"; sig = p/"sig.bin"
