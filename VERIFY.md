@@ -207,7 +207,13 @@ curl -s https://blockstream.info/api/block-height/963190          # -> block has
 curl -s https://blockstream.info/api/block/<that-hash> | grep merkle_root
 ```
 
-Both roots match, and they were confirmed this way on 2026-08-21. That means the sealed
+Both roots match, and they were confirmed this way on 2026-08-21. **All five
+attestations have now been confirmed against blockstream.info** — blocks 963190,
+963207, 963408, 963413 and 963431, each returning exactly the merkle root its proof
+requires. One of them (963190) was independently confirmed by an outside verifier in
+[issue #1](https://github.com/machine-native/chronology-protocol/issues/1); the rest
+were checked by the author, so repeat them yourself if it matters to you — the whole
+point of this step is that it needs nothing from us. That means the sealed
 evidence bundle existed **before those Bitcoin blocks were mined** — a fact now secured
 by Bitcoin's accumulated proof-of-work, not by us. Four of the five proofs carry
 attestations (blocks 963190, 963207, 963408, 963413); the newest is still aggregating
