@@ -14,7 +14,8 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| on-board run (selftest) | **PASS on hardware 2026-08-22** |
+| on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
+| measured throughput | **0.0906 MH/s** — 99.7% of the cycle-limited ceiling |
 | `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
 
 Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
@@ -35,16 +36,35 @@ That nonce and that hash are **height 221 of the live anchor chain** — a block
 project mined in software, now reproduced by an FPGA it also built. A third independent
 implementation of the consensus hash, after Python and C, and the first in hardware.
 
-What that does **not** yet establish, stated because the run is flattering and the bar
-should go up rather than down when it is:
+The first run scanned only 4 nonces, which proves the hash and the link but hardly
+exercises the scanner. A deep run followed the same day:
 
-- The scan covered **4 nonces**. It proves SHA-256d is computed correctly and reported
-  over UART; it barely exercises the nonce scanner. Run
-  `selftest --depth 1000000` for a scan the board must walk properly — and which
-  measures the real rate.
-- **No throughput has been measured.** The 0.091 MH/s figure below is still arithmetic.
-  The deep selftest replaces it with a measurement.
+```
+scanned         1,000,000 nonces      999,999 correctly rejected
+stopped on      2757362010            the right one, first time
+elapsed         11.03 s
+measured rate   0.0906 MH/s
+2^32 sweep      13.2 hours
+```
+
+**The estimate held.** Predicted 0.091 MH/s and 13 hours; measured 0.0906 and 13.2 — a
+0.4% gap. Worth stating precisely because the two earlier estimates for this board were
+wrong by 50× and by 8×, and a third guess deserved no benefit of the doubt until a
+board settled it.
+
+Better still, 12 MHz ÷ 132 cycles/nonce gives a ceiling of 0.0909 MH/s, so the board is
+running at **99.7% of what its cycle count allows**. The UART, the host round-trip and
+the reporting path together cost 0.3%. That is the useful result: the 132-cycle model is
+confirmed exactly, there is no hidden stall, and the projections below now rest on a
+measured constant rather than an assumed one.
+
+What this still does **not** establish, stated because the run is flattering and that is
+when the bar should go up:
+
 - **No block has been mined by this board.** `mine` mode is not written.
+- The scan ran against a **known answer**. It proves the scanner walks a range and stops
+  correctly; it is not a live race against other miners.
+- 0.0906 MH/s is **44× slower than this laptop**. Nothing here is competitive yet.
 
 ### Bring-up fault, found 2026-08-22: the UART port directions were inverted
 
@@ -205,15 +225,18 @@ clocking       no MMCM/PLL — running straight off the board oscillator
 
 That last line is the problem, and it is mine. **The Cmod A7's oscillator is 12 MHz**,
 while the earlier estimate below assumed 100 MHz and never said so. At 132 cycles per
-nonce:
+nonce — a figure hardware has now confirmed to within 0.3%:
 
 | configuration | MH/s | vs this laptop (4.0 MH/s measured) |
 |---|---|---|
-| **as built** — 12 MHz, 1 core | **0.091** *(still arithmetic — measure it)* | **44× slower** |
-| + MMCM at 75 MHz, 1 core | 0.57 | 7× slower |
-| + MMCM at 75 MHz, 9 cores | 5.11 | slightly faster |
+| **as built** — 12 MHz, 1 core | **0.0906 measured** | **44× slower** |
+| + MMCM at 75 MHz, 1 core | 0.57 projected | 7× slower |
+| + MMCM at 75 MHz, 9 cores | 5.11 projected | slightly faster |
 
-A full 2³² nonce sweep as built takes **13 hours**. It cannot compete for a block, and
+The first row is now a measurement. The other two remain projections — but they scale a
+constant that hardware has confirmed to 0.4%, rather than one that had been guessed.
+
+A full 2³² nonce sweep as built takes **13.2 hours**, measured. It cannot compete for a block, and
 saying otherwise would repeat the error this section already exists to correct.
 
 The good news is that the path to the ~5 MH/s figure is now *measured* rather than
