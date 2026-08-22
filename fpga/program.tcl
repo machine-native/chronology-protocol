@@ -15,8 +15,32 @@ set bitfile [file normalize ./build/miner_top.bit]
 
 if {![file exists $bitfile]} {
     puts "\nERROR: no bitstream at $bitfile"
-    puts "Build it first:  vivado -mode batch -source build.tcl\n"
+    puts "Build it first:  vivado -mode batch -source build.tcl"
+    puts ""
+    puts "If a build just ran, IT FAILED. build.tcl deletes the previous bitstream"
+    puts "before starting, precisely so a failed build cannot leave one behind for"
+    puts "this step to load and measure as if it were the new configuration.\n"
     exit 1
+}
+
+# Announce which configuration is being loaded. Consecutive builds differ only in
+# core count and clock, and a measurement attributed to the wrong one is worse
+# than no measurement -- it looks like data. On 2026-08-23 a failed 16-core build
+# left the previous 12-core bitstream in place; it was programmed and measured at
+# 6.2838 MH/s, a real number for a configuration nobody thought they were testing.
+set cfgfile [file rootname $bitfile].cfg
+set built "UNKNOWN -- no .cfg stamp beside this bitstream"
+if {[file exists $cfgfile]} {
+    set fh [open $cfgfile r]
+    set data [read $fh]
+    close $fh
+    set c "?"
+    set m "?"
+    foreach line [split $data "\n"] {
+        if {[lindex $line 0] eq "cores"} { set c [lindex $line 1] }
+        if {[lindex $line 0] eq "mhz"}   { set m [lindex $line 1] }
+    }
+    set built "$c cores at $m MHz"
 }
 
 open_hw_manager
@@ -57,6 +81,7 @@ for {set attempt 1} {$attempt <= 2} {incr attempt} {
 }
 
 puts "bitstream    : $bitfile"
+puts "configuration: $built"
 puts "DONE pin     : $done"
 
 # Release the FT2232 before anyone tries to open the serial port.

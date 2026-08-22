@@ -14,9 +14,9 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| MMCM + parallel cores | **built and measured 2026-08-22: 6.25 MH/s** |
+| MMCM + parallel cores | **built and measured: 6.72 MH/s, 12 cores at 75 MHz** |
 | on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
-| measured throughput | **6.2505 MH/s** at 12 cores / 69.565 MHz |
+| measured throughput | **6.7242 MH/s** at 12 cores / 75 MHz |
 | `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
 
 Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
@@ -246,6 +246,7 @@ nonce — a figure hardware has now confirmed to within 0.3%:
 | 12 MHz, 1 core | **0.0906** |
 | 60 MHz MMCM, 8 cores | **3.5911** |
 | 69.565 MHz MMCM, 12 cores | **6.2505** |
+| 75 MHz MMCM, 12 cores | **6.7242** |
 
 All three are measurements on hardware. The full table, the configurations still
 untried, and the two wrong verdicts this section reached along the way are below.
@@ -324,7 +325,8 @@ not a trend. Written from one data point, refuted by the second.
 **Wrong argument #2: reading fmax off a slack-having build.** The replacement claim was
 that the SHA-256 core's own path sits near 14 ns regardless of core count, so 75 MHz
 (13.33 ns) could never close. Then the same 12 cores, constrained to 69.565 MHz, routed
-to **12.153 ns**.
+to **12.153 ns** — and at a 75 MHz constraint, to **12.849 ns with timing met and
+6.7242 MH/s measured on hardware.**
 
 That is the real lesson, and it is a methodological one:
 
@@ -334,8 +336,11 @@ That is the real lesson, and it is a methodological one:
 > build with slack is a lower bound, not an estimate** — and treating a lower bound as an
 > estimate is what produced both wrong verdicts above.
 
-At 12.153 ns achieved, 75 MHz (13.333 ns) and even 80 MHz (12.500 ns) should close.
-Neither has been tried.
+Note the shape of the mistake, since it is the same one twice: a number that was only
+ever an upper bound on the path got quoted as the path itself, and a configuration was
+declared impossible on that basis. Both times the claim was confident, and both times a
+single build refuted it. The correct statement all along was "no build has yet needed to
+go faster", which is not a limit at all.
 
 **69.565 MHz was the unlock.** It needs 14.375 ns and is reachable only because
 `CLKOUT0_DIVIDE_F` moves in steps of 0.125 (600/8.625). It is precisely the frequency the
@@ -343,19 +348,47 @@ earlier "must divide 600 exactly" check forbade — a self-inflicted restriction
 excluded the single useful setting between 60 and 75, and whose removal is what revealed
 that the fabric had far more headroom than three builds had suggested.
 
-| configuration | projected MH/s | measured |
-|---|---|---|
-| 1 core at 12 MHz | 0.0909 | **0.0906** |
-| 8 cores at 60 MHz | 3.64 | **3.5911** |
-| 12 cores at 60 MHz | 5.45 | **5.3904** |
-| **12 cores at 69.565 MHz** | 6.32 | **6.2505** |
-| 12 cores at 75 MHz | 6.82 | untested |
-| 16 cores at 69.565 MHz | 8.43 | untested |
-| 16 cores at 80 MHz | 9.70 | untested |
+| configuration | projected MH/s | measured | setup slack |
+|---|---|---|---|
+| 1 core at 12 MHz | 0.0909 | **0.0906** | +69.588 ns |
+| 8 cores at 60 MHz | 3.64 | **3.5911** | +2.468 ns |
+| 12 cores at 60 MHz | 5.45 | **5.3904** | +2.804 ns |
+| 12 cores at 69.565 MHz | 6.32 | **6.2505** / **6.2548** | +2.222 ns |
+| **12 cores at 75 MHz** | 6.82 | **6.7242** | +0.484 ns |
+| ~~16 cores, any clock~~ | ~~8.43+~~ | **does not fit** | — |
 
-Four measurements, each within **1.3%** of its projection — 99.7%, 98.7%, 98.9% and
-98.9% of predicted. The 132-cycles-per-nonce-per-core model holds across two orders of
-magnitude of throughput, three core counts and three frequencies.
+Five configurations measured, each within **1.4%** of its projection — 99.7%, 98.7%,
+98.9%, 98.9% and 98.6% of predicted. The 132-cycles-per-nonce-per-core model holds
+across two orders of magnitude of throughput, three core counts and four frequencies.
+The 69.565 MHz build was measured twice on separate programming runs and agreed to
+0.07% (6.2505 and 6.2548), which is a useful check that the measurement itself is
+stable rather than a lucky single reading.
+
+### The ceiling, and what actually sets it
+
+**16 cores does not fit.** Not a timing failure — a hard resource one:
+
+```
+ERROR: [DRC UTLZ-1] LUT as Logic over-utilized ...
+requires 24374 of such cell types but only 20800 compatible sites are available
+```
+
+That gives the first real measurement of core size: roughly **1,508 LUTs each**.
+
+| cores | LUTs | % of XC7A35T |
+|---|---|---|
+| 12 | ~18,340 | 88% |
+| 13 | ~19,850 | 95% |
+| 14 | ~21,360 | **103% — will not fit** |
+
+So **12 cores is the practical maximum** on this part, 13 at a squeeze. The device is
+LUT-limited, not timing-limited, and that was not obvious from any earlier build: at
+8 cores the fabric looked half empty.
+
+Frequency has a little headroom left. At 75 MHz the path routed to 12.849 ns, so
+**77.419 MHz** (600/7.75, needing 12.917 ns) should close and would give about
+**7.04 MH/s** — a 4.7% gain. Whether that is worth a build is a matter of taste; the
+configuration in the table above is the one that has actually run.
 
 ### On comparing this to a CPU
 
@@ -375,7 +408,7 @@ given machine is that machine's own CPU miner. The laptop's 4.0 MH/s stands as a
 measured fact about the laptop and nothing more; the desktop's rate has never been
 measured.
 
-What survives without a baseline: the board does **6.25 MH/s at roughly 2 W**, running
+What survives without a baseline: the board does **6.72 MH/s at roughly 2 W**, running
 continuously without occupying a general-purpose machine. That was always the actual
 argument for it.
 

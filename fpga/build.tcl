@@ -12,6 +12,16 @@ set top       miner_top
 set outdir    [file normalize ./build]
 file mkdir $outdir
 
+# Delete any previous bitstream and its stamp BEFORE building anything.
+#
+# On 2026-08-23 a 16-core build failed at place_design (LUT over-utilisation),
+# program.tcl then loaded the bitstream still sitting in build/ from the previous
+# run, and the selftest returned a healthy 6.2838 MH/s -- a real measurement of
+# the WRONG configuration, indistinguishable from success. A failed build must
+# leave nothing behind that a later step can mistake for its output.
+file delete -force $outdir/${top}.bit
+file delete -force $outdir/${top}.cfg
+
 create_project -in_memory -part $part
 
 read_verilog [glob ./rtl/*.v]
@@ -79,6 +89,15 @@ report_timing_summary   -file $outdir/timing.rpt
 report_drc              -file $outdir/drc.rpt
 
 write_bitstream -force $outdir/${top}.bit
+
+# Stamp the bitstream with the configuration that produced it, so the programming
+# step can say what it is actually loading rather than leaving the operator to
+# remember which build came last.
+set fh [open $outdir/${top}.cfg w]
+puts $fh "cores $cores"
+puts $fh "mhz $mhz"
+puts $fh "clk_hz $clk_hz"
+close $fh
 
 # Report the numbers that decide whether this build is usable, rather than
 # leaving them in a file the reader may not open.
