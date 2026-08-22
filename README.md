@@ -92,17 +92,18 @@ mined into block C at height 222. Construction and non-claims:
 `vectors/valid/reality-sandwich-bundle.cbor`; verifier: `scripts/verify_sandwich.py`
 (offline, network-free).
 
-## Independently verified
+## Independent verification — claimed, then withdrawn
 
-On 2026-08-22 an unrelated party, on their own machine and toolchain, ran the full
-offline verifier against a hand-delivered copy of this record and reported
-**`PASS`** on every load-bearing check — the post-quantum signatures, the
-measurement re-derivations, the Merkle and consensus structures, the embedded
-proof-of-work, the header linkage, the tamper cases, and the photograph digests.
-They also found two real defects, both since fixed. Their scope, limits and
-transcript: [`live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md`](live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md).
+A record published on 2026-08-22 claiming the first independent verification of this
+project was **withdrawn the same day**: its provenance was never established, and a
+party in a position to be the verifier stated they had not run it. The full account of
+what was claimed, why it was withdrawn, and what would make a future verification
+auditable is kept at
+[`live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md`](live/anchor-evidence/INDEPENDENT-VERIFICATION-01.md).
 
-Mining remains open to anyone: the next accepted block belongs to whoever finds it.
+**No independent verification of this record has been established.** If you run
+[VERIFY.md](VERIFY.md), publishing your result somewhere you control would be the first.
+Mining is equally open: the next accepted block belongs to whoever finds it.
 
 ## Verify this yourself
 
