@@ -37,11 +37,25 @@ refresh_hw_device -update_hw_probes false $dev
 puts "\ndevice found : [get_property PART $dev]"
 
 set_property PROGRAM.FILE $bitfile $dev
-program_hw_devices $dev
-refresh_hw_device -update_hw_probes false $dev
 
-# Read the state back rather than trusting that the command returned quietly.
-set done [get_property REGISTER.IR.BIT5_DONE $dev]
+# Program, retrying once. "End of startup status: LOW" -- DONE failing to assert
+# -- is frequently transient after a previous configuration, and a bare error
+# message sends you looking for a design fault that is not there. One automatic
+# retry distinguishes "needs a nudge" from "genuinely will not configure".
+set done "0"
+for {set attempt 1} {$attempt <= 2} {incr attempt} {
+    if {$attempt > 1} {
+        puts "\nDONE did not assert; retrying once..."
+        refresh_hw_device -update_hw_probes false $dev
+    }
+    if {[catch {program_hw_devices $dev} err]} {
+        puts "attempt $attempt : programming reported: $err"
+    }
+    refresh_hw_device -update_hw_probes false $dev
+    set done [get_property REGISTER.IR.BIT5_DONE $dev]
+    if {$done eq "1"} break
+}
+
 puts "bitstream    : $bitfile"
 puts "DONE pin     : $done"
 
@@ -59,5 +73,25 @@ if {$done eq "1"} {
 }
 
 puts "\n=== PROGRAMMING FAILED ==="
-puts "DONE did not assert. The bitstream did not take; the device is not running.\n"
+puts "DONE did not assert after two attempts. The device is NOT running, so any"
+puts "serial test now is meaningless -- there is nothing on the other end."
+puts ""
+puts "This is not a design fault if the build was clean. Check in this order:"
+puts ""
+puts "  1. POWER-CYCLE the board. Unplug the USB cable, wait five seconds, plug"
+puts "     it back in, and re-run this script. This clears a latched"
+puts "     configuration state and resolves most DONE-LOW reports."
+puts ""
+puts "  2. Close any other Vivado or Hardware Manager session. Two tools sharing"
+puts "     one JTAG cable produces exactly this."
+puts ""
+puts "  3. Try a different USB port, and a different cable if one is to hand."
+puts "     Configuration pushes ~2 MB over the link and is less tolerant of a"
+puts "     marginal cable than JTAG identification is -- which is why the device"
+puts "     can be detected perfectly and still fail to program."
+puts ""
+puts "  4. Only if all of the above fail: re-run build.tcl and confirm it ends"
+puts "     with a POSITIVE setup slack and zero DRC errors before suspecting the"
+puts "     bitstream itself."
+puts ""
 exit 1

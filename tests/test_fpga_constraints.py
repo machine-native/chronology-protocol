@@ -1,13 +1,17 @@
 """Guard the one FPGA fact that was established by measurement, not reading.
 
-The UART link was silent in both directions for three build cycles. The argument
-stayed on whether Digilent's `uart_rxd_out` / `uart_txd_in` names are relative to
-the bridge or the host -- and that was the wrong question. The naming convention
-had been read correctly all along; the two PACKAGE PINS were simply assigned to
-the wrong nets in the constraints file.
+The UART link was silent in both directions for three build cycles, because the
+two port DIRECTIONS were inverted. The pin numbers matched Digilent's master XDC
+exactly; their net names are relative to the HOST side, so `uart_txd_in` is data
+the host transmits INTO the board -- an FPGA input -- and it had been declared an
+output. The FPGA therefore drove J17 against the FT2232's own driver.
 
 Measured on 2026-08-22 with `fpga/rtl/pinprobe.v` and the host transmitting
 continuously: J17 carried edges, J18 was static. The FPGA receives on J17.
+
+Note this was the FIRST hypothesis raised during bring-up, and it was abandoned
+on the strength of a single web search that stated the opposite. The search was
+wrong. Three further theories were pursued before an instrument settled it.
 
 These tests exist because that fact cannot be re-derived by reading. Anyone who
 "tidies" the constraints back toward the vendor's net names, or swaps the pins to

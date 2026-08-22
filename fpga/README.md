@@ -20,20 +20,27 @@ Nothing here has run on a board. Per the project's standing rule, "simulated" an
 "synthesised" and "mined a real block" are three different claims and only the first
 is currently true.
 
-### Bring-up fault, found 2026-08-22: the two UART package pins were swapped
+### Bring-up fault, found 2026-08-22: the UART port directions were inverted
 
-**The constraints file assigned J17 and J18 to the wrong nets.** The FPGA receives on
-**J17** and transmits on **J18**; it had been built the other way round. Such a board
-synthesises, meets timing, passes DRC, configures, and blinks — and is silent in both
-directions with no error reported anywhere.
+The FPGA receives on **J17** and transmits on **J18**; it had been built the other way
+round. Such a board synthesises, meets timing, passes DRC, configures, and blinks — and
+is silent in both directions with no error reported anywhere.
 
-The diagnosis took three build cycles longer than it should have, because the argument
-was stuck on the wrong question. Digilent's net names `uart_rxd_out` / `uart_txd_in` can
-be read as relative to the bridge or to the host, both grammatical, and that ambiguity
-absorbed all the attention. **The naming convention had been read correctly the whole
-time.** The pins underneath it were simply crossed — a separate failure that produces an
-identical symptom, and one that was never separately named until an instrument forced it
-into the open.
+The **pin numbers were correct all along** and matched Digilent's master XDC exactly
+(J18 = `uart_rxd_out`, J17 = `uart_txd_in`). What was wrong was the **directions**.
+Digilent's names are relative to the host/USB side: `uart_txd_in` is data the host
+transmits *into* the board, so it is an FPGA **input**, and it had been declared an
+output.
+
+That has a consequence worth stating plainly: for as long as that bitstream was loaded,
+**the FPGA was driving J17 against the FT2232's own output** — two push-pull CMOS
+drivers fighting on one net.
+
+Inverted directions was the **first** hypothesis raised during bring-up. It was
+abandoned on the strength of a single web search that asserted the opposite, and the
+abandonment was reported as though the code had been verified. It had not; one source
+had been consulted and believed. Three further theories were pursued before an
+instrument settled the question — and the first instinct turned out to be right.
 
 What was **observed rather than assumed**, in the order it arrived:
 
@@ -58,7 +65,14 @@ retires the baud-divisor theory independently of the baud sweep.
 
 Only the last two lines resolved it, and they took two attempts.
 
-`rtl/pinprobe.v` settles both by measurement. Its first version compared **static
+Note what the probe deliberately does **not** ask. Inverted directions and swapped pin
+numbers are two independent faults with one identical symptom, and no reading of a
+datasheet separates them. The probe sidesteps both by asking a question with a physical
+answer: *which package pin carries the host's traffic?* Whichever pin moves is the
+FPGA's receive pin, and it makes no difference what the net is named or which fault put
+it there.
+
+`rtl/pinprobe.v` settles it by measurement. Its first version compared **static
 levels** — weak internal pulldowns, on the theory that the bridge's transmit pin idles
 actively high and wins, while its receive pin is undriven and loses. On hardware **both
 pins read high**, which is no answer at all: a weak internal pulldown cannot outvote a
@@ -95,10 +109,12 @@ names would silently reintroduce a board that builds cleanly and does nothing.
 
 #### What this cost, and why it is written down
 
-Four theories were advanced and four were wrong: inverted pin *directions*, an erased
-volatile bitstream, a baud mismatch, and a static-level probe that could not distinguish
-a driven pin from one held high by a resistor. Each was plausible. Each consumed a
-build-program-observe cycle on hardware.
+Four theories were advanced. Three were wrong — an erased volatile bitstream, a baud
+mismatch, and a static-level probe too weak to tell a driven pin from one held high by a
+resistor. The **fourth was right and was discarded first**: inverted directions was the
+opening hypothesis, dropped because one web search said otherwise, and that dismissal
+was written up as if the code had been checked rather than merely googled. Each cycle
+cost a build, a program and an observation on real hardware.
 
 What ended it was not a better theory but three instruments that each split one question
 into two answerable halves:
@@ -109,11 +125,17 @@ into two answerable halves:
 | `scripts/fpga_diag.py` | "wrong baud" from "total silence" |
 | `rtl/pinprobe.v` | "which physical pin carries the traffic" from every naming argument |
 
-The lesson recorded for next time: **when two candidate causes produce an identical
-symptom, no amount of reading resolves them.** Build the thing that makes them look
-different. And simulate the instrument first — the static probe shipped without a
-testbench and returned a useless "both fast", while the activity probe's testbench
-caught the equivalent bug in two seconds, before it reached a board.
+Three lessons recorded for next time:
+
+1. **When two candidate causes produce an identical symptom, no amount of reading
+   resolves them.** Build the thing that makes them look different.
+2. **Simulate the instrument before trusting it.** The static probe shipped without a
+   testbench and returned a useless "both fast"; the activity probe's testbench caught
+   the equivalent bug in two seconds, before it reached a board.
+3. **One source consulted is not a verification.** Saying a hypothesis was "checked
+   against the documentation" when a single search result was read and believed is a
+   stronger claim than the evidence supported — and here it retired the correct answer
+   for three cycles.
 
 ## The vectors are ours
 

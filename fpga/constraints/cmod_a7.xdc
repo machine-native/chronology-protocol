@@ -7,17 +7,20 @@ create_clock -add -name sys_clk_pin -period 83.33 -waveform {0 41.66} [get_ports
 
 ## USB-UART bridge (FT2232H).
 ##
-## These two assignments were MEASURED, not read off a datasheet. An earlier
-## version had them the other way round and the link was silent in both
-## directions for several build cycles, while the argument stayed stuck on
-## whether Digilent's `uart_rxd_out` / `uart_txd_in` names are relative to the
-## bridge or the host. That was the wrong question: the naming convention was
-## being read correctly all along, and the PACKAGE PINS were simply swapped.
+## These two assignments were MEASURED, not read off a datasheet.
+## fpga/rtl/pinprobe.v, 2026-08-22: with the host transmitting continuously, J17
+## showed edges and J18 stayed static. Traffic from the host arrives on J17, so
+## that is the FPGA's receive pin -- whatever anyone chooses to call the net.
 ##
-## The measurement (fpga/rtl/pinprobe.v, 2026-08-22): with the host transmitting
-## continuously, J17 showed edges and J18 stayed static. Traffic from the host
-## arrives on J17, so that is the FPGA's receive pin. Nothing about this depends
-## on what the nets are called.
+## What was actually wrong before: the PIN NUMBERS matched Digilent's master XDC
+## exactly (J18 = uart_rxd_out, J17 = uart_txd_in). The DIRECTIONS were inverted.
+## Digilent's names are relative to the HOST/USB side, so `uart_txd_in` is data
+## transmitted BY the host INTO the board -- an FPGA input -- and `uart_rxd_out`
+## is what the board sends back. They were declared the other way round.
+##
+## The cost of that: the FPGA drove J17 as an output while the FT2232 was also
+## driving it. Two push-pull CMOS drivers fighting, for as long as the board was
+## powered with that bitstream loaded.
 set_property -dict { PACKAGE_PIN J17  IOSTANDARD LVCMOS33 } [get_ports { uart_rx_from_host }];
 set_property -dict { PACKAGE_PIN J18  IOSTANDARD LVCMOS33 } [get_ports { uart_tx_to_host   }];
 

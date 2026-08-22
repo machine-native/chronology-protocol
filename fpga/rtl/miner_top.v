@@ -27,13 +27,18 @@ module miner_top #(
 ) (
     input  wire clk,
     // Named for what they carry, not for whose datasheet is being quoted.
-    // Digilent's `uart_rxd_out` / `uart_txd_in` are relative to the BRIDGE, and
-    // reading them as relative to the host is equally grammatical -- an ambiguity
+    // Digilent's `uart_rxd_out` / `uart_txd_in` are relative to the HOST side,
+    // and reading them as bridge-relative is equally grammatical -- an ambiguity
     // that cost several hardware cycles here. Direction is now in the name.
     //
-    // Which package pin is which was MEASURED, not inferred: with the host
+    // Which pin carries what was MEASURED, not inferred: with the host
     // transmitting continuously, J17 showed edges and J18 was static
     // (fpga/rtl/pinprobe.v, 2026-08-22). The FPGA therefore receives on J17.
+    //
+    // The original bug was the DIRECTIONS, not the pin numbers -- those matched
+    // Digilent's master XDC exactly. Their names are relative to the host, so
+    // `uart_txd_in` is data the host transmits INTO the board: an FPGA input.
+    // It had been declared an output, which drove J17 against the FT2232.
     input  wire uart_rx_from_host,   // J17
     output wire uart_tx_to_host,     // J18
     output wire [1:0] led
