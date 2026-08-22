@@ -284,7 +284,12 @@ def main():
     att = bitcoin_attestations()
     anch, chain_len = anchors()
     built = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    (dest / "README.txt").write_text(readme(att, anch, chain_len, built), encoding="utf-8", newline="\n")
+    prov = git_provenance()
+    (dest / "README.txt").write_text(readme(att, anch, chain_len, built, prov),
+                                     encoding="utf-8", newline="\n")
+    (dest / "PROVENANCE.json").write_text(json.dumps(
+        {"built_utc": built, "repository": "github.com/machine-native/chronology-protocol",
+         **prov}, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     # manifest over everything, written last
     lines = []
