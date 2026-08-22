@@ -15,8 +15,8 @@ create_clock -add -name sys_clk_pin -period 83.33 -waveform {0 41.66} [get_ports
 ## They are kept because an undriven CMOS input floats and will register noise
 ## as edges, which in an activity detector is a false positive on the exact
 ## question being asked. Here the pulldown parks the quiet pin quiet.
-set_property -dict { PACKAGE_PIN J18  IOSTANDARD LVCMOS33  PULLTYPE PULLDOWN } [get_ports { uart_rxd_out }];
-set_property -dict { PACKAGE_PIN J17  IOSTANDARD LVCMOS33  PULLTYPE PULLDOWN } [get_ports { uart_txd_in  }];
+set_property -dict { PACKAGE_PIN J18  IOSTANDARD LVCMOS33  PULLTYPE PULLDOWN } [get_ports { pin_j18 }];
+set_property -dict { PACKAGE_PIN J17  IOSTANDARD LVCMOS33  PULLTYPE PULLDOWN } [get_ports { pin_j17 }];
 
 ## LD1 reports J18, LD2 reports J17. Fast flicker = high, slow blink = low.
 set_property -dict { PACKAGE_PIN A17  IOSTANDARD LVCMOS33 } [get_ports { led[0] }];

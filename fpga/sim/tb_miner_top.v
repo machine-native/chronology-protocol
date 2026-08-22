@@ -22,7 +22,7 @@ module tb_miner_top;
     integer fails = 0;
 
     miner_top #(.CLK_HZ(CLK_HZ), .BAUD(BAUD), .ZERO_WORDS(1)) dut (
-        .clk(clk), .uart_rxd_out(host_tx), .uart_txd_in(fpga_tx), .led(led)
+        .clk(clk), .uart_rx_from_host(host_tx), .uart_tx_to_host(fpga_tx), .led(led)
     );
 
     always #500 clk = ~clk;                         // 1 MHz

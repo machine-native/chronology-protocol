@@ -107,7 +107,7 @@ project, and the next accepted block belongs to whoever finds it.
 **2026-08-22 — [issue #1](https://github.com/machine-native/chronology-protocol/issues/1).**
 A party outside this project cloned the repository themselves at commit `fc5933d`, ran
 the full offline verifier, and published the result from their own GitHub account:
-`48 passed`, `PASS_PRE_POW`, `PASS`, three × `SANDWICH_PASS` including the photograph
+`51 passed`, `PASS_PRE_POW`, `PASS`, three × `SANDWICH_PASS` including the photograph
 digests, and every OpenTimestamps digest matching. They also confirmed one Bitcoin
 attestation directly against a public block explorer — a comparison no code of ours
 takes part in.

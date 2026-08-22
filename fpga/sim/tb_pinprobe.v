@@ -26,8 +26,8 @@ module tb_pinprobe;
 
     pinprobe #(.WINDOW_BITS(WB)) dut (
         .clk(clk),
-        .uart_rxd_out(moving),
-        .uart_txd_in(parked_high),
+        .pin_j18(moving),
+        .pin_j17(parked_high),
         .led(led)
     );
 
@@ -52,28 +52,28 @@ module tb_pinprobe;
     initial begin
         settle;
 
-        check(dut.act_rxd === 1'b1, "moving pin registers as active");
-        check(dut.act_txd === 1'b0, "pin parked HIGH registers as inactive");
-        check(dut.act_rxd !== dut.act_txd,
+        check(dut.act_j18 === 1'b1, "moving pin registers as active");
+        check(dut.act_j17 === 1'b0, "pin parked HIGH registers as inactive");
+        check(dut.act_j18 !== dut.act_j17,
               "moving and parked pins are distinguishable -- the whole point");
 
         // A pin parked LOW must also read inactive: level is never the signal.
         // Changing it is itself one real edge, so let that wash out first.
         parked_high = 1'b0;
         settle;
-        check(dut.act_txd === 1'b0, "pin parked LOW also registers as inactive");
+        check(dut.act_j17 === 1'b0, "pin parked LOW also registers as inactive");
 
         // Activity must decay. Without this the display would latch a single
         // stray edge forever and report traffic that stopped minutes ago.
-        force dut.sync_rxd = 2'b00;
+        force dut.sync_j18 = 2'b00;
         settle;
-        check(dut.act_rxd === 1'b0, "activity decays once traffic stops");
+        check(dut.act_j18 === 1'b0, "activity decays once traffic stops");
 
         // And recover: a pin that goes quiet and busy again must read active
         // again, or the probe would be a one-shot.
-        release dut.sync_rxd;
+        release dut.sync_j18;
         settle;
-        check(dut.act_rxd === 1'b1, "activity is detected again when traffic resumes");
+        check(dut.act_j18 === 1'b1, "activity is detected again when traffic resumes");
 
         if (errors == 0)
             $display("\nPINPROBE OK - edges detected, static levels ignored, decays and recovers");

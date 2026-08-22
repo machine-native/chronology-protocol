@@ -26,8 +26,16 @@ module miner_top #(
     parameter integer ZERO_WORDS = 1
 ) (
     input  wire clk,
-    input  wire uart_rxd_out,      // Cmod A7 naming: FTDI -> FPGA
-    output wire uart_txd_in,       // FPGA -> FTDI
+    // Named for what they carry, not for whose datasheet is being quoted.
+    // Digilent's `uart_rxd_out` / `uart_txd_in` are relative to the BRIDGE, and
+    // reading them as relative to the host is equally grammatical -- an ambiguity
+    // that cost several hardware cycles here. Direction is now in the name.
+    //
+    // Which package pin is which was MEASURED, not inferred: with the host
+    // transmitting continuously, J17 showed edges and J18 was static
+    // (fpga/rtl/pinprobe.v, 2026-08-22). The FPGA therefore receives on J17.
+    input  wire uart_rx_from_host,   // J17
+    output wire uart_tx_to_host,     // J18
     output wire [1:0] led
 );
     reg rst = 1'b1;
@@ -44,10 +52,10 @@ module miner_top #(
     wire       tx_busy;
 
     uart_rx #(.CLK_HZ(CLK_HZ), .BAUD(BAUD)) urx
-        (.clk(clk), .rst(rst), .rx(uart_rxd_out), .data(rx_data), .valid(rx_valid));
+        (.clk(clk), .rst(rst), .rx(uart_rx_from_host), .data(rx_data), .valid(rx_valid));
     uart_tx #(.CLK_HZ(CLK_HZ), .BAUD(BAUD)) utx
         (.clk(clk), .rst(rst), .data(tx_data), .send(tx_send),
-         .tx(uart_txd_in), .busy(tx_busy));
+         .tx(uart_tx_to_host), .busy(tx_busy));
 
     // ---- command reception -------------------------------------------------
     localparam integer WORK_BYTES = 48;

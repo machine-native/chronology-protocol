@@ -14,16 +14,28 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| on-board run (selftest) | **blocked — programmed board does not answer over UART** |
+| on-board run (selftest) | pins corrected 2026-08-22; awaiting the next hardware run |
 
 Nothing here has run on a board. Per the project's standing rule, "simulated" and
 "synthesised" and "mined a real block" are three different claims and only the first
 is currently true.
 
-### Open bring-up fault (2026-08-22) — narrowed by measurement
+### Bring-up fault, found 2026-08-22: the two UART package pins were swapped
 
-A board that is definitely running returns nothing over the serial link, in either
-direction. What is now **observed rather than assumed**:
+**The constraints file assigned J17 and J18 to the wrong nets.** The FPGA receives on
+**J17** and transmits on **J18**; it had been built the other way round. Such a board
+synthesises, meets timing, passes DRC, configures, and blinks — and is silent in both
+directions with no error reported anywhere.
+
+The diagnosis took three build cycles longer than it should have, because the argument
+was stuck on the wrong question. Digilent's net names `uart_rxd_out` / `uart_txd_in` can
+be read as relative to the bridge or to the host, both grammatical, and that ambiguity
+absorbed all the attention. **The naming convention had been read correctly the whole
+time.** The pins underneath it were simply crossed — a separate failure that produces an
+identical symptom, and one that was never separately named until an instrument forced it
+into the open.
+
+What was **observed rather than assumed**, in the order it arrived:
 
 ```
 DONE pin                 1            device configured
@@ -35,23 +47,16 @@ heartbeat LED            blinking     bitstream running, 12 MHz clock confirmed
 serial at 115200         silent
 serial at 6 other rates  silent       so not a baud mismatch
 COM port                 opens        so the bridge enumerates
-both UART pins           read HIGH    static levels: no information (see below)
+both pins, static level  read HIGH    no information: see below
+J17, host transmitting   EDGES        <- traffic arrives here
+J18, host transmitting   static       <- so this is the FPGA's transmit pin
 ```
 
-The heartbeat did its job: it retired "the bitstream is not loaded", which had been the
-leading theory and was wrong. A blinking heartbeat also confirms `CLK_HZ` matches the
-crystal, which retires the baud-divisor theory independently of the baud sweep.
+The heartbeat retired "the bitstream is not loaded", which had been the leading theory
+and was wrong. A blinking heartbeat also confirms `CLK_HZ` matches the crystal, which
+retires the baud-divisor theory independently of the baud sweep.
 
-**What remains is the pin direction.** Digilent's net names, `uart_rxd_out` and
-`uart_txd_in`, can be read as relative to the *bridge* (making `uart_rxd_out` an FPGA
-input, as declared here) or relative to the *host* (making it an output). Both readings
-are grammatical, silence in both directions is exactly what a swap produces, and this
-was treated as settled on the strength of one search result. It was a coin-flip wearing
-a citation.
-
-There is also a *second*, independent way to have a mix-up, which had been folded into
-the first without ever being named: the **package pins** J17 and J18 could be assigned
-to the wrong nets. Silence cannot tell a direction swap from a pin swap.
+Only the last two lines resolved it, and they took two attempts.
 
 `rtl/pinprobe.v` settles both by measurement. Its first version compared **static
 levels** — weak internal pulldowns, on the theory that the bridge's transmit pin idles
@@ -82,14 +87,33 @@ a phantom 0→1 transition on the first samples. A short startup blanking interv
 discards it. The static probe shipped without a testbench and cost a hardware cycle;
 this one did not.
 
-Two instruments were added rather than continuing to guess: the **heartbeat LED**,
-which separates "no bitstream" from "no link", and **`scripts/fpga_diag.py`**, which
-separates "wrong baud" from "silence". Both are described under bring-up below.
+The port names are now `uart_rx_from_host` and `uart_tx_to_host`, which state their own
+direction and cannot be misread the way the vendor's names were.
+`tests/test_fpga_constraints.py` pins the mapping, because **this fact cannot be
+re-derived by reading** — only by measuring — and a future tidy-up toward the vendor's
+names would silently reintroduce a board that builds cleanly and does nothing.
 
-Three theories have now been tested and killed — inverted pins (checked against the
-documentation *before* editing, and the code was already right by that reading), an
-erased volatile bitstream, and a baud mismatch. Each was plausible and each was wrong,
-which is the argument for instruments over reasoning at this stage.
+#### What this cost, and why it is written down
+
+Four theories were advanced and four were wrong: inverted pin *directions*, an erased
+volatile bitstream, a baud mismatch, and a static-level probe that could not distinguish
+a driven pin from one held high by a resistor. Each was plausible. Each consumed a
+build-program-observe cycle on hardware.
+
+What ended it was not a better theory but three instruments that each split one question
+into two answerable halves:
+
+| instrument | separates |
+|---|---|
+| heartbeat LED | "no bitstream" from "no link" |
+| `scripts/fpga_diag.py` | "wrong baud" from "total silence" |
+| `rtl/pinprobe.v` | "which physical pin carries the traffic" from every naming argument |
+
+The lesson recorded for next time: **when two candidate causes produce an identical
+symptom, no amount of reading resolves them.** Build the thing that makes them look
+different. And simulate the instrument first — the static probe shipped without a
+testbench and returned a useless "both fast", while the activity probe's testbench
+caught the equivalent bug in two seconds, before it reached a board.
 
 ## The vectors are ours
 
