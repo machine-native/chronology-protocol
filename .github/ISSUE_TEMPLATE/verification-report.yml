@@ -1,0 +1,102 @@
+name: Verification report
+description: Report what happened when you ran the verifier — passes, failures, or partial runs all welcome
+title: "Verification report: "
+labels: ["verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for running this.
+
+        **Please do not round anything up.** A failure is worth more than a pass. If you
+        skipped a step, say so. If you could not check something, say that too — there is
+        a field for it below and it is the most useful field on this form.
+
+        Everything here is offline; you should not need any account or network access to
+        produce it. Guide: [CALL-FOR-VERIFICATION.md](../blob/main/CALL-FOR-VERIFICATION.md)
+
+  - type: checkboxes
+    id: authenticity
+    attributes:
+      label: How you obtained the code
+      options:
+        - label: I cloned it myself from GitHub (rather than receiving a copy from someone)
+        - label: I received a copy from someone else (please say who, below)
+
+  - type: input
+    id: commit
+    attributes:
+      label: Commit you tested
+      description: Output of `git rev-parse HEAD`
+      placeholder: e.g. 6f8c95a1b2c3...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Python version, and the OpenSSL version reported by `openssl version`
+      placeholder: |
+        OS:       Ubuntu 24.04
+        Python:   3.12.3
+        OpenSSL:  3.5.1
+    validations:
+      required: true
+
+  - type: textarea
+    id: results
+    attributes:
+      label: What you actually got
+      description: >
+        Paste real output — not what the documentation said to expect. The test count,
+        each verdict, and anything that surprised you.
+      placeholder: |
+        $ python -m pytest -q
+        43 passed in 31.35s
+
+        $ python scripts/verify_bundle.py vectors/valid/evidence-bundle.cbor
+        ... verdict: PASS_PRE_POW
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: not-verified
+    attributes:
+      label: What you did NOT verify
+      description: >
+        The most valuable field here. Anything you skipped, could not run, or are not
+        confident about. For example: no network so the Bitcoin attestations were parsed
+        but not checked against a node; or the live-chain step was not attempted.
+      placeholder: |
+        - Did not query Bitcoin; parsed the OTS proofs but did not compare merkle roots against a node.
+        - Did not attempt the live-chain or mining steps.
+    validations:
+      required: true
+
+  - type: textarea
+    id: problems
+    attributes:
+      label: Anything broken, unclear, or wrong
+      description: >
+        Errors, misleading documentation, commands that failed, claims that seem
+        overstated. Outside review has already found three real defects this way and
+        every one was credited and fixed.
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        **On what this establishes.** A green run shows the signatures verify, the
+        measurements re-derive from the recorded packets, the structures are consistent,
+        the embedded blocks meet their stated proof-of-work, and the tamper cases fail as
+        designed. It does **not** show that any time source told the truth — this protocol
+        bounds *when* evidence was acquired, never whether its content is correct.
+        Limits: [CLAIMS.md](../blob/main/CLAIMS.md).
+
+        By posting from your own account you make this attributable to you rather than
+        relayed through the project author — which is the entire point, and the reason an
+        earlier report had to be withdrawn.
