@@ -83,8 +83,23 @@ module tb_miner_top;
         send_byte((NONCE - 2) >> 24); send_byte((NONCE - 2) >> 16);
         send_byte((NONCE - 2) >> 8);  send_byte((NONCE - 2));
 
-        // expect 'F' + nonce + digest
+        // A ping DURING the scan must not disturb it. The host driver sends one
+        // every second on a long scan to keep the USB link from being suspended
+        // by Windows mid-run -- a real failure seen on hardware, where a
+        // million-nonce scan died with 'ClearCommError: Access is denied' after
+        // pinging successfully moments before. That keepalive is only safe if
+        // 'P' neither aborts the scan nor corrupts the report, so it is checked
+        // here rather than assumed.
+        send_byte(8'h50);
+
+        // expect 'F' + nonce + digest. The 'K' from that ping may arrive first;
+        // the report is emitted contiguously once it starts, so the two cannot
+        // interleave -- skip a leading 'K' and require the report intact.
         recv_byte(rb);
+        if (rb === 8'h4B) begin
+            $display("PASS  ping during scan answered without disturbing it");
+            recv_byte(rb);
+        end
         if (rb !== 8'h46) begin
             $display("FAIL  expected 'F', got %02x", rb);
             fails = fails + 1;

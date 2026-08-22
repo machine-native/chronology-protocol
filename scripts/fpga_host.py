@@ -78,15 +78,45 @@ def ping(ser) -> bool:
     return ser.read(1) == b"K"
 
 
-def scan(ser, header80: bytes, nonce_start: int, bits: int, timeout_s: float):
-    """Send work, wait for a candidate, verify it here against the exact target."""
+def scan(ser, header80: bytes, nonce_start: int, bits: int, timeout_s: float,
+         progress=False):
+    """Send work, wait for a candidate, verify it here against the exact target.
+
+    A deep scan means many seconds in which neither side transmits anything. On
+    Windows an idle FTDI can be suspended out from under an open handle, and the
+    next read fails with `ClearCommError ... Access is denied` -- observed here
+    on 2026-08-22 during a one-million-nonce scan that had already pinged
+    successfully.
+
+    So the link is kept warm: a 'P' ping every second, whose 'K' reply is
+    ignored by the tag loop below. This is safe during a scan -- the RTL treats
+    only 'W' as work and only 'S' as abort, and answers a ping whenever it is
+    not already transmitting a report -- and it gives the operator a sign of
+    life during a long run.
+    """
     ser.reset_input_buffer()
     ser.write(make_work(header80) + struct.pack(">I", nonce_start))
     target = target_from_bits(bits)
-    deadline = time.time() + timeout_s
+    started = time.time()
+    deadline = started + timeout_s
+    last_poke = started
     while time.time() < deadline:
-        tag = ser.read(1)
+        try:
+            tag = ser.read(1)
+        except Exception as e:                       # the port went away
+            return None, f"serial-error: {e}"
         if not tag:
+            now = time.time()
+            if now - last_poke >= 1.0:
+                try:
+                    ser.write(b"P")
+                except Exception as e:
+                    return None, f"serial-error: {e}"
+                last_poke = now
+                if progress:
+                    print(f"\r  scanning… {now-started:5.1f}s", end="", flush=True)
+            continue
+        if tag in (b"K", b"\x00"):       # keepalive echo, or line noise
             continue
         if tag == b"E":
             return None, "exhausted"
@@ -135,8 +165,23 @@ def cmd_selftest(a):
         print(f"scanning {span:,} nonces up to it — the board must reject every "
               f"one of the first {span-1:,}")
     t0 = time.time()
-    got, status = scan(ser, hdr, start, int(v["bits"], 16), a.timeout)
+    got, status = scan(ser, hdr, start, int(v["bits"], 16), a.timeout,
+                       progress=depth > 1000)
     dt = time.time() - t0
+    if depth > 1000:
+        print()
+    if status.startswith("serial-error"):
+        print(f"\nSERIAL LINK LOST after {dt:.1f}s — {status}")
+        print("\n  The port disappeared mid-scan. This is not a mining failure:")
+        print("  the board answered a ping moments earlier. In likelihood order:")
+        print("   1. Windows suspended the idle USB device. Device Manager ->")
+        print("      the FTDI port -> Power Management -> untick 'Allow the")
+        print("      computer to turn off this device to save power'.")
+        print("   2. A marginal cable or port. Try another of each — the same")
+        print("      link already failed once during programming.")
+        print("   3. Confirm it is duration-related by running a shorter scan:")
+        print("        --depth 100000    (about a tenth of the time)")
+        sys.exit(1)
     if got and got[0] == v["nonce"] and got[1] == v["hash"]:
         print(f"SELFTEST PASS — board returned nonce {got[0]} and hash {got[1]}")
         print(f"  ({dt:.2f}s for {span:,} nonces)")

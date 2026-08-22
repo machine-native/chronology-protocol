@@ -348,6 +348,18 @@ Run it deep to exercise the scanner and measure the real rate:
 python ../scripts/fpga_host.py selftest --port COM4 --depth 1000000
 ```
 
+A deep scan spends many seconds with neither side transmitting, and on 2026-08-22 that
+killed the link outright: `ClearCommError ... Access is denied` after a ping had
+succeeded moments before — Windows suspending an idle FTDI out from under an open
+handle. The host now sends a ping every second during a long scan to keep the link warm,
+and prints elapsed time so a long run shows a sign of life.
+
+That keepalive is only safe if a `'P'` arriving mid-scan neither aborts the scan nor
+corrupts the report, so `sim/tb_miner_top.v` checks exactly that rather than assuming
+it: the ping is answered, and the 37-byte report still arrives intact. If the link dies
+anyway, the host now says so explicitly instead of raising a traceback — a lost port is
+not a mining failure, and the two should never look alike.
+
 `mine` mode was locked until selftest passed, because wiring live anchoring to a miner
 that had never returned a known-correct answer would be the kind of shortcut this
 project does not take. That precondition is now met; the mode is simply not written
