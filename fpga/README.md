@@ -21,7 +21,7 @@ Still not true, and stated first because the numbers above are the flattering pa
 | MMCM + parallel cores | **done: 6.9854 MH/s, 12 cores at 77.419 MHz** |
 | on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
 | measured throughput | **6.9854 MH/s** at 12 cores / 77.419 MHz |
-| `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
+| `mine` mode | **written**; no block mined by this board yet |
 
 Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
 "mined a real block" are four different claims. The first three are now true. **The
@@ -586,8 +586,46 @@ not a mining failure, and the two should never look alike.
 
 `mine` mode was locked until selftest passed, because wiring live anchoring to a miner
 that had never returned a known-correct answer would be the kind of shortcut this
-project does not take. That precondition is now met; the mode is simply not written
-yet — it needs chain-tip fetch, coinbase construction and submission.
+project does not take. That precondition was met on 2026-08-22 and the mode is now
+written.
+
+## Mining a real block
+
+```bash
+python ../scripts/fpga_host.py mine --port COM4 --refresh --rounds 4
+```
+
+`--refresh` fetches the chain tip first and re-checks it between rounds, so a block is
+never built on a parent someone else has already replaced. Each round tries one nTime
+and runs for a full 2^32 sweep at the measured rate — about 10 minutes at 6.99 MH/s,
+which is also the expected time to find a block at difficulty 1.
+
+Three properties are decisions, not accidents:
+
+**Nothing is broadcast unless you say so.** A found block is written to `live/mine/` and
+that is all. Mining a wrong block costs a file you can delete; publishing one costs a
+chain that does not forget. Broadcasting is a separate program:
+
+```bash
+python ../scripts/submit_block.py live/mine/fpga-block-273-<hash>.json
+```
+
+which re-derives the proof-of-work from the raw bytes before sending, refuses a file
+whose stated hash disagrees with its own contents, and asks for typed confirmation. It
+treats the miner's claim that the block is valid as the thing being checked, not as a
+premise. `--check-only` runs every check and contacts nothing.
+
+**The FPGA never decides validity.** Its filter reports nonces whose digest ends in a
+zero word. At difficulty 1 that admits roughly **1 in 65,536** hashes that are still
+above the target — the target is `0xFFFF · 2^208` and the filter's bound is `2^224`, so
+the gap is real and gets hit. Every candidate is re-checked here against the exact
+compact target, by the same code path that validates blocks arriving from the network.
+
+**Rounds end on a clock, not on exhaustion.** The RTL instantiates its cores with
+`nonce_count = 0`, meaning "run to the 2^32 wrap", so the `'E'` exhausted report never
+arrives. A round is therefore bounded by time, sized from the measured hash rate rather
+than guessed — and `--rate-mhs` exists so that number stays honest when the bitstream
+changes.
 
 ## Wire protocol
 

@@ -13,9 +13,13 @@ Modes:
   mine      scan for a real block on top of the current chain tip
 
 Usage:
-  python scripts/fpga_host.py ping --port COM7
-  python scripts/fpga_host.py selftest --port COM7
-  python scripts/fpga_host.py mine --port COM7 --payload live/g5-work/payload.hex
+  python scripts/fpga_host.py ping --port COM4
+  python scripts/fpga_host.py selftest --port COM4 --depth 20000000
+  python scripts/fpga_host.py mine --port COM4 --refresh
+
+Mining never broadcasts on its own. A found block is written to live/mine/ and
+sent only by scripts/submit_block.py, or by passing --submit explicitly. Mining a
+wrong block costs a file; publishing one costs a chain that does not forget.
 
 Requires pyserial (`pip install pyserial`) — needed only for this tool.
 """
@@ -196,21 +200,153 @@ def cmd_selftest(a):
         sys.exit(1)
 
 
+def fetch_tip_context(refresh: bool, host: str, port: int):
+    """Get the chain tip, median-time-past and nBits the candidate must satisfy.
+
+    This shells out to live/fetch_tip_context.py rather than reimplementing the
+    wire protocol. That script parses every value from raw block bytes received
+    over the network, never from a node's self-reported summary, and it is the
+    path that produced the four anchors already on the chain. A second
+    implementation here would be a second thing to get wrong.
+    """
+    ctx_path = ROOT / "live" / "tip-context.json"
+    if refresh:
+        import subprocess
+        print(f"fetching tip context from {host}:{port} ...")
+        r = subprocess.run([sys.executable, str(ROOT / "live" / "fetch_tip_context.py"),
+                            host, str(port)], capture_output=True, text=True)
+        if r.returncode != 0:
+            raise SystemExit(f"tip fetch failed:\n{r.stdout}\n{r.stderr}")
+    if not ctx_path.is_file():
+        raise SystemExit(f"no {ctx_path}; run with --refresh to fetch it")
+    ctx = json.loads(ctx_path.read_text())
+    age = time.time() - time.mktime(time.strptime(ctx["acquired_utc"], "%Y-%m-%dT%H:%M:%SZ"))
+    if not refresh and age > 3600:
+        print(f"WARNING: tip context is {age/3600:.1f} hours old. A block mined on a "
+              f"stale parent is worthless — use --refresh.")
+    return ctx
+
+
 def cmd_mine(a):
-    # The board passed selftest on real hardware on 2026-08-22, so the original
-    # precondition is met. What blocks this now is simply that the mode is not
-    # written: it needs live chain-tip fetching, coinbase construction and block
-    # submission, none of which exist here yet.
-    #
-    # There is also no hurry. The board as built runs at roughly 0.09 MH/s
-    # against this laptop's measured 4.0 MH/s, so it would lose every race it
-    # entered. It becomes worth wiring up after the MMCM and multi-core work,
-    # or for continuous low-power mining where always-on beats fast-but-rarely.
-    raise SystemExit(
-        "mine mode is not implemented yet.\n"
-        "  selftest has passed on hardware, so the safety precondition is met;\n"
-        "  what is missing is chain-tip fetch, coinbase build and submission.\n"
-        "  Use live/race_sandwich.sh for CPU mining meanwhile.")
+    """Mine a real block on top of the live chain tip.
+
+    Deliberate properties, each of which is a decision rather than an accident:
+
+    - **Nothing is broadcast unless --submit is given.** Submitting a block is
+      irreversible and visible to everyone on the chain. Mining it is not. The
+      two are separated so that a mistake in the first cannot become a mistake
+      in the second.
+    - **The FPGA never decides validity.** It reports nonces whose digest ends in
+      a zero word; at difficulty 1 roughly one in 65,536 of those is still above
+      the target. `scan()` re-checks every candidate against the exact compact
+      target using the same code path that validates blocks from the network.
+    - **Rounds are time-bounded, not exhaustion-bounded.** The RTL instantiates
+      its cores with nonce_count = 0, meaning "run to the 2^32 wrap", so the
+      'E' exhausted report never arrives. A round therefore ends on a clock, and
+      the default is derived from the measured hash rate rather than guessed.
+    """
+    from ctp.bitcoin_jan09 import make_block, with_nonce, compact_size
+
+    ser = open_port(a.port, a.baud)
+    if not ping(ser):
+        raise SystemExit("no link — run 'ping' and see fpga/README.md bring-up")
+
+    ctx = fetch_tip_context(a.refresh, a.host, a.port_p2p)
+    prev = ctx["tip_hash"]
+    mtp = int(ctx["median_time_past"])
+    bits = int(ctx["tip_nBits"], 16)
+    height = int(ctx["candidate_height"])
+
+    if a.payload_hex:
+        payload = bytes.fromhex(a.payload_hex)
+    else:
+        rep = json.loads((ROOT / "reports" / "verification.json").read_text())
+        payload = bytes.fromhex(rep["anchor"]["payload_hex"])
+        print("payload: reusing reports/verification.json anchor "
+              "(pass --payload-hex for a fresh one)")
+
+    # A full 2^32 sweep at the measured rate, plus 5% so a round genuinely
+    # covers the space rather than stopping just short of it.
+    round_s = a.round_seconds or (2**32 / (a.rate_mhs * 1e6)) * 1.05
+    target = target_from_bits(bits)
+
+    print(f"\nmining height {height} on {prev[:24]}…")
+    print(f"  bits {hex(bits)}  mtp {mtp}  rate {a.rate_mhs} MH/s")
+    print(f"  {a.rounds} round(s) of {round_s:.0f}s, one nTime each")
+    print(f"  submit: {'YES — will broadcast on success' if a.submit else 'no (mine only)'}\n")
+
+    for rnd in range(a.rounds):
+        ntime = max(int(time.time()), mtp + 1)
+        if ntime <= mtp:
+            raise SystemExit("nTime cannot exceed median-time-past; clock is wrong")
+        tmpl = make_block(payload, prev, ntime, bits, nonce=0)
+        header0 = tmpl["header"]
+
+        print(f"round {rnd+1}/{a.rounds}  nTime {ntime}  ", end="", flush=True)
+        t0 = time.time()
+        got, status = scan(ser, header0, 0, bits, round_s, progress=True)
+        dt = time.time() - t0
+
+        if status.startswith("serial-error"):
+            print(f"\n  LINK LOST after {dt:.0f}s — {status}")
+            sys.exit(1)
+
+        if got:
+            nonce, h, _ = got
+            raw = with_nonce(header0, nonce) + compact_size(1) + tmpl["tx"]
+            # Decide validity here, from the bytes, not from the FPGA's word.
+            if int(block_hash(raw[:80]), 16) > target:
+                print(f"\n  candidate {nonce} above target — filter false positive, "
+                      "continuing")
+                ser.write(b"S")
+                continue
+            print(f"\n\n  *** BLOCK FOUND at height {height} ***")
+            print(f"  nonce  {nonce}")
+            print(f"  hash   {h}")
+            print(f"  {dt:.1f}s, {len(raw)} bytes")
+
+            out = ROOT / "live" / "mine" / f"fpga-block-{height}-{h[:16]}.json"
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps({
+                "height": height, "hash": h, "nonce": nonce, "nTime": ntime,
+                "prev_hash": prev, "bits": hex(bits), "median_time_past": mtp,
+                "payload_hex": payload.hex(), "txid": tmpl["txid"],
+                "raw_block_hex": raw.hex(),
+                "mined_by": "FPGA, Cmod A7-35T, 12 cores at 77.419 MHz",
+                "found_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "note": "PoW re-verified against the exact compact target by the "
+                        "host before this file was written; the FPGA only filters.",
+            }, indent=2) + "\n")
+            print(f"  saved  {out.relative_to(ROOT)}")
+
+            if not a.submit:
+                print("\n  NOT submitted. This block exists only on this machine.")
+                print("  To broadcast it:")
+                print(f"    python scripts/submit_block.py {out.relative_to(ROOT)}")
+                return
+            print(f"\n  submitting to {a.host}:{a.port_p2p} ...")
+            from ctp.p2p_v01 import submit_block
+            ev = submit_block(a.host, a.port_p2p, raw)
+            print(json.dumps(ev, indent=2) if ev else "  (no events returned)")
+            print("\n  A successful send is NOT proof of acceptance. Confirm the")
+            print("  block is on the chain:  python live/fetch_full_chain.py")
+            return
+
+        print(f"\n  no block in {dt:.0f}s ({status}); rolling nTime")
+        ser.write(b"S")                       # abort before the next round
+        time.sleep(0.1)
+        if a.refresh and rnd + 1 < a.rounds:
+            ctx = fetch_tip_context(True, a.host, a.port_p2p)
+            if ctx["tip_hash"] != prev:
+                print(f"  TIP MOVED to {ctx['tip_hash'][:24]}… — someone else won "
+                      f"height {height}. Rebasing.")
+                prev = ctx["tip_hash"]
+                mtp = int(ctx["median_time_past"])
+                bits = int(ctx["tip_nBits"], 16)
+                height = int(ctx["candidate_height"])
+                target = target_from_bits(bits)
+
+    print(f"\nno block found in {a.rounds} round(s). Nothing was submitted.")
 
 
 def main():
@@ -226,6 +362,27 @@ def main():
                            help="nonces to scan before the known answer. 4 checks "
                                 "the hash only; 1000000 exercises the scanner and "
                                 "measures the real hash rate.")
+        if name == "mine":
+            s.add_argument("--host", default="bitcoin.bitcoin-lab.org")
+            s.add_argument("--port-p2p", type=int, default=18026)
+            s.add_argument("--refresh", action="store_true",
+                           help="fetch the chain tip before mining, and re-check it "
+                                "between rounds. Without this a stale parent is used, "
+                                "and a block on a stale parent is worthless.")
+            s.add_argument("--rounds", type=int, default=1,
+                           help="how many nTime values to try")
+            s.add_argument("--round-seconds", type=float, default=None,
+                           help="seconds per round; default is one full 2^32 sweep "
+                                "at --rate-mhs plus 5%%")
+            s.add_argument("--rate-mhs", type=float, default=6.9854,
+                           help="measured hash rate, used only to size a round")
+            s.add_argument("--payload-hex",
+                           help="coinbase payload; defaults to the anchor in "
+                                "reports/verification.json")
+            s.add_argument("--submit", action="store_true",
+                           help="BROADCAST a found block to the network. Without "
+                                "this the block is only written to disk. Submitting "
+                                "is irreversible and visible to everyone.")
         s.set_defaults(func=fn)
     a = p.parse_args()
     a.func(a)

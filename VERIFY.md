@@ -57,7 +57,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: `53 passed`, and — more to the point — **zero failures**. The count grows as
+Expected: `59 passed`, and — more to the point — **zero failures**. The count grows as
 profiles are added, so treat the number as informational and the failure count as the
 result. This exercises the canonical encoder, the interval algebra, the PQ signatures,
 the Roughtime verifier, the OpenTimestamps proof reader, and full synthetic sandwich
