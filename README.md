@@ -92,6 +92,16 @@ mined into block C at height 222. Construction and non-claims:
 `vectors/valid/reality-sandwich-bundle.cbor`; verifier: `scripts/verify_sandwich.py`
 (offline, network-free).
 
+## ⭐ Wanted: one independent verifier
+
+Everything here is checkable from bytes. The one thing missing cannot be produced by
+writing more code: **nobody outside the project has verified it and said so publicly.**
+Ten minutes, entirely offline, no accounts, nothing of ours running on your machine —
+[**CALL-FOR-VERIFICATION.md**](CALL-FOR-VERIFICATION.md).
+
+Mining is equally open: every block on the anchor chain so far was mined by this
+project, and the next accepted block belongs to whoever finds it.
+
 ## Independent verification — claimed, then withdrawn
 
 A record published on 2026-08-22 claiming the first independent verification of this
