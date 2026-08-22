@@ -13,7 +13,8 @@ chain. Started 2026-08-21.
 | `rtl/uart.v` + `rtl/miner_top.v` — UART link | **simulated end-to-end** |
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
-| synthesis / bitstream / on-board run | **not attempted — needs Vivado + board** |
+| synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
+| on-board run (selftest) | pending — board not yet programmed |
 
 Nothing here has run on a board. Per the project's standing rule, "simulated" and
 "synthesised" and "mined a real block" are three different claims and only the first
@@ -39,7 +40,41 @@ iverilog -g2012 -o sim/tb.vvp rtl/sha256_core.v sim/tb_sha256_core.v
 vvp sim/tb.vvp
 ```
 
-## Honest throughput expectation — corrected
+## Measured after synthesis — the estimate was wrong twice over
+
+Vivado has now built it (`timing.rpt`, `utilisation.rpt` in this folder). Timing closes
+comfortably: **WNS +70.246 ns, zero failing endpoints, all constraints met.**
+
+```
+LUTs           1,593 of 20,800   (7.7% — smaller than the 2,600 estimated)
+registers      3,200 of 41,600   (7.7%)
+critical path  13.08 ns          ->  fmax roughly 76 MHz
+clocking       no MMCM/PLL — running straight off the board oscillator
+```
+
+That last line is the problem, and it is mine. **The Cmod A7's oscillator is 12 MHz**,
+while the earlier estimate below assumed 100 MHz and never said so. At 132 cycles per
+nonce:
+
+| configuration | MH/s | vs this laptop (4.0 MH/s measured) |
+|---|---|---|
+| **as built** — 12 MHz, 1 core | **0.091** | **44× slower** |
+| + MMCM at 75 MHz, 1 core | 0.57 | 7× slower |
+| + MMCM at 75 MHz, 9 cores | 5.11 | slightly faster |
+
+A full 2³² nonce sweep as built takes **13 hours**. It cannot compete for a block, and
+saying otherwise would repeat the error this section already exists to correct.
+
+The good news is that the path to the ~5 MH/s figure is now *measured* rather than
+guessed: the core is smaller than estimated so **9 fit** instead of 6, and timing has
+enough slack for a 6× clock multiplier. Both are ordinary additions — an MMCM primitive
+and a parallel instantiation with a nonce-range splitter — neither yet written.
+
+**What the bitstream is for right now is correctness, not speed**: proving that silicon
+reproduces a proof-of-work answer this project already established. That is what
+`selftest` checks, and it is the milestone that matters.
+
+## Earlier throughput estimate — kept for the record
 
 An earlier note in this project estimated 100–300 MH/s for this board. **That was
 wrong by roughly a factor of 50** and is corrected here rather than quietly dropped.
