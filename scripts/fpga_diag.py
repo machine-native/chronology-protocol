@@ -6,11 +6,64 @@ device, wrong baud and dead wiring all look identical. This walks the
 possibilities in order and reports what it actually observed.
 
 Usage:
-  python scripts/fpga_diag.py              # list candidate ports
-  python scripts/fpga_diag.py --port COM7  # probe one port properly
+  python scripts/fpga_diag.py                      # list candidate ports
+  python scripts/fpga_diag.py --port COM7          # probe one port properly
+  python scripts/fpga_diag.py --port COM7 --stream # transmit continuously
 """
 from __future__ import annotations
 import argparse, sys, time
+
+
+def stream(port: str, seconds: int, baud: int):
+    """Transmit continuously so the pin-activity probe has something to see.
+
+    The FPGA-side probe answers "which package pin carries host traffic?" by
+    watching for edges. That question only has an answer while the host is
+    actually transmitting, and a one-shot ping is over in 87 microseconds --
+    far too brief to see on an LED. This holds the line busy long enough to
+    walk over to the board and look at it.
+
+    0x55 is chosen deliberately: alternating bits give the maximum number of
+    edges per byte, so a pin carrying it cannot be mistaken for a static one.
+    """
+    try:
+        import serial
+    except ImportError:
+        raise SystemExit("pyserial required:  py -m pip install pyserial")
+
+    try:
+        ser = serial.Serial(port, baud, timeout=0.1)
+    except Exception as e:
+        print(f"FAIL  cannot open {port}: {e}")
+        return False
+
+    print(f"streaming 0x55 to {port} at {baud} baud for {seconds}s\n")
+    print("  Watch the two LEDs on the board now:")
+    print("    FAST flicker = that pin is carrying the traffic  (the FPGA's RX)")
+    print("    SLOW blink   = that pin is static")
+    print("    LD1 = J18 (uart_rxd_out)     LD2 = J17 (uart_txd_in)\n")
+
+    block = b"\x55" * 256
+    end = time.monotonic() + seconds
+    sent = 0
+    try:
+        while time.monotonic() < end:
+            ser.write(block)
+            sent += len(block)
+            remaining = int(end - time.monotonic())
+            print(f"\r  sent {sent:,} bytes   {remaining:>3}s left ", end="", flush=True)
+    except KeyboardInterrupt:
+        print("\n  stopped")
+    except Exception as e:
+        print(f"\nFAIL  write failed after {sent} bytes: {e}")
+        ser.close()
+        return False
+    ser.close()
+
+    print(f"\n\n  done -- {sent:,} bytes written without error.")
+    print("  Note this proves the HOST sent them; only the LEDs can say whether")
+    print("  they reached the FPGA's pins.")
+    return True
 
 
 def list_ports():
@@ -104,7 +157,16 @@ def probe(port: str):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--port")
+    ap.add_argument("--stream", action="store_true",
+                    help="transmit 0x55 continuously so the FPGA pin probe has "
+                         "traffic to detect; watch the board's LEDs while it runs")
+    ap.add_argument("--seconds", type=int, default=30)
+    ap.add_argument("--baud", type=int, default=115200)
     a = ap.parse_args()
+    if a.stream:
+        if not a.port:
+            raise SystemExit("--stream needs --port, e.g. --port COM4 --stream")
+        sys.exit(0 if stream(a.port, a.seconds, a.baud) else 1)
     if a.port:
         sys.exit(0 if probe(a.port) else 1)
     list_ports()

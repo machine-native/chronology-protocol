@@ -6,9 +6,15 @@ set_property -dict { PACKAGE_PIN L17  IOSTANDARD LVCMOS33 } [get_ports { clk }];
 create_clock -add -name sys_clk_pin -period 83.33 -waveform {0 41.66} [get_ports { clk }];
 
 ## The two USB-UART nets, read only.
-## PULLTYPE PULLDOWN is the entire measurement: a weak pulldown loses to the
-## bridge's active driver and wins against an undriven pin, so the pin that
-## reads high is the one the bridge transmits on.
+##
+## The pulldowns are no longer the measurement -- comparing static levels was
+## tried first and came back with BOTH pins high, because a weak internal
+## pulldown cannot outvote a board pull-up resistor and so cannot tell a driven
+## pin from a parked one. The probe now watches for EDGES instead.
+##
+## They are kept because an undriven CMOS input floats and will register noise
+## as edges, which in an activity detector is a false positive on the exact
+## question being asked. Here the pulldown parks the quiet pin quiet.
 set_property -dict { PACKAGE_PIN J18  IOSTANDARD LVCMOS33  PULLTYPE PULLDOWN } [get_ports { uart_rxd_out }];
 set_property -dict { PACKAGE_PIN J17  IOSTANDARD LVCMOS33  PULLTYPE PULLDOWN } [get_ports { uart_txd_in  }];
 

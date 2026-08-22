@@ -35,6 +35,7 @@ heartbeat LED            blinking     bitstream running, 12 MHz clock confirmed
 serial at 115200         silent
 serial at 6 other rates  silent       so not a baud mismatch
 COM port                 opens        so the bridge enumerates
+both UART pins           read HIGH    static levels: no information (see below)
 ```
 
 The heartbeat did its job: it retired "the bitstream is not loaded", which had been the
@@ -48,17 +49,38 @@ are grammatical, silence in both directions is exactly what a swap produces, and
 was treated as settled on the strength of one search result. It was a coin-flip wearing
 a citation.
 
-`rtl/pinprobe.v` settles it by measurement instead. It reads **both** pins as inputs —
-driving neither, so it is safe to run without knowing the answer — with weak internal
-pulldowns. The bridge's transmit pin idles actively high and beats the pulldown; its
-receive pin is undriven and loses to it. The pin that reads high is the FPGA's RX.
+There is also a *second*, independent way to have a mix-up, which had been folded into
+the first without ever being named: the **package pins** J17 and J18 could be assigned
+to the wrong nets. Silence cannot tell a direction swap from a pin swap.
+
+`rtl/pinprobe.v` settles both by measurement. Its first version compared **static
+levels** — weak internal pulldowns, on the theory that the bridge's transmit pin idles
+actively high and wins, while its receive pin is undriven and loses. On hardware **both
+pins read high**, which is no answer at all: a weak internal pulldown cannot outvote a
+board pull-up resistor, and UART lines commonly have them. The measurement was simply
+too weak for the question.
+
+The current version measures **motion instead of level**. While the host transmits
+continuously, the bridge's transmit pin toggles; its receive pin is an input on the
+bridge's side and stays still, whatever DC level a resistor parks it at. A pull-up
+cannot fake an edge. Both pins remain inputs and neither is ever driven, so it is still
+safe to run without knowing the answer.
 
 ```bash
-vivado -mode batch -source build_pinprobe.tcl   # builds and programs in one pass
+vivado -mode batch -source build_pinprobe.tcl        # builds and programs
+python ../scripts/fpga_diag.py --port COM4 --stream  # then, in a second window
 ```
 
-Then read the LEDs: fast flicker means high, slow blink means low, and both always
-blink so a dark board still unambiguously means "no bitstream".
+Watch the LEDs while the stream runs: **fast flicker = edges seen on that pin**, slow
+blink = static. Every state blinks, so a dark board still unambiguously means "no
+bitstream" and can never be misread as a measurement.
+
+Simulation earned its keep here. `sim/tb_pinprobe.v` immediately caught a bug that would
+have produced the same useless "both fast" reading as the static version: the
+synchronisers power up at zero, so a pin sitting high — every idle UART line — presents
+a phantom 0→1 transition on the first samples. A short startup blanking interval
+discards it. The static probe shipped without a testbench and cost a hardware cycle;
+this one did not.
 
 Two instruments were added rather than continuing to guess: the **heartbeat LED**,
 which separates "no bitstream" from "no link", and **`scripts/fpga_diag.py`**, which

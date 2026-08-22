@@ -1,73 +1,127 @@
-// Pin-direction probe for the Cmod A7 USB-UART bridge. Not part of the miner.
+// Pin-activity probe for the Cmod A7 USB-UART bridge. Not part of the miner.
 //
 // WHY THIS EXISTS
 //
-// The miner's bitstream loads, meets timing, and blinks its heartbeat, yet the
-// serial link is silent in BOTH directions. That pattern is what a swapped
-// transmit/receive pin looks like, and the pin naming does not settle the
-// question: Digilent labels the two nets `uart_rxd_out` and `uart_txd_in`, which
-// can be read as relative to the BRIDGE (making `uart_rxd_out` an FPGA input) or
-// relative to the HOST (making it an FPGA output). Both readings are grammatical.
-// Guessing has already cost two rebuilds.
+// The miner's bitstream loads, meets timing with 69 ns to spare, and blinks its
+// heartbeat -- yet the serial link is silent in BOTH directions at seven baud
+// rates. That is what a transmit/receive mix-up looks like, and there are two
+// independent ways to have one:
 //
-// So ask the board instead of arguing about the datasheet.
+//   1. the DIRECTIONS are swapped -- Digilent's net names `uart_rxd_out` and
+//      `uart_txd_in` can be read as relative to the bridge or to the host, and
+//      both readings are grammatical;
+//   2. the PACKAGE PINS are swapped -- J17 and J18 assigned to the wrong nets.
 //
-// HOW IT WORKS
+// Silence cannot tell these apart, and neither can a datasheet argument.
 //
-// Both pins are declared as INPUTS -- the FPGA never drives either one, so there
-// is no possibility of two drivers fighting on a line, which is why this is safe
-// to run before knowing the answer. Each pin gets a weak internal PULLDOWN.
+// WHAT THE FIRST VERSION GOT WRONG
 //
-//   - The pin the bridge TRANSMITS on is actively driven high while idle (UART
-//     lines idle high). A strong driver beats a weak pulldown: reads 1.
-//   - The pin the bridge RECEIVES on is an input on its side, so nothing drives
-//     it. The pulldown wins: reads 0.
+// This probe originally compared STATIC pin levels: weak internal pulldowns, on
+// the theory that the bridge's transmit pin idles actively high and wins, while
+// its receive pin is undriven and loses. On hardware BOTH pins read high, which
+// is no answer at all. A weak pulldown cannot distinguish a pin driven high by
+// the bridge from one held high by a board pull-up resistor -- and UART lines
+// commonly have those. The measurement was too weak for the question.
 //
-// The pin that reads 1 is the bridge's output, and therefore the FPGA's RX.
+// HOW THIS VERSION WORKS
 //
-// READING THE RESULT
+// Motion, not level. While the host transmits a continuous byte stream, the
+// bridge's transmit pin TOGGLES; its receive pin is an input on the bridge's
+// side and stays still, whatever DC level a resistor parks it at. A pull-up
+// cannot fake an edge.
 //
-// Each LED always blinks, so a dark board still means "no bitstream" and can
-// never be confused with a pin reading low:
+// So: detect edges on each pin, latch them within a rolling ~1.4 s window, and
+// show the result. Both pins are still declared INPUTS and neither is ever
+// driven, so this remains safe to run without knowing the answer.
 //
-//   FAST flicker (~3 Hz) = that pin is HIGH = bridge drives it = FPGA's RX
-//   SLOW blink   (~0.7 Hz) = that pin is LOW  = nothing drives it = FPGA's TX
+//   The pin that MOVES is the bridge's output, and therefore the FPGA's RX.
+//
+// READING THE RESULT -- first start the host stream:
+//
+//     py scripts/fpga_diag.py --port COM4 --stream
+//
+//   FAST flicker (~3 Hz) = edges seen on that pin = the bridge is driving it
+//   SLOW blink  (~0.7 Hz) = that pin is static
 //
 //   LD1 = uart_rxd_out (J18)      LD2 = uart_txd_in (J17)
 //
-//   LD1 fast, LD2 slow  -> the miner's current declaration is CORRECT
-//   LD1 slow, LD2 fast  -> the pins are SWAPPED; that is the bug
-//   both slow           -> the bridge drives neither: the UART channel is not
-//                          active, so COM4 is not this board's serial channel
-//   both fast           -> inconclusive; report it and do not proceed
+//   LD1 fast, LD2 slow -> declarations are CORRECT; the fault is elsewhere
+//   LD1 slow, LD2 fast -> RX and TX are crossed; that is the bug
+//   both slow          -> nothing arrives on either pin. COM4 is not wired to
+//                         them: wrong port, or the bridge's second channel
+//   both fast          -> both pins carry traffic, which should be impossible
+//                         with the FPGA driving neither; report it
+//
+// Every LED state blinks, so a dark board still means "no bitstream" and can
+// never be misread as a measurement.
 `default_nettype none
 
-module pinprobe (
+module pinprobe #(
+    // Width of the free-running window/blink counter. 24 bits at 12 MHz gives a
+    // ~1.4 s activity window and blink rates an eye can read. Simulation scales
+    // it down so a testbench can cross several windows in reasonable time --
+    // the hardware behaviour is identical, only the timebase changes.
+    parameter integer WINDOW_BITS = 24
+) (
     input  wire clk,
     input  wire uart_rxd_out,      // J18 -- read only, never driven
     input  wire uart_txd_in,       // J17 -- read only, never driven
     output wire [1:0] led
 );
-    // Two-flop synchronisers. These pins are asynchronous to clk by definition,
-    // and sampling them straight into logic would be metastable -- which for a
-    // measurement instrument would mean an unreadable LED at exactly the moment
-    // the answer matters.
+    // Two-flop synchronisers. These pins are asynchronous to clk by definition;
+    // sampling them straight into logic would be metastable, which in a
+    // measuring instrument means an unreadable answer exactly when it matters.
     reg [1:0] sync_rxd = 2'b00;
     reg [1:0] sync_txd = 2'b00;
+    reg       prev_rxd = 1'b0;
+    reg       prev_txd = 1'b0;
+
+    // Free-running window and blink-rate source. At 12 MHz a 24-bit counter
+    // wraps every ~1.4 s: bit 21 toggles at ~2.9 Hz, bit 23 at ~0.7 Hz.
+    reg [WINDOW_BITS-1:0] cnt = {WINDOW_BITS{1'b0}};
+
+    // Sticky within the window, so a burst of edges is still visible to an eye
+    // rather than flashing past between two clock cycles.
+    reg act_rxd = 1'b0;
+    reg act_txd = 1'b0;
+
+    // Startup blanking. The synchronisers and `prev` registers power up at 0,
+    // so a pin sitting HIGH -- which is every idle UART line, and every line
+    // with a pull-up -- presents a 0->1 transition on the first samples that is
+    // an artefact of reset, not traffic. Without this, both pins latch a
+    // phantom edge and the probe reports activity everywhere for a full window:
+    // exactly the "both fast" non-answer this instrument exists to avoid.
+    // Simulation caught it; the previous probe went to hardware unsimulated and
+    // came back meaningless.
+    reg [3:0] arm = 4'd0;
+    wire armed = (arm == 4'hF);
+
     always @(posedge clk) begin
         sync_rxd <= {sync_rxd[0], uart_rxd_out};
         sync_txd <= {sync_txd[0], uart_txd_in};
+        prev_rxd <= sync_rxd[1];
+        prev_txd <= sync_txd[1];
+        cnt      <= cnt + {{(WINDOW_BITS-1){1'b0}}, 1'b1};
+        if (!armed) arm <= arm + 4'd1;
+
+        if (!armed) begin
+            act_rxd <= 1'b0;
+            act_txd <= 1'b0;
+        end else if (cnt == {WINDOW_BITS{1'b0}}) begin
+            // window boundary: forget the last window so the display tracks
+            // live traffic instead of latching one stray edge forever
+            act_rxd <= 1'b0;
+            act_txd <= 1'b0;
+        end else begin
+            if (sync_rxd[1] != prev_rxd) act_rxd <= 1'b1;
+            if (sync_txd[1] != prev_txd) act_txd <= 1'b1;
+        end
     end
 
-    // One free-running counter; two of its bits are the two blink rates.
-    // At 12 MHz: bit 21 toggles at ~2.9 Hz, bit 23 at ~0.7 Hz.
-    reg [23:0] cnt = 24'd0;
-    always @(posedge clk) cnt <= cnt + 24'd1;
+    wire fast = cnt[WINDOW_BITS-3];   // ~2.9 Hz at 12 MHz
+    wire slow = cnt[WINDOW_BITS-1];   // ~0.7 Hz at 12 MHz
 
-    wire fast = cnt[21];
-    wire slow = cnt[23];
-
-    assign led[0] = sync_rxd[1] ? fast : slow;
-    assign led[1] = sync_txd[1] ? fast : slow;
+    assign led[0] = act_rxd ? fast : slow;
+    assign led[1] = act_txd ? fast : slow;
 endmodule
 `default_nettype wire
