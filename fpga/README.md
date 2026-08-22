@@ -4,8 +4,13 @@ A SHA-256d miner in hardware for the anchor chain: our own silicon mining our ow
 chain. Started 2026-08-21; **running on a board and measured at 6.9854 MH/s on
 2026-08-23**, from 0.0906 MH/s when the first bitstream ran the day before.
 
-Still not true, and stated first because the numbers above are the flattering part:
-**no block has been mined by this board.** `mine` mode is not written.
+**On 2026-08-23 this board mined block 298 of the anchor chain** — the first block on
+it won by purpose-built hardware rather than software on a general-purpose machine.
+Record: [`live/anchor-evidence/FPGA-BLOCK-298.md`](../live/anchor-evidence/FPGA-BLOCK-298.md).
+
+Stated in the same breath, because it is the part that stays true: this is **not
+independent mining**. Every block on this chain, including that one, was mined by this
+project. New hardware is not a new party.
 
 ## Status
 
@@ -21,11 +26,12 @@ Still not true, and stated first because the numbers above are the flattering pa
 | MMCM + parallel cores | **done: 6.9854 MH/s, 12 cores at 77.419 MHz** |
 | on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
 | measured throughput | **6.9854 MH/s** at 12 cores / 77.419 MHz |
-| `mine` mode | **written**; no block mined by this board yet |
+| `mine` mode | **won height 298 on 2026-08-23** |
 
 Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
-"mined a real block" are four different claims. The first three are now true. **The
-fourth is not**, and nothing here should be read as saying otherwise.
+"mined a real block" are four different claims. **All four are now true**, the last of
+them on 2026-08-23 at height 298 — and each was claimed only on the day it became true,
+which is the point of keeping them separate.
 
 ### Ran on real silicon — 2026-08-22
 
@@ -66,7 +72,8 @@ measured constant rather than an assumed one.
 What this still does **not** establish, stated because the run is flattering and that is
 when the bar should go up:
 
-- **No block has been mined by this board.** `mine` mode is not written.
+- **No block had been mined by this board** at the time of that run. One has since:
+  height 298, on 2026-08-23.
 - The scan ran against a **known answer**. It proves the scanner walks a range and stops
   correctly; it is not a live race against other miners.
 - 0.0906 MH/s is **~44× slower than a laptop CPU miner** measured elsewhere in this

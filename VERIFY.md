@@ -57,7 +57,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: `59 passed`, and — more to the point — **zero failures**. The count grows as
+Expected: `62 passed`, and — more to the point — **zero failures**. The count grows as
 profiles are added, so treat the number as informational and the failure count as the
 result. This exercises the canonical encoder, the interval algebra, the PQ signatures,
 the Roughtime verifier, the OpenTimestamps proof reader, and full synthetic sandwich
@@ -162,7 +162,16 @@ epoch 0  height 221  00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360
 epoch 1  height 222  0000000055cddf6e969747b574d17435af0799c839a3f149e020745b69419fa0
 epoch 2  height 253  00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee
 epoch 3  height 269  000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112
+epoch 0  height 298  000000004d255fbd71886cba88f5730185aed1a73fb2ac1a17dadd61c0016d48
 ```
+
+**The repeated `epoch 0` on the last line is expected and is not a defect.** Height 298
+was mined on 2026-08-23 by an FPGA built for this project, and it was mined without a
+fresh payload — so its coinbase carries a *copy* of the epoch-0 anchor rather than new
+evidence. It is a genuine proof-of-work block and it is not a new chronology claim.
+Only the four earlier heights carry anchors that assert anything, and each of those
+appears exactly once. Details in
+[`live/anchor-evidence/FPGA-BLOCK-298.md`](live/anchor-evidence/FPGA-BLOCK-298.md).
 
 ## 6. Check the Bitcoin attestations (independent of us entirely)
 
