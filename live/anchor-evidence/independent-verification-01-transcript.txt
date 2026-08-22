@@ -1,0 +1,323 @@
+Chronology Protocol independent offline verification transcript
+UTC run time: 2026-08-22T05:54:51Z
+
+$ sha256sum /mnt/data/chronology-protocol-verification-pack.zip
+53e983d9bd06c8231461490b873b5ac67198844d22bf80745fb5b478dfc810da  /mnt/data/chronology-protocol-verification-pack.zip
+
+$ sha256sum -c MANIFEST.sha256
+CLAIMS.md: OK
+ctp/__init__.py: OK
+ctp/bitcoin_jan09.py: OK
+ctp/bundle.py: OK
+ctp/cbor.py: OK
+ctp/genesis.py: OK
+ctp/hashsuite.py: OK
+ctp/interval.py: OK
+ctp/merkle.py: OK
+ctp/model.py: OK
+ctp/p2p_v01.py: OK
+ctp/pq.py: OK
+ctp/radio.py: OK
+ctp/renewal.py: OK
+ctp/roughtime.py: OK
+ctp/sandwich.py: OK
+ctp/simulate.py: OK
+ctp/verify.py: OK
+docs/RADIO-RELAY.md: OK
+docs/REALITY-SANDWICH.md: OK
+INVARIANTS.md: OK
+LICENSE: OK
+live/anchor-evidence/ACCEPTANCE.md: OK
+live/anchor-evidence/ASTRO-SANDWICH-ACCEPTANCE.md: OK
+live/anchor-evidence/astrolabe-expectation.json: OK
+live/anchor-evidence/finalize-height221.json: OK
+live/anchor-evidence/live-template-height221.json: OK
+live/anchor-evidence/mined-block-height221.hex: OK
+live/anchor-evidence/orphans/orphan-epoch3-h264.hex: OK
+live/anchor-evidence/ROUGHTIME-SANDWICH-ACCEPTANCE.md: OK
+live/anchor-evidence/SANDWICH-ACCEPTANCE.md: OK
+live/anchor-evidence/submit-height221.json: OK
+live/anchor-evidence/tip-context-post-submit.json: OK
+live/chain-blocks.hex: OK
+live/g2b-work/photos/10308.jpg: OK
+live/g2b-work/photos/10309.jpg: OK
+live/g2b-work/photos/10310.jpg: OK
+live/g2b-work/photos/10311.jpg: OK
+live/g2b-work/photos/10312.jpg: OK
+live/g2b-work/photos/10313.jpg: OK
+live/g2b-work/photos/10314.jpg: OK
+live/g2b-work/photos/10315.jpg: OK
+live/g2b-work/photos/10316.jpg: OK
+live/g2b-work/photos/10317.jpg: OK
+Makefile: OK
+native/mine_sha256d.c: OK
+NOTICE: OK
+pyproject.toml: OK
+README.md: OK
+README.txt: OK
+RELEASE_NOTES.md: OK
+scripts/assemble_g2b_bundle.py: OK
+scripts/assemble_g5_bundle.py: OK
+scripts/assemble_sandwich_bundle.py: OK
+scripts/build_archive.py: OK
+scripts/build_live_template.py: OK
+scripts/build_sandwich_template.py: OK
+scripts/finalize_mined_block.py: OK
+scripts/fpga_host.py: OK
+scripts/ots_info.py: OK
+scripts/ots_stamp.py: OK
+scripts/ots_upgrade.py: OK
+scripts/radio_relay.py: OK
+scripts/release_audit.py: OK
+scripts/rolling_code.py: OK
+scripts/run_g2b.py: OK
+scripts/run_g5.py: OK
+scripts/run_milestone1.py: OK
+scripts/run_sandwich.py: OK
+scripts/submit_block_v01.py: OK
+scripts/verify_bundle.py: OK
+scripts/verify_sandwich.py: OK
+SECURITY.md: OK
+SPEC.md: OK
+tests/test_anchor_payload.py: OK
+tests/test_bitcoin_anchor_parse.py: OK
+tests/test_bitcoin_genesis.py: OK
+tests/test_bundle_cbor.py: OK
+tests/test_cbor.py: OK
+tests/test_interval.py: OK
+tests/test_p2p_v01.py: OK
+tests/test_pow_math.py: OK
+tests/test_pq.py: OK
+tests/test_protocol_genesis.py: OK
+tests/test_radio.py: OK
+tests/test_renewal.py: OK
+tests/test_rolling_code.py: OK
+tests/test_roughtime.py: OK
+tests/test_sandwich.py: OK
+tests/test_witness_chain.py: OK
+THREAT-MODEL.md: OK
+vectors/valid/anchor-payload.hex: OK
+vectors/valid/astro-sandwich-bundle.cbor: OK
+vectors/valid/astro-sandwich-bundle.cbor.ots: OK
+vectors/valid/candidate-block-nonce0.hex: OK
+vectors/valid/candidate-header-nonce0.hex: OK
+vectors/valid/evidence-bundle-live-anchored.cbor: OK
+vectors/valid/evidence-bundle-live-anchored.cbor.ots: OK
+vectors/valid/evidence-bundle.cbor: OK
+vectors/valid/evidence-bundle.cbor.ots: OK
+vectors/valid/reality-sandwich-bundle.cbor: OK
+vectors/valid/reality-sandwich-bundle.cbor.ots: OK
+vectors/valid/roughtime-sandwich-bundle.cbor: OK
+vectors/valid/roughtime-sandwich-bundle.cbor.ots: OK
+VERIFY.md: OK
+[exit 0]
+
+$ python -m pytest -q
+.......................................                                  [100%]
+39 passed in 27.32s
+[exit 0]
+
+$ python scripts/verify_bundle.py vectors/valid/evidence-bundle.cbor
+{
+  "bundle": "vectors/valid/evidence-bundle.cbor",
+  "sha256": "9fc2d7c767078d5445e0ca649e4e5e4ff909c4ebd828f6165cafa20c868c3854",
+  "checks": {
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": false
+  },
+  "verdict": "PASS_PRE_POW"
+}
+[exit 0]
+
+$ python scripts/verify_bundle.py vectors/valid/evidence-bundle-live-anchored.cbor
+{
+  "bundle": "vectors/valid/evidence-bundle-live-anchored.cbor",
+  "sha256": "9fbccb5b37e5c3798f557d9de91f1d60a16b86dd817544e2967fdf729d6561a4",
+  "checks": {
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true
+  },
+  "verdict": "PASS"
+}
+[exit 0]
+
+$ python scripts/verify_sandwich.py vectors/valid/reality-sandwich-bundle.cbor
+{
+  "bundle": "vectors/valid/reality-sandwich-bundle.cbor",
+  "sha256": "61d409059c8ccb891acd84b663ee898ff025e67178af6216843b2a0e3835be71",
+  "facts": {
+    "b0_hash": "00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b",
+    "b0_height": 221,
+    "block_c_hash": "0000000055cddf6e969747b574d17435af0799c839a3f149e020745b69419fa0",
+    "burial_depth": 2,
+    "challenge": "6bfc8e3da4f18f8c59fae11bce0e311b1d19bac6ca1bd6e1e1ff77c3205aeb34"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+[exit 0]
+
+$ python scripts/verify_sandwich.py vectors/valid/astro-sandwich-bundle.cbor
+{
+  "bundle": "vectors/valid/astro-sandwich-bundle.cbor",
+  "sha256": "32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc",
+  "facts": {
+    "b0_hash": "0000000058e3ceb8b0a3f332d9ec7248884d7693125f7e80972fbd8bccc6f6b9",
+    "b0_height": 252,
+    "block_c_hash": "00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee",
+    "burial_depth": 10,
+    "challenge": "d2b79b45d60f408a3aab7c9bbb5c507b092d150f38f5f2e00a8889b6de56de52"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_CAMERA_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+[exit 0]
+
+$ python scripts/verify_sandwich.py vectors/valid/roughtime-sandwich-bundle.cbor
+{
+  "bundle": "vectors/valid/roughtime-sandwich-bundle.cbor",
+  "sha256": "bf22c1586a2dff27235f3473283d50388b951ec218fc8fa9d4da8ea6b432fa9b",
+  "facts": {
+    "b0_hash": "00000000120059e003e8bf7e32d29866a37188aee93a976651b7ce3aa754202d",
+    "b0_height": 263,
+    "block_c_hash": "000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112",
+    "burial_depth": 3,
+    "challenge": "20319c97f751973d3cffdedf80c415971c3c2a62ab849deef92f2aad10dd456f"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_ROUGHTIME_SIGNATURES": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+[exit 0]
+
+$ python scripts/verify_sandwich.py vectors/valid/astro-sandwich-bundle.cbor --photos live/g2b-work/photos
+{
+  "bundle": "vectors/valid/astro-sandwich-bundle.cbor",
+  "sha256": "32ec9b4eeb00906bc5d27ec5ddd7573ee7a25aef5ded69e8469bf9977636bcfc",
+  "facts": {
+    "b0_hash": "0000000058e3ceb8b0a3f332d9ec7248884d7693125f7e80972fbd8bccc6f6b9",
+    "b0_height": 252,
+    "block_c_hash": "00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee",
+    "burial_depth": 10,
+    "challenge": "d2b79b45d60f408a3aab7c9bbb5c507b092d150f38f5f2e00a8889b6de56de52"
+  },
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_CAMERA_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true,
+    "S_PHOTO_FILES": true
+  },
+  "verdict": "SANDWICH_PASS"
+}
+[exit 0]
+
+$ python scripts/ots_info.py vectors/valid/roughtime-sandwich-bundle.cbor.ots
+Traceback (most recent call last):
+  File "/mnt/data/chronology_verify_run/chronology-protocol-deposit-20260822/scripts/ots_info.py", line 26, in <module>
+    from opentimestamps.core.timestamp import DetachedTimestampFile
+ModuleNotFoundError: No module named 'opentimestamps'
+[exit 1]

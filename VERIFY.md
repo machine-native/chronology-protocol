@@ -30,8 +30,12 @@ Two lines means you are ready. No output means you need a newer OpenSSL — rece
 Debian/Fedora/Arch, Homebrew (`brew install openssl@3.5`), MSYS2 on Windows
 (`C:\msys64\mingw64\bin\openssl.exe`), or any 3.5+ build on your `PATH`.
 
-Python 3.10+ is the only other requirement. **No third-party Python packages are
-needed** for verification, and nothing here touches the network except where it says so.
+Python 3.10+ is the only other requirement. **No third-party Python packages are needed
+by anything on the verification path** — including the OpenTimestamps proof reader in
+step 6, which is implemented from the format in `ctp/ots.py` for exactly this reason.
+(Only `scripts/ots_stamp.py` and `ots_upgrade.py` need the reference library, and those
+*create* proofs over the network rather than checking them.) Nothing touches the network
+except where it says so.
 
 ## 1. Clone and run the whole test suite
 
@@ -41,9 +45,11 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: `29 passed`. This exercises the canonical encoder, the interval algebra, the
-PQ signatures, the Roughtime verifier, and full synthetic sandwich round-trips
-*including* deliberate tamper cases that must fail.
+Expected: `43 passed`, and — more to the point — **zero failures**. The count grows as
+profiles are added, so treat the number as informational and the failure count as the
+result. This exercises the canonical encoder, the interval algebra, the PQ signatures,
+the Roughtime verifier, the OpenTimestamps proof reader, and full synthetic sandwich
+round-trips *including* deliberate tamper cases that must fail.
 
 ## 2. Verify the sealed baseline (offline)
 

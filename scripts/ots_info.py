@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 """Show what an OpenTimestamps proof asserts, so you can check it against Bitcoin yourself.
 
-This is NOT a replacement for `ots verify`. The official client talks to a Bitcoin node
-and confirms the commitment for you. This prints the same facts in a form you can check
-by hand against any Bitcoin node or block explorer you already trust:
+Uses NO third-party packages — the proof parser is `ctp/ots.py`, written from the
+format specification precisely so that a cold-storage reader never needs a package
+index. (An independent verifier found the earlier version importing the reference
+library while the deposit claimed to be self-contained. They were right; this is
+the fix.)
+
+This is NOT a replacement for `ots verify`. The official client talks to a Bitcoin
+node and confirms the commitment for you. This prints the same facts in a form you
+can check by hand against any Bitcoin node or block explorer you already trust:
 
     for each Bitcoin attestation in the proof:
         the block height, and
         the 32-byte value that must appear as that block's MERKLE ROOT
 
-If the merkle root of that Bitcoin block equals the value printed here, then the file
-digest was committed before that block was mined — regardless of anything this project
-says. That is the whole claim.
-
-It exists because the official `ots` CLI depends on python-bitcoinlib, which fails to
-load on Windows (it dlopens libssl through ctypes). The `opentimestamps` library itself
-works everywhere, so this uses only that.
+If the merkle root of that Bitcoin block equals the value printed here, then the
+file digest was committed before that block was mined — regardless of anything this
+project says. That is the whole claim.
 
 Usage: python scripts/ots_info.py FILE.ots [FILE.ots ...]
 """
@@ -23,50 +25,45 @@ import hashlib
 import sys
 from pathlib import Path
 
-from opentimestamps.core.timestamp import DetachedTimestampFile
-from opentimestamps.core.notary import (BitcoinBlockHeaderAttestation,
-                                        PendingAttestation)
-from opentimestamps.core.serialize import StreamDeserializationContext
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
-
-def walk(node):
-    yield node
-    for child in node.ops.values():
-        yield from walk(child)
+from ctp.ots import parse_file, OTSError
 
 
 def show(path: Path) -> bool:
-    with path.open("rb") as f:
-        detached = DetachedTimestampFile.deserialize(StreamDeserializationContext(f))
-    target = path.with_suffix("") if path.suffix == ".ots" else None
+    try:
+        proof = parse_file(path)
+    except OTSError as e:
+        print(f"{path.name}\n  NOT A VALID PROOF: {e}")
+        return False
+
     print(f"{path.name}")
-    print(f"  file digest ({detached.file_hash_op.TAG_NAME}): {detached.file_digest.hex()}")
+    print(f"  file digest ({proof.file_hash_op}): {proof.file_digest.hex()}")
+
+    target = path.with_suffix("") if path.suffix == ".ots" else None
     if target and target.is_file():
         actual = hashlib.sha256(target.read_bytes()).digest()
-        match = actual == detached.file_digest
+        match = actual == proof.file_digest
         print(f"  {target.name} on disk matches this proof: {match}")
         if not match:
             print("  *** the file next to this proof is NOT the file that was stamped ***")
             return False
 
-    attested = False
-    for node in walk(detached.timestamp):
-        for att in node.attestations:
-            if isinstance(att, BitcoinBlockHeaderAttestation):
-                print(f"  BITCOIN block {att.height}")
-                print(f"    that block's merkle root must be: {node.msg[::-1].hex()}")
-                attested = True
-            elif isinstance(att, PendingAttestation):
-                uri = att.uri if isinstance(att.uri, str) else att.uri.decode()
-                print(f"  PENDING at {uri} (not yet in a Bitcoin block; run ots_upgrade.py later)")
-    if attested:
+    for height, merkle_root in proof.bitcoin:
+        print(f"  BITCOIN block {height}")
+        print(f"    that block's merkle root must be: {merkle_root}")
+    for uri in proof.pending:
+        print(f"  PENDING at {uri} (not yet in a Bitcoin block; run ots_upgrade.py later)")
+
+    if proof.bitcoin:
         print("  check it yourself: compare each merkle root above against that block")
         print("  height on any Bitcoin node or explorer you trust. Nothing here asks")
         print("  you to trust us.")
-    else:
-        print("  no Bitcoin attestation yet — the calendars have not aggregated this")
-        print("  commitment into a transaction. Run scripts/ots_upgrade.py later.")
-    return attested
+        return True
+    print("  no Bitcoin attestation yet — the calendars have not aggregated this")
+    print("  commitment into a transaction. Run scripts/ots_upgrade.py later.")
+    return False
 
 
 def main():
