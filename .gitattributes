@@ -1,0 +1,12 @@
+# Byte-exactness is the entire point of this repository, so git must never
+# translate line endings on checkout.
+#
+# Without this, Git for Windows (which defaults to core.autocrlf=true) rewrites
+# every text file's LF to CRLF as it lands on disk. The files then hash
+# differently from MANIFEST.sha256 and every single entry fails — on a clone that
+# is otherwise perfectly intact. A Windows verifier's first command would report
+# 221 failures and they would reasonably conclude the record was broken.
+#
+# `-text` disables all end-of-line conversion for every path: what is committed is
+# what appears on disk, on every platform.
+* -text
