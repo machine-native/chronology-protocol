@@ -14,9 +14,9 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| MMCM + parallel cores | **built and measured 2026-08-22: 3.59 MH/s** |
+| MMCM + parallel cores | **built and measured 2026-08-22: 6.25 MH/s** |
 | on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
-| measured throughput | **3.5911 MH/s** at 8 cores / 60 MHz (was 0.0906 single-core) |
+| measured throughput | **6.2505 MH/s** at 12 cores / 69.565 MHz |
 | `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
 
 Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
@@ -65,7 +65,9 @@ when the bar should go up:
 - **No block has been mined by this board.** `mine` mode is not written.
 - The scan ran against a **known answer**. It proves the scanner walks a range and stops
   correctly; it is not a live race against other miners.
-- 0.0906 MH/s is **44× slower than this laptop**. Nothing here is competitive yet.
+- 0.0906 MH/s is **~44× slower than a laptop CPU miner** measured elsewhere in this
+  project. Nothing at this stage is competitive. (Later builds reach 6.25 MH/s; see
+  the throughput section, and the note there about comparing across machines.)
 
 ### Bring-up fault, found 2026-08-22: the UART port directions were inverted
 
@@ -216,7 +218,9 @@ vvp sim/top.vvp
 ## Measured after synthesis — the estimate was wrong twice over
 
 Vivado has now built it (`timing.rpt`, `utilisation.rpt`, `drc.rpt` in this folder,
-regenerated 2026-08-22 with the heartbeat included). Timing closes comfortably:
+copied from the build machine on 2026-08-22). **Those three files describe the
+single-core 12 MHz build**, not the 12-core configuration measured later; they are kept
+as the record of the first bitstream that ran rather than overwritten each time. Timing closes comfortably:
 **setup slack +69.588 ns, hold +0.024 ns, zero failing endpoints, zero DRC violations.**
 
 ```
@@ -237,15 +241,14 @@ That last line is the problem, and it is mine. **The Cmod A7's oscillator is 12 
 while the earlier estimate below assumed 100 MHz and never said so. At 132 cycles per
 nonce — a figure hardware has now confirmed to within 0.3%:
 
-| configuration | MH/s | vs this laptop (4.0 MH/s measured) |
-|---|---|---|
-| 12 MHz, 1 core | **0.0906 measured** | **44× slower** |
-| **60 MHz MMCM, 8 cores** | **3.5911 measured** | **0.90× — near parity** |
-| ~~75 MHz, 9 cores~~ | ~~5.11~~ | **impossible: measured fmax is 70.4 MHz** |
+| configuration | measured MH/s |
+|---|---|
+| 12 MHz, 1 core | **0.0906** |
+| 60 MHz MMCM, 8 cores | **3.5911** |
+| 69.565 MHz MMCM, 12 cores | **6.2505** |
 
-Both surviving rows are measurements. The third was the original target and is now
-ruled out by the hardware itself — worth leaving struck through rather than deleted,
-since it was quoted as the plan for two days.
+All three are measurements on hardware. The full table, the configurations still
+untried, and the two wrong verdicts this section reached along the way are below.
 
 A full 2³² nonce sweep as built takes **13.2 hours**, measured. It cannot compete for a block, and
 saying otherwise would repeat the error this section already exists to correct.
@@ -300,43 +303,81 @@ measured        3.5911 MH/s      (projected 3.64 -- 98.7%)
 2^32 sweep      0.3 hours        (was 13.2)
 ```
 
-**39.6× faster than the single-core build**, and 90% of this laptop's measured
-4.0 MH/s — near parity, not past it.
+**39.6× faster than the single-core build.**
 
-**The 75 MHz target is dead**, and the reason is not the one first given here.
+**The 75 MHz target is alive after all.** This section said twice that it was dead, with
+two different wrong arguments, and both are left below because the way they were wrong
+is the useful part.
 
-Three builds now report their critical path, and it barely moves with core count:
-
-| cores | clock | setup slack | critical path | implied fmax |
+| cores | constraint | setup slack | critical path | implied fmax |
 |---|---|---|---|---|
 | 1 | 12 MHz | +69.588 ns | 13.745 ns | 72.8 MHz |
 | 8 | 60 MHz | +2.468 ns | 14.199 ns | 70.4 MHz |
 | 12 | 60 MHz | +2.804 ns | 13.863 ns | 72.1 MHz |
+| 12 | **69.565 MHz** | +2.222 ns | **12.153 ns** | **82.3 MHz** |
 
-**Twelve cores timed better than eight.** The first version of this section blamed
-congestion — "filling the fabric cost roughly 6 MHz" — and that was wrong, written from
-a single data point. The spread across 1, 8 and 12 cores is about 3%, which is placement
-variance, not a trend. The limit is the **SHA-256 core's own critical path** at roughly
-14 ns, and it is nearly independent of how many copies are instanced.
+**Wrong argument #1: congestion.** After the 8-core build, this section claimed "filling
+the fabric cost roughly 6 MHz" against the single core's fmax. Then 12 cores timed
+*better* than 8. The spread across 1, 8 and 12 cores is about 3% — placement variance,
+not a trend. Written from one data point, refuted by the second.
 
-That is a better result than the congestion story would have been: it means core count
-is cheap and frequency is the hard ceiling. 75 MHz needs 13.33 ns and no build has come
-under 13.7, so 9 cores at 75 MHz remains impossible — but 9 was never the interesting
-number.
+**Wrong argument #2: reading fmax off a slack-having build.** The replacement claim was
+that the SHA-256 core's own path sits near 14 ns regardless of core count, so 75 MHz
+(13.33 ns) could never close. Then the same 12 cores, constrained to 69.565 MHz, routed
+to **12.153 ns**.
 
-**69.565 MHz closes everywhere.** It needs 14.375 ns, which every build above satisfies.
-It is reachable because `CLKOUT0_DIVIDE_F` moves in steps of 0.125 (600/8.625), and it
-is precisely the frequency the earlier "must divide 600 exactly" check would have
-rejected — a self-inflicted restriction that happened to forbid the one useful setting
-between 60 and 75.
+That is the real lesson, and it is a methodological one:
 
-| configuration | projected MH/s | status |
+> **Vivado stops optimising once it meets the constraint.** A build with +2.8 ns of slack
+> at 60 MHz proves the path is *at most* 13.863 ns. It says nothing about the minimum
+> achievable. Tighten the constraint and the tool works harder. **Implied fmax from a
+> build with slack is a lower bound, not an estimate** — and treating a lower bound as an
+> estimate is what produced both wrong verdicts above.
+
+At 12.153 ns achieved, 75 MHz (13.333 ns) and even 80 MHz (12.500 ns) should close.
+Neither has been tried.
+
+**69.565 MHz was the unlock.** It needs 14.375 ns and is reachable only because
+`CLKOUT0_DIVIDE_F` moves in steps of 0.125 (600/8.625). It is precisely the frequency the
+earlier "must divide 600 exactly" check forbade — a self-inflicted restriction that
+excluded the single useful setting between 60 and 75, and whose removal is what revealed
+that the fabric had far more headroom than three builds had suggested.
+
+| configuration | projected MH/s | measured |
 |---|---|---|
-| 8 cores at 60 MHz | 3.64 | **measured 3.5911** |
-| 12 cores at 60 MHz | 5.45 | **built, timing met** — not yet measured |
-| 12 cores at 69.565 MHz | 6.32 | closes on paper; untested |
+| 1 core at 12 MHz | 0.0909 | **0.0906** |
+| 8 cores at 60 MHz | 3.64 | **3.5911** |
+| 12 cores at 60 MHz | 5.45 | **5.3904** |
+| **12 cores at 69.565 MHz** | 6.32 | **6.2505** |
+| 12 cores at 75 MHz | 6.82 | untested |
 | 16 cores at 69.565 MHz | 8.43 | untested |
-| ~~9 cores at 75 MHz~~ | ~~5.11~~ | **impossible — no build beats 13.7 ns** |
+| 16 cores at 80 MHz | 9.70 | untested |
+
+Four measurements, each within **1.3%** of its projection — 99.7%, 98.7%, 98.9% and
+98.9% of predicted. The 132-cycles-per-nonce-per-core model holds across two orders of
+magnitude of throughput, three core counts and three frequencies.
+
+### On comparing this to a CPU
+
+Earlier versions of this table carried a "vs laptop" column against a measured
+**4.0 MH/s** software miner. That comparison is removed, because it was quietly mixing
+two machines.
+
+**The board has never been connected to the machine this repository is developed on.**
+Every Vivado build, every programming run and every hash-rate measurement in this file
+was performed on a separate desktop; the 4.0 MH/s CPU figure came from the development
+laptop, which has never had the FPGA attached to it.
+
+The FPGA numbers themselves are unaffected — the board's rate is a property of the
+board, and the host only feeds it work and waits. But "the FPGA is 1.56× the laptop"
+compares hardware in one room to software in another, and the honest baseline for a
+given machine is that machine's own CPU miner. The laptop's 4.0 MH/s stands as a
+measured fact about the laptop and nothing more; the desktop's rate has never been
+measured.
+
+What survives without a baseline: the board does **6.25 MH/s at roughly 2 W**, running
+continuously without occupying a general-purpose machine. That was always the actual
+argument for it.
 
 Every projection scales 132 cycles per nonce per core, a constant hardware has confirmed
 twice: to 0.3% single-core and 1.3% across eight. That is arithmetic on a measured
@@ -362,17 +403,20 @@ block and the outer hash are on-chip):
 | unrolled ×2 | ~4,200 | 68 | 3 | ~4.4 |
 | unrolled ×4 | ~7,000 | 36 | 2 | ~5.6 |
 
-Measured baselines: this laptop's 8-core scanner **4.0 MH/s**; the laboratory VM
-**~1.1 MH/s**. So a realistic bitstream lands **around 5 MH/s** — comparable to the
-laptop, roughly 5× the VM. Real numbers replace these estimates after synthesis;
-these are arithmetic, not measurements.
+Measured baselines at the time: the development laptop's 8-core scanner **4.0 MH/s**;
+the laboratory VM **~1.1 MH/s**. So a realistic bitstream was expected to land **around
+5 MH/s**. Real numbers replaced these after synthesis — the board measures 6.25 MH/s —
+but note that every FPGA figure was taken on a different machine from those CPU
+baselines, so the two were never directly comparable.
 
 ## What it is actually for, given that
 
 Not brute-force dominance. The value is:
 
-- **Continuous, dedicated mining** at ~2 W instead of a 50 W laptop tied up in
-  20-minute bursts. Always-on beats faster-but-occasional for winning anchor races.
+- **Continuous, dedicated mining** at ~2 W, instead of a general-purpose machine at
+  tens of watts tied up in 20-minute bursts. Always-on beats faster-but-occasional for
+  winning anchor races, and this argument held when the board was slower than a CPU
+  and still holds now that it is faster.
 - **A real machine-native artifact**: purpose-built silicon participating in the
   chain, which is the kind of thing this portfolio exists to demonstrate.
 - An independent third implementation of the consensus hash, after Python and C.
