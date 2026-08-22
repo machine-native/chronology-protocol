@@ -24,11 +24,11 @@ read_xdc     ./constraints/cmod_a7.xdc
 #     vivado -mode batch -source build.tcl -tclargs 8 60       (the default)
 #
 # The board oscillator is 12 MHz; an MMCM multiplies it to CLK_HZ via a fixed
-# 600 MHz VCO, so the frequency must divide 600 exactly. A single core closed at
-# roughly 76 MHz fmax, and filling the fabric costs some of that, so core count
-# and clock trade against each other. That trade is why this is swept rather
-# than assumed -- read the WNS printed at the end and step back if it goes
-# negative.
+# 600 MHz VCO (see the reachability check below). Core count and clock trade
+# against each other: one core alone closed at ~76 MHz, and the 8-core build
+# measured 70.4 MHz fmax, so filling the fabric costs real frequency. That
+# trade is why this is swept rather than assumed -- read the WNS printed at the
+# end, and do not trust any rate measured from a build with negative slack.
 #
 # Generics go to synth_design directly rather than onto the fileset.
 # `set_property generic ... [current_fileset]` is a project-flow idiom that an
@@ -40,12 +40,22 @@ set mhz   60
 if {[llength $argv] >= 1} { set cores [lindex $argv 0] }
 if {[llength $argv] >= 2} { set mhz   [lindex $argv 1] }
 
-if {[expr {600 % $mhz}] != 0} {
-    puts "\nERROR: $mhz MHz does not divide the 600 MHz VCO exactly."
-    puts "Use one of: 50 60 75 100 120 150\n"
+# CLKOUT0_DIVIDE_F is a real with 0.125 granularity, so the reachable set is
+# wider than the integer divisors of 600: 69.565 MHz (divide 8.625) is legal
+# where 70 is not. Check what the part can actually synthesise rather than a
+# stricter rule of thumb -- rejecting a frequency the hardware supports is as
+# much a defect as accepting one it does not, and this board's measured fmax of
+# 70.4 MHz sits precisely in the gap the stricter rule would have hidden.
+set div [expr {600.0 / $mhz}]
+if {abs($div * 8 - round($div * 8)) > 0.01 || $div < 1.0 || $div > 128.0} {
+    puts "\nERROR: $mhz MHz is not reachable from the 600 MHz VCO."
+    puts "CLKOUT0_DIVIDE_F moves in steps of 0.125, so 600/f must land on one."
+    puts "Reachable nearby: 50, 60, 66.667, 69.565, 75, 100 MHz\n"
     exit 1
 }
-set clk_hz [expr {$mhz * 1000000}]
+# round(): a fractional MHz such as 69.565 would otherwise make clk_hz a float,
+# and the generic must be an integer number of hertz.
+set clk_hz [expr {round($mhz * 1000000)}]
 
 puts "cores     : $cores"
 puts "clock     : $mhz MHz  (CLK_HZ=$clk_hz)"

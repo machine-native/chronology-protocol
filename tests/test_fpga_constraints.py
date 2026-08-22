@@ -99,9 +99,21 @@ def test_mmcm_frequency_is_reachable_from_the_fixed_vco():
     assert vco and clk, "MMCM VCO or CLK_HZ default not found"
     vco_mhz = float(vco.group(1))
     clk_mhz = int(clk.group(1).replace("_", "")) / 1e6
-    assert vco_mhz % clk_mhz == 0, (
-        f"{clk_mhz} MHz does not divide the {vco_mhz} MHz VCO exactly"
+    # CLKOUT0_DIVIDE_F moves in steps of 0.125, so the reachable set is wider
+    # than the integer divisors -- what matters is that 600/f lands on one of
+    # those steps, not that it is a whole number.
+    # Tolerance is 0.01, not machine epsilon: legal divide steps are 1.0 apart
+    # in these units, while a frequency like 69.565217 MHz cannot be written
+    # exactly in integer Hz. Demanding exactness rejects legal frequencies for
+    # a rounding artefact -- 0.01 discriminates the real cases with room to
+    # spare, since an unreachable frequency lands hundreds of times further out.
+    div = vco_mhz / clk_mhz
+    assert abs(div * 8 - round(div * 8)) < 0.01, (
+        f"{clk_mhz} MHz needs CLKOUT0_DIVIDE_F = {div}, which is not a multiple "
+        "of 0.125; the MMCM would synthesise something else and every value "
+        "derived from CLK_HZ -- baud divisor included -- would be wrong"
     )
+    assert 1.0 <= div <= 128.0, div
     # 600-1200 MHz is the Artix-7 -1 VCO range; 12 MHz x 50 = 600 sits at the
     # bottom of it, which is legal. Outside it the MMCM will not lock at all.
     assert 600.0 <= vco_mhz <= 1200.0, vco_mhz

@@ -14,9 +14,9 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| MMCM + parallel cores | **written and simulated**; not yet built or measured |
+| MMCM + parallel cores | **built and measured 2026-08-22: 3.59 MH/s** |
 | on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
-| measured throughput | **0.0906 MH/s** — 99.7% of the cycle-limited ceiling |
+| measured throughput | **3.5911 MH/s** at 8 cores / 60 MHz (was 0.0906 single-core) |
 | `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
 
 Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
@@ -239,12 +239,13 @@ nonce — a figure hardware has now confirmed to within 0.3%:
 
 | configuration | MH/s | vs this laptop (4.0 MH/s measured) |
 |---|---|---|
-| **as built** — 12 MHz, 1 core | **0.0906 measured** | **44× slower** |
-| + MMCM at 75 MHz, 1 core | 0.57 projected | 7× slower |
-| + MMCM at 75 MHz, 9 cores | 5.11 projected | slightly faster |
+| 12 MHz, 1 core | **0.0906 measured** | **44× slower** |
+| **60 MHz MMCM, 8 cores** | **3.5911 measured** | **0.90× — near parity** |
+| ~~75 MHz, 9 cores~~ | ~~5.11~~ | **impossible: measured fmax is 70.4 MHz** |
 
-The first row is now a measurement. The other two remain projections — but they scale a
-constant that hardware has confirmed to 0.4%, rather than one that had been guessed.
+Both surviving rows are measurements. The third was the original target and is now
+ruled out by the hardware itself — worth leaving struck through rather than deleted,
+since it was quoted as the plan for two days.
 
 A full 2³² nonce sweep as built takes **13.2 hours**, measured. It cannot compete for a block, and
 saying otherwise would repeat the error this section already exists to correct.
@@ -288,23 +289,39 @@ candidates are genuine. The lowest index wins; the other is dropped. That costs 
 real — the host re-checks every reported nonce against the exact target anyway, and a
 dropped candidate at difficulty 1 is a retry, not a lost block.
 
-### What the build must confirm
+### Built and measured, 2026-08-22
 
-A single core closed at roughly **76 MHz fmax**, and filling the fabric costs some of
-that, so core count and clock trade against each other. The defaults are 8 cores at
-60 MHz because that leaves real margin; 9 at 75 is the number the projection below
-assumes and may not close. **Read the WNS the build prints.** If it is negative, the
-bitstream is not usable and any rate measured from it is meaningless.
+```
+config          8 cores at 60 MHz
+setup slack     +2.468 ns   -> critical path 14.199 ns -> fmax 70.4 MHz
+hold slack      +0.020 ns   met
+scanned         5,000,000 nonces in 1.39 s
+measured        3.5911 MH/s      (projected 3.64 -- 98.7%)
+2^32 sweep      0.3 hours        (was 13.2)
+```
 
-| configuration | projected MH/s | note |
+**39.6× faster than the single-core build**, and 90% of this laptop's measured
+4.0 MH/s — near parity, not past it.
+
+**The 75 MHz target is dead.** Measured fmax with 8 cores is 70.4 MHz; 75 MHz needs a
+13.33 ns path and this one is 14.199 ns. The original 5.11 MH/s projection assumed
+9 cores at 75 MHz and **that configuration cannot close on this part**. Filling the
+fabric cost roughly 6 MHz against the single-core build's ~76 MHz, which is the ordinary
+price of congestion and was not accounted for.
+
+More cores at 60 MHz remains open, and is now the only route left:
+
+| configuration | projected MH/s | status |
 |---|---|---|
-| 8 cores at 60 MHz | 3.64 | the default; conservative timing |
-| 9 cores at 75 MHz | 5.11 | the original target; may not close |
+| 8 cores at 60 MHz | 3.64 | **measured 3.5911** |
+| 12 cores at 60 MHz | 5.45 | untested; timing may not hold |
+| 16 cores at 60 MHz | 7.27 | untested; likely too congested |
+| ~~9 cores at 75 MHz~~ | ~~5.11~~ | **ruled out — fmax is 70.4 MHz** |
 
-These scale 132 cycles per nonce per core — a constant hardware has now confirmed to
-within 0.3%. That makes them arithmetic on a measured quantity rather than on a guess,
-which is the only reason they are worth printing at all. They remain projections until a
-board runs `selftest --depth 5000000` and returns a number.
+Every projection here scales 132 cycles per nonce per core, a constant hardware has
+confirmed twice: to 0.3% single-core and 1.3% across eight. That is arithmetic on a
+measured quantity, which is the only reason it is worth printing — and it stays a
+projection until a board returns a number.
 
 **What the bitstream is for right now is correctness, not speed**: proving that silicon
 reproduces a proof-of-work answer this project already established. That is what
