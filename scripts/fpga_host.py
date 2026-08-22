@@ -118,7 +118,8 @@ def scan(ser, header80: bytes, nonce_start: int, bits: int, timeout_s: float,
                     return None, f"serial-error: {e}"
                 last_poke = now
                 if progress:
-                    print(f"\r  scanning… {now-started:5.1f}s", end="", flush=True)
+                    # trailing spaces clear whatever a longer previous line left
+                    print(f"\r  scanning… {now-started:7.1f}s   ", end="", flush=True)
             continue
         if tag in (b"K", b"\x00"):       # keepalive echo, or line noise
             continue
@@ -282,7 +283,7 @@ def cmd_mine(a):
         tmpl = make_block(payload, prev, ntime, bits, nonce=0)
         header0 = tmpl["header"]
 
-        print(f"round {rnd+1}/{a.rounds}  nTime {ntime}  ", end="", flush=True)
+        print(f"round {rnd+1}/{a.rounds}  nTime {ntime}")
         t0 = time.time()
         got, status = scan(ser, header0, 0, bits, round_s, progress=True)
         dt = time.time() - t0

@@ -32,7 +32,9 @@ def main():
     ap.add_argument("--port", type=int, default=18026)
     ap.add_argument("--yes", action="store_true", help="do not ask for confirmation")
     ap.add_argument("--check-only", action="store_true",
-                    help="validate the file and exit without contacting anything")
+                    help="validate the file and exit without sending it")
+    ap.add_argument("--skip-tip-check", action="store_true",
+                    help="do not verify the parent is still the chain tip")
     a = ap.parse_args()
 
     p = Path(a.block_json)
@@ -66,6 +68,39 @@ def main():
     except Exception as e:
         raise SystemExit(f"\nREFUSING: block does not parse as a single-tx block: {e}")
     print("pow       VALID (re-derived here from the raw bytes)")
+
+    # Is the parent still the tip? Mining takes minutes, and a block built on a
+    # parent that has since been replaced is not an extension of the chain -- it
+    # is a competing block at an already-taken height. That is a legitimate thing
+    # to send, but it should never happen by accident, so it is checked and named.
+    prev = rec.get("prev_hash")
+    if prev and not a.skip_tip_check and not a.check_only:
+        ctx = ROOT / "live" / "tip-context.json"
+        try:
+            import subprocess
+            r = subprocess.run([sys.executable, str(ROOT / "live" / "fetch_tip_context.py"),
+                                a.host, str(a.port)], capture_output=True, text=True, timeout=120)
+            if r.returncode != 0:
+                raise RuntimeError(r.stderr.strip()[:200] or "fetch failed")
+            tip = json.loads(ctx.read_text())
+            if tip["tip_hash"] == prev:
+                print(f"parent    still the tip at height {tip['tip_height']} — this "
+                      f"block extends the chain")
+            else:
+                print(f"\nWARNING: the parent is NO LONGER THE TIP.")
+                print(f"  block's parent : {prev}")
+                print(f"  current tip    : {tip['tip_hash']} (height {tip['tip_height']})")
+                print(f"  Sending this now creates a COMPETING block at height "
+                      f"{rec.get('height')}, not an extension.")
+                # Always demand a typed confirmation here, even under --yes.
+                # --yes means "I have already thought about this submission";
+                # it cannot mean "I have thought about a fact discovered after
+                # I typed it". A stale parent is exactly such a fact.
+                a.yes = False
+        except Exception as e:
+            print(f"parent    could not check (network: {e}).")
+            print("          Submitting blind risks sending a block whose parent was "
+                  "replaced while it was being mined.")
 
     if a.check_only:
         print("\n--check-only: nothing was sent.")
