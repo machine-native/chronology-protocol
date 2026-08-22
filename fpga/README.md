@@ -1,7 +1,11 @@
 # FPGA miner — Cmod A7-35T (work in progress)
 
 A SHA-256d miner in hardware for the anchor chain: our own silicon mining our own
-chain. Started 2026-08-21.
+chain. Started 2026-08-21; **running on a board and measured at 6.9854 MH/s on
+2026-08-23**, from 0.0906 MH/s when the first bitstream ran the day before.
+
+Still not true, and stated first because the numbers above are the flattering part:
+**no block has been mined by this board.** `mine` mode is not written.
 
 ## Status
 
@@ -14,9 +18,9 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| MMCM + parallel cores | **built and measured: 6.72 MH/s, 12 cores at 75 MHz** |
+| MMCM + parallel cores | **done: 6.9854 MH/s, 12 cores at 77.419 MHz** |
 | on-board run (selftest) | **PASS on hardware 2026-08-22**, 10^6-nonce scan |
-| measured throughput | **6.7242 MH/s** at 12 cores / 75 MHz |
+| measured throughput | **6.9854 MH/s** at 12 cores / 77.419 MHz |
 | `mine` mode | not written: needs chain-tip fetch, coinbase build, submission |
 
 Per the project's standing rule, "simulated", "synthesised", "ran on a board" and
@@ -247,6 +251,7 @@ nonce — a figure hardware has now confirmed to within 0.3%:
 | 60 MHz MMCM, 8 cores | **3.5911** |
 | 69.565 MHz MMCM, 12 cores | **6.2505** |
 | 75 MHz MMCM, 12 cores | **6.7242** |
+| 77.419 MHz MMCM, 12 cores | **6.9854** |
 
 All three are measurements on hardware. The full table, the configurations still
 untried, and the two wrong verdicts this section reached along the way are below.
@@ -354,15 +359,19 @@ that the fabric had far more headroom than three builds had suggested.
 | 8 cores at 60 MHz | 3.64 | **3.5911** | +2.468 ns |
 | 12 cores at 60 MHz | 5.45 | **5.3904** | +2.804 ns |
 | 12 cores at 69.565 MHz | 6.32 | **6.2505** / **6.2548** | +2.222 ns |
-| **12 cores at 75 MHz** | 6.82 | **6.7242** | +0.484 ns |
+| 12 cores at 75 MHz | 6.82 | **6.7242** | +0.484 ns |
+| **12 cores at 77.419 MHz** | 7.04 | **6.9854** | +0.457 ns |
 | ~~16 cores, any clock~~ | ~~8.43+~~ | **does not fit** | — |
 
-Five configurations measured, each within **1.4%** of its projection — 99.7%, 98.7%,
-98.9%, 98.9% and 98.6% of predicted. The 132-cycles-per-nonce-per-core model holds
-across two orders of magnitude of throughput, three core counts and four frequencies.
-The 69.565 MHz build was measured twice on separate programming runs and agreed to
-0.07% (6.2505 and 6.2548), which is a useful check that the measurement itself is
-stable rather than a lucky single reading.
+Six configurations measured, each within **1.4%** of its projection — 99.7%, 98.7%,
+98.9%, 98.9%, 98.6% and 99.2% of predicted. The 132-cycles-per-nonce-per-core model
+holds across two orders of magnitude of throughput, three core counts and five
+frequencies. The 69.565 MHz build was measured twice on separate programming runs and
+agreed to 0.07% (6.2505 and 6.2548), which checks that the measurement itself is stable
+rather than one lucky reading.
+
+**77× the throughput of the first bitstream that ran**, from the same RTL on the same
+board — entirely from clocking and replication.
 
 ### The ceiling, and what actually sets it
 
@@ -385,10 +394,26 @@ So **12 cores is the practical maximum** on this part, 13 at a squeeze. The devi
 LUT-limited, not timing-limited, and that was not obvious from any earlier build: at
 8 cores the fabric looked half empty.
 
-Frequency has a little headroom left. At 75 MHz the path routed to 12.849 ns, so
-**77.419 MHz** (600/7.75, needing 12.917 ns) should close and would give about
-**7.04 MH/s** — a 4.7% gain. Whether that is worth a build is a matter of taste; the
-configuration in the table above is the one that has actually run.
+Frequency headroom is nearly gone too, and the way it ran out is worth recording. The
+achieved critical path across four 12-core builds:
+
+| constraint | achieved path | implied fmax |
+|---|---|---|
+| 60 MHz | 13.863 ns | 72.1 MHz |
+| 69.565 MHz | 12.153 ns | 82.3 MHz |
+| 75 MHz | 12.849 ns | 77.8 MHz |
+| 77.419 MHz | 12.460 ns | 80.3 MHz |
+
+It does not converge. The tool lands somewhere in a **12.15–12.85 ns** band depending on
+constraint and placement luck, and the band is wide enough that no single build predicts
+the next. That is the same trap as before, seen from the other side: reading any one of
+these as "the" critical path is what produced two wrong impossibility verdicts.
+
+**80 MHz needs 12.500 ns and sits inside that band** — a genuine coin flip rather than a
+prediction, worth about 3.3% (7.27 MH/s). It has not been tried, and this is the point
+where the returns stop justifying the builds.
+
+**12 cores at 77.419 MHz — 6.9854 MH/s — is where this stops.**
 
 ### On comparing this to a CPU
 
@@ -408,7 +433,7 @@ given machine is that machine's own CPU miner. The laptop's 4.0 MH/s stands as a
 measured fact about the laptop and nothing more; the desktop's rate has never been
 measured.
 
-What survives without a baseline: the board does **6.72 MH/s at roughly 2 W**, running
+What survives without a baseline: the board does **6.99 MH/s at roughly 2 W**, running
 continuously without occupying a general-purpose machine. That was always the actual
 argument for it.
 
