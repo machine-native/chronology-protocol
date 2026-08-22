@@ -31,8 +31,15 @@ openssl list -signature-algorithms | grep -E "ML-DSA-87|SLH-DSA-SHAKE-256s"
 
 Two lines means you are ready. Nothing appears on OpenSSL 3.0–3.4 — get a 3.5+ build
 (recent Debian/Fedora/Arch, `brew install openssl@3.5`, or MSYS2 on Windows).
-Python 3.10+ is the only other requirement. **No third-party Python packages are
-needed.**
+Python 3.10+ is the only other requirement. **Commands 2–7 need no third-party Python
+packages at all.** The test suite (command 1) additionally needs `pytest`:
+`pip install pytest`.
+
+⚠️ **Ubuntu 24.04 LTS ships OpenSSL 3.0.13 and will fail this check**, with no apt
+path to 3.5 — as will most current LTS distributions. If you are on one, either use a
+newer distro/container, or build OpenSSL 3.5 from source (roughly half an hour). A
+reviewer lost that time discovering it, so it is stated here rather than found the
+hard way.
 
 **3. Run it.** Everything here is offline — no network, no accounts, nothing of ours
 running on your machine:

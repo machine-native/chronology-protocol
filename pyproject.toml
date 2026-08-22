@@ -7,6 +7,17 @@ name = "chronology-protocol"
 version = "0.1.0"
 description = "Witnessed physical chronology with post-quantum evidence and Jan09 Bitcoin anchoring"
 requires-python = ">=3.10"
+# Verification itself (scripts/verify_*.py, ctp/) uses only the standard library.
+# Running the TEST SUITE additionally needs pytest, which an outside reviewer
+# correctly pointed out was being instructed while also being undeclared.
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+# Creating or upgrading OpenTimestamps proofs needs the reference client; READING
+# them does not (ctp/ots.py is standard-library only).
+stamping = ["opentimestamps-client"]
+serial = ["pyserial"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
