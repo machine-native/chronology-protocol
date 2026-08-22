@@ -11,7 +11,9 @@ create_clock -add -name sys_clk_pin -period 83.33 -waveform {0 41.66} [get_ports
 set_property -dict { PACKAGE_PIN J18  IOSTANDARD LVCMOS33 } [get_ports { uart_rxd_out }];
 set_property -dict { PACKAGE_PIN J17  IOSTANDARD LVCMOS33 } [get_ports { uart_txd_in  }];
 
-## Two of the on-board LEDs: led[0] = reporting, led[1] = scanning
+## Two of the on-board LEDs: led[0] = 1 Hz heartbeat, led[1] = scanning.
+## The heartbeat is a bring-up instrument: it proves the bitstream is loaded and
+## the clock is running before any question about the serial link is asked.
 set_property -dict { PACKAGE_PIN A17  IOSTANDARD LVCMOS33 } [get_ports { led[0] }];
 set_property -dict { PACKAGE_PIN C16  IOSTANDARD LVCMOS33 } [get_ports { led[1] }];
 

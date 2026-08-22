@@ -14,11 +14,22 @@ chain. Started 2026-08-21.
 | `scripts/fpga_host.py` — host driver | written; midstate matches RTL |
 | `build.tcl` + `constraints/cmod_a7.xdc` | ready to run |
 | synthesis + bitstream | **DONE 2026-08-22 — timing met, reports in this folder** |
-| on-board run (selftest) | pending — board not yet programmed |
+| on-board run (selftest) | **blocked — programmed board does not answer over UART** |
 
 Nothing here has run on a board. Per the project's standing rule, "simulated" and
 "synthesised" and "mined a real block" are three different claims and only the first
 is currently true.
+
+**Open bring-up fault (2026-08-22).** A board reported as programmed returns nothing to
+`ping`. Every remotely checkable cause has been eliminated: the UART pin directions
+match Digilent's convention (`uart_rxd_out` is an FPGA *input*), the pin assignments and
+the 12 MHz clock pin match the board's master constraints, the baud divisor is
+104 for a 0.16% error, and the end-to-end simulation drives real UART bytes through the
+top level and passes. The design has met timing but has never been observed running.
+
+Two instruments were added rather than continuing to guess: a **1 Hz heartbeat LED**,
+which separates "no bitstream" from "no link", and **`scripts/fpga_diag.py`**, which
+separates "wrong baud" from "silence". Both are described under bring-up below.
 
 ## The vectors are ours
 
@@ -44,6 +55,11 @@ vvp sim/tb.vvp
 
 Vivado has now built it (`timing.rpt`, `utilisation.rpt` in this folder). Timing closes
 comfortably: **WNS +70.246 ns, zero failing endpoints, all constraints met.**
+
+> These two reports are from the build of 2026-08-22 and **predate the heartbeat
+> counter**, which adds roughly 32 flip-flops and a comparator. The figures below are
+> therefore very slightly low rather than wrong, and are left as measured instead of
+> being adjusted by arithmetic. They will be replaced by the next build's own output.
 
 ```
 LUTs           1,593 of 20,800   (7.7% — smaller than the 2,600 estimated)
@@ -147,14 +163,46 @@ Then check two numbers before believing anything:
 - `build/timing.rpt` — worst negative slack must be **positive**. If it is not, the
   design did not meet timing and any measured rate is meaningless.
 
-Program the board (Vivado Hardware Manager, or `openFPGALoader -b cmod_a7_35t
-build/miner_top.bit`), then bring it up in the honest order:
+Then program it — scripted, so that "was it actually programmed?" is answered by a
+readback rather than by remembering what a dialog said:
+
+```bash
+vivado -mode batch -source program.tcl      # prints the DONE pin state
+```
+
+This also **closes the JTAG session before exiting**, which matters on this board:
+JTAG and the UART are two channels of the same FT2232 chip, and an open Hardware
+Manager target can hold the serial port shut. Note that programming is **volatile** —
+it survives until power is removed, so unplugging the board to hunt for its COM port
+erases it.
+
+### Bring-up, in the order that isolates faults
+
+**LED0 blinks once a second** as soon as a working bitstream is loaded, driven off the
+clock alone and independent of the UART. Check it before anything else:
+
+- **Blinking** — the bitstream is running and the clock is right. Any remaining fault
+  is in the serial path.
+- **Dark** — nothing is running. The programming did not take; do not debug the UART.
+- **Blinking at visibly the wrong rate** — `CLK_HZ` disagrees with the crystal, which
+  is the same error that corrupts the baud divisor and turns the UART to garbage.
+
+That distinction is the whole reason the heartbeat exists. Before it, an unprogrammed
+board and a broken link looked identical — both LEDs dark — and bring-up here stalled
+on exactly that ambiguity.
 
 ```bash
 pip install pyserial
-python ../scripts/fpga_host.py ping     --port COM7   # link alive?
-python ../scripts/fpga_host.py selftest --port COM7   # does it find a KNOWN answer?
+python ../scripts/fpga_diag.py                        # which port is the board?
+python ../scripts/fpga_diag.py --port COM4            # why is it silent?
+python ../scripts/fpga_host.py ping     --port COM4   # link alive?
+python ../scripts/fpga_host.py selftest --port COM4   # does it find a KNOWN answer?
 ```
+
+`fpga_diag.py` exists because a failed `ping` is uninformative on its own: wrong port,
+unprogrammed device, wrong baud and dead wiring all produce identical silence. It
+enumerates ports and flags the FTDI one, checks the port opens, then sweeps baud rates
+to separate "alive but mismatched" from "nothing there."
 
 `selftest` replays the real height-221 work and requires the board to return nonce
 2757362010 and that block's hash. **`mine` mode is deliberately locked until

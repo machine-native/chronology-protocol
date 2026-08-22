@@ -143,6 +143,26 @@ module miner_top #(
         end
     end
 
-    assign led = {busy, rep_left != 0};
+    // ---- heartbeat ---------------------------------------------------------
+    // LED0 blinks at 1 Hz off the input clock alone, independent of the UART,
+    // the reset counter and the miner. Without it an unprogrammed board and a
+    // board whose serial link is broken look identical -- both LEDs dark -- and
+    // bring-up cannot tell "no bitstream" from "no link". It doubles as a
+    // measurement of CLK_HZ: a blink that is visibly not 1 Hz means the
+    // parameter disagrees with the crystal, which is the same error that
+    // silently corrupts the baud divisor and makes the UART emit garbage.
+    localparam integer HALF_SECOND = CLK_HZ / 2;
+    reg [31:0] hb_cnt    = 32'd0;
+    reg        heartbeat = 1'b0;
+    always @(posedge clk) begin
+        if (hb_cnt >= HALF_SECOND - 1) begin
+            hb_cnt    <= 32'd0;
+            heartbeat <= ~heartbeat;
+        end else begin
+            hb_cnt <= hb_cnt + 32'd1;
+        end
+    end
+
+    assign led = {busy, heartbeat};
 endmodule
 `default_nettype wire
