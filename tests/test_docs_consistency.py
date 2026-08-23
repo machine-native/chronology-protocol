@@ -39,7 +39,11 @@ def test_release_status_test_count_is_current():
 
 def test_verify_md_test_count_is_current():
     text = (ROOT / "VERIFY.md").read_text(encoding="utf-8")
-    m = re.search(r"Expected:\s*`(\d+)\s+passed`", text)
+    # The document deliberately promises zero FAILURES out of N tests rather
+    # than N passed: several tests skip when optional evidence files are absent,
+    # and a reader who sees "79 passed, 5 skipped" against a promise of "84
+    # passed" cannot tell whether that matters. The count is still pinned.
+    m = re.search(r"zero failures\*\* out of (\d+) tests", text)
     assert m, "VERIFY.md no longer states an expected test count in the known form"
     assert int(m.group(1)) == collected_test_count(), (
         f"VERIFY.md promises {m.group(1)} passed but the suite collects "

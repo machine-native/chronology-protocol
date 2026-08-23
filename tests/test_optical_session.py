@@ -85,3 +85,40 @@ def test_codes_differ_between_adjacent_slots():
     seed = "D2B79B45D60F408A"
     codes = [_longhand(seed, s) for s in range(178723920, 178723926)]
     assert len(set(codes)) == len(codes), "codes repeat across adjacent slots"
+
+
+def test_the_displayed_code_cannot_wrap_onto_a_second_line():
+    """A wrapped code is a misreadable code.
+
+    The rehearsal on 2026-08-23 rendered E2823ACA1448 as "E2823ACA144" with a
+    lone "8" beneath it, in both portrait and landscape, because the size was
+    13vw: twelve monospace glyphs need about 0.64em each, so 12 * 0.64 * 13 =
+    100vw and the line always overflowed by roughly one character.
+
+    A verifier reading a code off a photograph months later has no way to know
+    whether a stray trailing character belongs to the code, to the slot number,
+    or to nothing. This pins both halves of the fix -- a size that fits, and
+    nowrap so overflow can never silently become a line break.
+    """
+    import re
+    css = HTML.read_text(encoding="utf-8")
+    block = re.search(r"#code\s*\{(.*?)\}", css, re.S)
+    assert block, "#code style block not found"
+    style = block.group(1)
+
+    assert "white-space:nowrap" in style.replace(" ", ""), (
+        "#code must set white-space:nowrap; without it a size regression turns "
+        "into a silent line break rather than a visible overflow")
+    assert "word-break" not in style, (
+        "word-break:break-all actively permits the wrap this test forbids")
+
+    m = re.search(r"font-size:\s*min\(\s*([\d.]+)vw", style)
+    assert m, "#code font-size must be a min() with a vw term, to stay bounded"
+    vw = float(m.group(1))
+    # 12 glyphs, 0.6em monospace advance, plus letter-spacing
+    ls = re.search(r"letter-spacing:\s*([\d.]+)em", style)
+    tracking = float(ls.group(1)) if ls else 0.0
+    needed = 12 * (0.6 + tracking) * vw
+    assert needed < 90, (
+        f"12 characters at {vw}vw need {needed:.0f}vw and will not fit on one "
+        "line; keep it under 90vw so font substitution cannot push it over")
