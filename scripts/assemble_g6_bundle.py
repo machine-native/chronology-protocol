@@ -19,7 +19,7 @@ rather than by any check this program can run. Putting it anywhere else would
 imply the bundle had verified it.
 """
 from __future__ import annotations
-import hashlib, json, sys
+import argparse, hashlib, json, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +41,14 @@ REPORT = "reports/rolling-code-sandwich-verification.json"
 
 
 def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--b1-depth", type=int, default=None,
+                    help="how many blocks after the anchor to include. Fixing "
+                         "this makes the bundle REPRODUCIBLE: without it the "
+                         "digest changes every time the chain grows, and a "
+                         "verifier re-running this later cannot obtain the "
+                         "published digest. Omit to take every block available.")
+    a = ap.parse_args()
     work = ROOT / WORK
     ch = json.loads((work / "challenge.json").read_text())
     payload = bytes.fromhex((work / "payload.hex").read_text().strip())
@@ -96,6 +104,17 @@ def main():
             "anchor first: PAYLOAD_HEX=$(cat live/g6-work/payload.hex) "
             "./live/race.sh")
 
+    available = len(chain) - (c_idx + 1)
+    if a.b1_depth is None:
+        end = len(chain)
+    else:
+        if a.b1_depth > available:
+            raise SystemExit(
+                f"--b1-depth {a.b1_depth} requested but only {available} block(s) "
+                "follow the anchor. Wait for the chain to grow.")
+        end = c_idx + 1 + a.b1_depth
+    b1_headers = [chain[i][:80] for i in range(c_idx + 1, end)]
+
     origin_s = parse_frame_origin(history[0].unsigned.reference_frame)
     cp = checkpoint.unsigned
     bundle = SandwichBundle(
@@ -103,7 +122,7 @@ def main():
         session_id=bytes.fromhex(ch["session_id"]), evidence=blobs,
         history=history, checkpoint=checkpoint, block_c_raw=chain[c_idx],
         path_headers=[chain[i][:80] for i in range(b0_idx + 1, c_idx)],
-        b1_headers=[chain[i][:80] for i in range(c_idx + 1, len(chain))],
+        b1_headers=b1_headers,
         expectation=era_expectation(origin_s,
                                     (cp.interval.lower + cp.interval.upper) // 2),
         genesis=genesis, version=2, photo_manifest=manifest,
@@ -121,6 +140,8 @@ def main():
         "b0": {"hash": facts["b0_hash"], "height": facts["b0_height"]},
         "block_c": {"hash": facts["block_c_hash"], "height": c_idx + 1},
         "burial_depth": facts["burial_depth"],
+        "b1_depth_frozen_at": len(b1_headers),
+        "reproduce": f"python scripts/assemble_g6_bundle.py --b1-depth {len(b1_headers)}",
         "witnesses": cp.witness_count,
         "frames": len(manifest),
         "frames_showing_a_code": rex["assessment"]["frames_with_code"],

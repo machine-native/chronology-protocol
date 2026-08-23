@@ -1,7 +1,7 @@
 {
   "bundle": "vectors\\valid\\rolling-code-sandwich-bundle.cbor",
-  "bytes": 488084,
-  "sha256": "b9bfe2e1f0f61af3d759dbcb4343fa37a84e3fa3764ada1e308ca00fbc14eebb",
+  "bytes": 488166,
+  "sha256": "f00b99438ae9d979ce2d006469b28564a076fa4860a10c17a55a1676708315f5",
   "b0": {
     "hash": "00000000e95f093d5d1b7d190684d7a0bb28839703d3611a6f8298ce74bb662f",
     "height": 320
@@ -10,7 +10,9 @@
     "hash": "00000000d2627afbbba405d7c429142c34e3c8c0eb4b5cc8f5391ebeac47c742",
     "height": 322
   },
-  "burial_depth": 0,
+  "burial_depth": 1,
+  "b1_depth_frozen_at": 1,
+  "reproduce": "python scripts/assemble_g6_bundle.py --b1-depth 1",
   "witnesses": 6,
   "frames": 41,
   "frames_showing_a_code": 29,
@@ -39,5 +41,5 @@
     "S_B1_CHAIN_VALID": true,
     "S_EXPECTATION_RECOMPUTED": true
   },
-  "verdict": "SANDWICH_PASS_UNBURIED"
+  "verdict": "SANDWICH_PASS"
 }
