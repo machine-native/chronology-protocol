@@ -16,6 +16,9 @@ KNOWN_ROOTS = {
     963190: "6fb556ef0dab354fe0e7ad5f2f1262f18490f1fed0c2a915c9c5abb3de346e3d",
     963207: "386b55af90bb5139e52c8b34500823b16f8eb053e1f04748a32004e3101567da",
     963431: "19f12f74695e5de964683351a08bdd0f9918ae87d780c11f44897975b0575dfd",
+    # Added 2026-08-23 when the roughtime proof upgraded from PENDING; confirmed
+    # against blockstream.info the same day.
+    963480: "252ecc2c627aec0a8d607a3efb07aa95675cbe9bb2e32c2a6fb545d7f89b19c3",
 }
 
 

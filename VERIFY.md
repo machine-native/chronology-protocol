@@ -57,7 +57,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: `62 passed`, and — more to the point — **zero failures**. The count grows as
+Expected: `69 passed`, and — more to the point — **zero failures**. The count grows as
 profiles are added, so treat the number as informational and the failure count as the
 result. This exercises the canonical encoder, the interval algebra, the PQ signatures,
 the Roughtime verifier, the OpenTimestamps proof reader, and full synthetic sandwich
@@ -216,17 +216,22 @@ curl -s https://blockstream.info/api/block-height/963190          # -> block has
 curl -s https://blockstream.info/api/block/<that-hash> | grep merkle_root
 ```
 
-Both roots match, and they were confirmed this way on 2026-08-21. **All five
+Both roots match, and they were confirmed this way on 2026-08-21. **All six
 attestations have now been confirmed against blockstream.info** — blocks 963190,
-963207, 963408, 963413 and 963431, each returning exactly the merkle root its proof
-requires. One of them (963190) was independently confirmed by an outside verifier in
-[issue #1](https://github.com/machine-native/chronology-protocol/issues/1); the rest
+963207, 963408, 963413, 963431 and 963480, each returning exactly the merkle root its
+proof requires. One of them (963190) was independently confirmed by an outside verifier
+in [issue #1](https://github.com/machine-native/chronology-protocol/issues/1); the rest
 were checked by the author, so repeat them yourself if it matters to you — the whole
-point of this step is that it needs nothing from us. That means the sealed
-evidence bundle existed **before those Bitcoin blocks were mined** — a fact now secured
-by Bitcoin's accumulated proof-of-work, not by us. Four of the five proofs carry
-attestations (blocks 963190, 963207, 963408, 963413); the newest is still aggregating
-and upgrades with `python scripts/ots_upgrade.py`.
+point of this step is that it needs nothing from us. That means the sealed evidence
+bundle existed **before those Bitcoin blocks were mined** — a fact now secured by
+Bitcoin's accumulated proof-of-work, not by us.
+
+**Every one of the five proofs now carries at least two Bitcoin attestations.** The
+roughtime bundle was the last to arrive: it upgraded from `PENDING` to block 963480 on
+2026-08-23, confirmed against blockstream.info the same day. Each proof also still
+lists pending calendar commitments, which will add further attestations over time —
+`python scripts/ots_upgrade.py` collects them, and none of it changes what is already
+proved.
 
 If this repository vanished tomorrow, a saved bundle plus its `.ots` file plus the
 Bitcoin blockchain would still prove when it existed.
