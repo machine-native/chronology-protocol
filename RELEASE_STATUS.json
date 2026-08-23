@@ -1,7 +1,7 @@
 {
   "release": "chronology-protocol-v0.1.1",
   "status": "PASS_LIVE_ANCHORED",
-  "tests": "69 passed",
+  "tests": "74 passed",
   "completed_engineering_checks_pass": true,
   "live_anchor_claimed": true,
   "protocol_genesis_id": {
