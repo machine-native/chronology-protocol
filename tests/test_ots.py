@@ -36,10 +36,29 @@ def test_every_proof_parses_and_matches_its_bundle():
 
 @pytest.mark.skipif(not PROOFS, reason="no .ots proofs present")
 def test_bitcoin_attestations_are_present_and_well_formed():
+    """A proof either carries a Bitcoin attestation or is still pending.
+
+    Those are different states and only one of them is a defect. A proof stamped
+    minutes ago is PENDING because the calendars aggregate on their own schedule;
+    treating that as "carries no Bitcoin attestation" is the same error as
+    reporting a check as FAILED when it merely could not run yet.
+
+    CLAIMS.md is explicit that a pending attestation is not a confirmation, so a
+    pending proof must never be counted as one -- but it must also not fail a
+    suite for being honest about its own state. What is forbidden is a proof that
+    is neither: no attestation and no calendar waiting to provide one, which
+    means the stamp never reached anybody.
+    """
     seen_heights = set()
+    pending = []
     for p in PROOFS:
         proof = parse_file(p)
-        assert proof.bitcoin, f"{p.name} carries no Bitcoin attestation"
+        if not proof.bitcoin:
+            assert proof.pending, (
+                f"{p.name} has no Bitcoin attestation and no pending calendar. "
+                "The stamp reached nobody; re-run scripts/ots_stamp.py.")
+            pending.append(p.name)
+            continue
         for height, root in proof.bitcoin:
             assert 500_000 < height < 5_000_000, height
             assert len(root) == 64 and int(root, 16) >= 0
@@ -49,6 +68,10 @@ def test_bitcoin_attestations_are_present_and_well_formed():
                 # public explorer — a parsing regression cannot pass this
                 assert root == KNOWN_ROOTS[height], f"height {height}"
     assert seen_heights & set(KNOWN_ROOTS), "none of the confirmed heights appeared"
+    if pending:
+        print(f"\n  {len(pending)} proof(s) still pending, not counted as "
+              f"confirmed: {', '.join(sorted(pending))}")
+        print("  run scripts/ots_upgrade.py once the calendars have aggregated.")
 
 
 def test_rejects_garbage_rather_than_guessing():
