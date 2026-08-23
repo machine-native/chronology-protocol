@@ -14,9 +14,15 @@ cd "$(dirname "$0")/.."
 : "${PAYLOAD_HEX:?set PAYLOAD_HEX to the 96-byte anchor payload, e.g. PAYLOAD_HEX=\$(cat live/g6-work/payload.hex)}"
 echo "anchoring payload epoch $(python -c "import sys;print(int(sys.argv[1][16:32],16))" "$PAYLOAD_HEX")"
 export PATH=/c/msys64/mingw64/bin:$PATH
-MAX_ROUNDS=8
-CORES=8
-SPAN=536870912   # 2^32 / 8
+MAX_ROUNDS=${MAX_ROUNDS:-8}
+# CORES defaults to 8 because that is what the earlier anchors were mined with.
+# SPAN is derived rather than hardcoded: the two must partition the 2^32 nonce
+# space exactly, and a mismatched pair silently leaves a gap that is never
+# searched -- a round that reports "nonce space exhausted" while having skipped
+# part of it.
+CORES=${CORES:-8}
+SPAN=$(( 4294967296 / CORES ))
+echo "mining with $CORES workers, span $SPAN each"
 
 for round in $(seq 1 $MAX_ROUNDS); do
   echo "=== ROUND $round $(date -u +%H:%M:%SZ) ==="
