@@ -19,6 +19,10 @@ KNOWN_ROOTS = {
     # Added 2026-08-23 when the roughtime proof upgraded from PENDING; confirmed
     # against blockstream.info the same day.
     963480: "252ecc2c627aec0a8d607a3efb07aa95675cbe9bb2e32c2a6fb545d7f89b19c3",
+    # epoch 4, the depth-0 rolling-code bundle. Checked against
+    # blockstream.info/api/block/... on 2026-08-23, block hash
+    # 00000000000000000000ea92f45c70b4100ceb15aa98de1f5129c6da951fc7a3
+    963750: "48d6ccdff76231ae33ee9272726ae3f2b2b6fe5bd993aa7957ac30009908c644",
 }
 
 
