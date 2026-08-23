@@ -23,7 +23,7 @@ C    0000000055cddf6e969747b574d17435af0799c839a3f149e020745b69419fa0   height 2
   ≺
 B1   00000000d237552978a87059c4795268ded8bffe0378dd9066000d3332edafa4   height 223
 B2   000000005b168a66d17e1ca3e7b2a633304f838fb78f583930c237f38fb3d914   height 224
-       both mined by the laboratory's own miner — independent burial
+       both mined by the laboratory's own VM — a second machine, same operator
 ```
 
 ## Verification
