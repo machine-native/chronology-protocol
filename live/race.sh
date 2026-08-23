@@ -5,6 +5,14 @@
 # takes ~1-7 min, so odds favor us in any given round.
 set -u
 cd "$(dirname "$0")/.."
+
+# Which epoch this race is anchoring. Required and explicit: the previous default
+# read reports/verification.json, the sealed v0.1.0 baseline, which carries epoch
+# 0 -- so a run started today would have mined a duplicate of an epoch already on
+# the chain, and nothing in the loop would have said so.
+#   PAYLOAD_HEX=$(cat live/g6-work/payload.hex) ./live/race.sh
+: "${PAYLOAD_HEX:?set PAYLOAD_HEX to the 96-byte anchor payload, e.g. PAYLOAD_HEX=\$(cat live/g6-work/payload.hex)}"
+echo "anchoring payload epoch $(python -c "import sys;print(int(sys.argv[1][16:32],16))" "$PAYLOAD_HEX")"
 export PATH=/c/msys64/mingw64/bin:$PATH
 MAX_ROUNDS=8
 CORES=8
@@ -19,7 +27,7 @@ for round in $(seq 1 $MAX_ROUNDS); do
   HEIGHT=$(python -c "import json;c=json.load(open('live/tip-context.json'));print(c['tip_height'])")
   NTIME=$(python -c "import time;print(int(time.time()))")
   echo "tip $PREV height $HEIGHT mtp $MTP bits $BITS ntime $NTIME"
-  python scripts/build_live_template.py "$PREV" "$MTP" "$BITS" "$NTIME" > /dev/null || { echo "template failed"; continue; }
+  python scripts/build_live_template.py "$PREV" "$MTP" "$BITS" "$NTIME" "$PAYLOAD_HEX" > /dev/null || { echo "template failed"; continue; }
   H=$(python -c "import json;print(json.load(open('reports/live-template.json'))['header_nonce0'])")
 
   rm -f live/mine/range*.out
