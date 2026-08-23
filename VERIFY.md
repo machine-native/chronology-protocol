@@ -57,7 +57,11 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: `84 passed`, and — more to the point — **zero failures**. The count grows as
+Expected: **zero failures** out of 84 tests. Some may report `skipped` rather
+than `passed` — several tests gate on evidence files that a given checkout may not
+carry (`live/chain-blocks.hex`, `.ots` proofs, a reference session), and a skip
+there means "this evidence is not present to check", never "this check failed".
+Run with `-rs` to see the reason for each. The count grows as
 profiles are added, so treat the number as informational and the failure count as the
 result. This exercises the canonical encoder, the interval algebra, the PQ signatures,
 the Roughtime verifier, the OpenTimestamps proof reader, and full synthetic sandwich
