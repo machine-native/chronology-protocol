@@ -18,3 +18,8 @@ live/g5-work/keys/
 live/race_g5.log
 dist-archive/
 fpga/sim/*.vvp
+
+# Rehearsal sessions. A challenge with no sky target and no anchor proves
+# nothing, and indoor test frames are megabytes of noise in an evidence
+# repository. Real sessions -- g2b-work, g5-work, g6-work -- stay tracked.
+live/*-rehearsal/
