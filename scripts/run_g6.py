@@ -100,41 +100,100 @@ def load_frames(work: Path, ist_offset_s: int):
     return photos, exif_ns
 
 
-def rolling_expectation(exif_ns: dict, seed16: str, slot_s: int):
-    """Which code must have been on the screen in each frame.
+def rolling_expectation(exif_ns: dict, seed16: str, slot_s: int, code_frames=None):
+    """Which code may have been on the screen in each frame.
 
-    Recorded as an expectation, never as a measurement: EXIF is the camera's own
-    assertion, so this says "if the camera clock was right, the screen read X".
-    A verifier confirms it by looking at the photograph.
+    Recorded as an expectation, never a measurement: EXIF is the camera's own
+    assertion, so this says "if the camera clock was right, the screen read one
+    of these". A verifier confirms it by looking at the photograph.
+
+    THE ACCEPTABLE SET IS THREE CODES, NOT ONE. Two independent clocks are
+    involved -- the phone rendering the code and the camera stamping EXIF -- and
+    the screen is captured a moment after it was painted. In this session's own
+    frames, 20260823_211531 shows slot 178749992 while its EXIF falls in
+    178749993: a real, benign, one-slot lag. tools/rolling-code.html and
+    scripts/rolling_code.py both already document a +/-1 slot tolerance; a
+    verifier handed a single expected code would read that frame as a mismatch
+    and could reasonably conclude the series was fabricated.
+
+    code_frames: names of frames that actually show the code page. Frames
+    outside it -- sky-only shots, strays, anything taken before Start was
+    pressed -- carry no expectation at all, because asserting one for a frame
+    that cannot show a code invites exactly the false mismatch above.
     """
     rows = []
     for name in sorted(exif_ns, key=lambda n: exif_ns[n]):
         t = exif_ns[name] // 10**9
         slot = t // slot_s
-        rows.append({
+        shows_code = code_frames is None or name in code_frames
+        row = {
             "frame": name,
             "exif_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t)),
             "slot": slot,
-            "expected_code": code_for(seed16, slot),
-        })
+            "shows_code": shows_code,
+        }
+        if shows_code:
+            row["expected_code"] = code_for(seed16, slot)
+            row["acceptable_codes"] = {str(slot + d): code_for(seed16, slot + d)
+                                       for d in (-1, 0, 1)}
+        else:
+            row["expected_code"] = None
+            row["acceptable_codes"] = None
+            row["reason"] = "frame does not show the code page"
+        rows.append(row)
     return rows
 
 
-def assess(rows, span_s):
-    slots = {r["slot"] for r in rows}
-    codes = {r["expected_code"] for r in rows}
+def assess(rows, slot_s):
+    """Thresholds count ONLY code-bearing frames.
+
+    A session of three code frames and forty sky shots would otherwise sail past
+    a frame count it has not earned: the sky shots say nothing about elapsed
+    time, which is the entire claim the rolling code exists to support. The span
+    is likewise measured across the code-bearing frames alone.
+    """
+    coded = [r for r in rows if r["shows_code"]]
+    slots = {r["slot"] for r in coded}
+    codes = {r["expected_code"] for r in coded}
+    span_s = (max(slots) - min(slots)) * slot_s if coded else 0
     return {
-        "frames": len(rows),
+        "frames_total": len(rows),
+        "frames_with_code": len(coded),
         "span_seconds": span_s,
         "distinct_slots": len(slots),
         "distinct_codes": len(codes),
-        "meets_min_frames": len(rows) >= MIN_FRAMES,
+        "meets_min_frames": len(coded) >= MIN_FRAMES,
         "meets_min_span": span_s >= MIN_SPAN_S,
         "meets_min_slots": len(slots) >= MIN_SLOTS,
         "thresholds": {"min_frames": MIN_FRAMES, "min_span_s": MIN_SPAN_S,
                        "min_slots": MIN_SLOTS},
     }
 
+
+def parse_code_frames(spec, all_names):
+    """--code-frames accepts 'FIRST..LAST' or a comma-separated list.
+
+    Which frames show the code page is something only the operator can know: a
+    program cannot read a screen out of a JPEG, and this one deliberately does
+    not try. Declaring it beats assuming every frame shows it, because a wrong
+    assumption manufactures an expectation the photograph then contradicts --
+    which reads exactly like a forged series.
+    """
+    if not spec:
+        return None
+    names = sorted(all_names)
+    if ".." in spec:
+        lo, hi = (x.strip() for x in spec.split("..", 1))
+        sel = {n for n in names if lo <= n <= hi}
+    else:
+        sel = {x.strip() for x in spec.split(",") if x.strip()}
+    unknown = sel - set(names)
+    if unknown:
+        raise SystemExit("--code-frames names frames that are not present: "
+                         + repr(sorted(unknown)[:3]))
+    if not sel:
+        raise SystemExit("--code-frames selected no frames")
+    return sel
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
@@ -146,6 +205,10 @@ def main():
                     help="proceed on a series below threshold, recording the shortfall")
     ap.add_argument("--dry-run", action="store_true",
                     help="report the frames and expected codes, write nothing")
+    ap.add_argument("--code-frames", default=None,
+                    help="which frames show the code page: 'FIRST..LAST' or a "
+                         "comma-separated list. Others stay hashed and "
+                         "witnessed but carry no code expectation.")
     a = ap.parse_args()
 
     work = ROOT / a.work
@@ -158,17 +221,22 @@ def main():
 
     photos, exif_ns = load_frames(work, a.ist_offset)
     times = sorted(exif_ns.values())
-    span_s = (times[-1] - times[0]) // 10**9
-    rows = rolling_expectation(exif_ns, seed16, slot_s)
-    verdict = assess(rows, span_s)
+    code_frames = parse_code_frames(a.code_frames, exif_ns.keys())
+    rows = rolling_expectation(exif_ns, seed16, slot_s, code_frames)
+    verdict = assess(rows, slot_s)
 
     print(f"\nB0 height {ch['b0_height']}  seed {seed16}  slot {slot_s}s")
     print(f"{'frame':<12} {'exif UTC':<21} {'slot':<12} expected code")
     for r in rows:
-        print(f"  {r['frame']:<10} {r['exif_utc']:<21} {r['slot']:<12} {r['expected_code']}")
-    print(f"\n  frames {verdict['frames']}   span {span_s}s   "
+        code = r['expected_code'] or '-- no code page in frame --'
+        print(f"  {r['frame']:<22} {r['exif_utc']:<21} {r['slot']:<12} {code}")
+    print(f"\n  frames {verdict['frames_total']} total, "
+          f"{verdict['frames_with_code']} showing a code   "
+          f"span {verdict['span_seconds']}s   "
           f"distinct slots {verdict['distinct_slots']}   "
           f"distinct codes {verdict['distinct_codes']}")
+    print("  each code-bearing frame accepts its slot +/-1: two clocks are\n"
+          "  involved, and the screen is captured a moment after it is painted.")
 
     failures = [k for k in ("meets_min_frames", "meets_min_span", "meets_min_slots")
                 if not verdict[k]]

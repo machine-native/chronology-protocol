@@ -57,7 +57,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: **zero failures** out of 92 tests. Some may report `skipped` rather
+Expected: **zero failures** out of 95 tests. Some may report `skipped` rather
 than `passed` — several tests gate on evidence files that a given checkout may not
 carry (`live/chain-blocks.hex`, `.ots` proofs, a reference session), and a skip
 there means "this evidence is not present to check", never "this check failed".

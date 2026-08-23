@@ -1,0 +1,10 @@
+{
+  "b0_hash": "00000000e95f093d5d1b7d190684d7a0bb28839703d3611a6f8298ce74bb662f",
+  "b0_height": 320,
+  "session_id": "a9b3aca09717039f93048392582db48e1be330882ec9f1e6ea39b52b31a5c130",
+  "challenge": "c315eec56b91aff8ecfce8761978fa2ba894244ffd7c54306d319fbd7730e5c6",
+  "seed16": "C315EEC56B91AFF8",
+  "slot_seconds": 10,
+  "issued_utc": "2026-08-23T15:41:46Z",
+  "note": "SEED16 is the first 16 hex of the challenge, typed into tools/rolling-code.html. The challenge is bound to B0, so no code in these photographs could have been produced before B0 existed."
+}
