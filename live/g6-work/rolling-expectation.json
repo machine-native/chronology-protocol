@@ -1,0 +1,482 @@
+{
+ "label": "EXPECTATION_NOT_EVIDENCE",
+ "note": "Which code must have been on the screen in each frame IF the camera clock was right. EXIF is the camera's own assertion; the sandwich, not EXIF, carries the causal claim. A verifier confirms this by looking at the photographs.",
+ "seed16": "C315EEC56B91AFF8",
+ "slot_seconds": 10,
+ "b0_height": 320,
+ "frames": [
+  {
+   "frame": "20260823_211226.jpg",
+   "exif_utc": "2026-08-23T15:42:26Z",
+   "slot": 178749974,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211232.jpg",
+   "exif_utc": "2026-08-23T15:42:32Z",
+   "slot": 178749975,
+   "shows_code": true,
+   "expected_code": "4A6190273459",
+   "acceptable_codes": {
+    "178749974": "BB51716110EB",
+    "178749975": "4A6190273459",
+    "178749976": "E384E2DAB81B"
+   }
+  },
+  {
+   "frame": "20260823_211241.jpg",
+   "exif_utc": "2026-08-23T15:42:42Z",
+   "slot": 178749976,
+   "shows_code": true,
+   "expected_code": "E384E2DAB81B",
+   "acceptable_codes": {
+    "178749975": "4A6190273459",
+    "178749976": "E384E2DAB81B",
+    "178749977": "4F1F26ED8780"
+   }
+  },
+  {
+   "frame": "20260823_211244.jpg",
+   "exif_utc": "2026-08-23T15:42:44Z",
+   "slot": 178749976,
+   "shows_code": true,
+   "expected_code": "E384E2DAB81B",
+   "acceptable_codes": {
+    "178749975": "4A6190273459",
+    "178749976": "E384E2DAB81B",
+    "178749977": "4F1F26ED8780"
+   }
+  },
+  {
+   "frame": "20260823_211253.jpg",
+   "exif_utc": "2026-08-23T15:42:54Z",
+   "slot": 178749977,
+   "shows_code": true,
+   "expected_code": "4F1F26ED8780",
+   "acceptable_codes": {
+    "178749976": "E384E2DAB81B",
+    "178749977": "4F1F26ED8780",
+    "178749978": "E8ABC82E2594"
+   }
+  },
+  {
+   "frame": "20260823_211257.jpg",
+   "exif_utc": "2026-08-23T15:42:58Z",
+   "slot": 178749977,
+   "shows_code": true,
+   "expected_code": "4F1F26ED8780",
+   "acceptable_codes": {
+    "178749976": "E384E2DAB81B",
+    "178749977": "4F1F26ED8780",
+    "178749978": "E8ABC82E2594"
+   }
+  },
+  {
+   "frame": "20260823_211308.jpg",
+   "exif_utc": "2026-08-23T15:43:09Z",
+   "slot": 178749978,
+   "shows_code": true,
+   "expected_code": "E8ABC82E2594",
+   "acceptable_codes": {
+    "178749977": "4F1F26ED8780",
+    "178749978": "E8ABC82E2594",
+    "178749979": "40E1D29997C9"
+   }
+  },
+  {
+   "frame": "20260823_211318.jpg",
+   "exif_utc": "2026-08-23T15:43:18Z",
+   "slot": 178749979,
+   "shows_code": true,
+   "expected_code": "40E1D29997C9",
+   "acceptable_codes": {
+    "178749978": "E8ABC82E2594",
+    "178749979": "40E1D29997C9",
+    "178749980": "FEF1292D9693"
+   }
+  },
+  {
+   "frame": "20260823_211323.jpg",
+   "exif_utc": "2026-08-23T15:43:25Z",
+   "slot": 178749980,
+   "shows_code": true,
+   "expected_code": "FEF1292D9693",
+   "acceptable_codes": {
+    "178749979": "40E1D29997C9",
+    "178749980": "FEF1292D9693",
+    "178749981": "627943D5F082"
+   }
+  },
+  {
+   "frame": "20260823_211336.jpg",
+   "exif_utc": "2026-08-23T15:43:36Z",
+   "slot": 178749981,
+   "shows_code": true,
+   "expected_code": "627943D5F082",
+   "acceptable_codes": {
+    "178749980": "FEF1292D9693",
+    "178749981": "627943D5F082",
+    "178749982": "5668E6CC164F"
+   }
+  },
+  {
+   "frame": "20260823_211338.jpg",
+   "exif_utc": "2026-08-23T15:43:39Z",
+   "slot": 178749981,
+   "shows_code": true,
+   "expected_code": "627943D5F082",
+   "acceptable_codes": {
+    "178749980": "FEF1292D9693",
+    "178749981": "627943D5F082",
+    "178749982": "5668E6CC164F"
+   }
+  },
+  {
+   "frame": "20260823_211345.jpg",
+   "exif_utc": "2026-08-23T15:43:46Z",
+   "slot": 178749982,
+   "shows_code": true,
+   "expected_code": "5668E6CC164F",
+   "acceptable_codes": {
+    "178749981": "627943D5F082",
+    "178749982": "5668E6CC164F",
+    "178749983": "EC5C3B4839AA"
+   }
+  },
+  {
+   "frame": "20260823_211348.jpg",
+   "exif_utc": "2026-08-23T15:43:49Z",
+   "slot": 178749982,
+   "shows_code": true,
+   "expected_code": "5668E6CC164F",
+   "acceptable_codes": {
+    "178749981": "627943D5F082",
+    "178749982": "5668E6CC164F",
+    "178749983": "EC5C3B4839AA"
+   }
+  },
+  {
+   "frame": "20260823_211357.jpg",
+   "exif_utc": "2026-08-23T15:43:57Z",
+   "slot": 178749983,
+   "shows_code": true,
+   "expected_code": "EC5C3B4839AA",
+   "acceptable_codes": {
+    "178749982": "5668E6CC164F",
+    "178749983": "EC5C3B4839AA",
+    "178749984": "8BA1377B5C3F"
+   }
+  },
+  {
+   "frame": "20260823_211402.jpg",
+   "exif_utc": "2026-08-23T15:44:02Z",
+   "slot": 178749984,
+   "shows_code": true,
+   "expected_code": "8BA1377B5C3F",
+   "acceptable_codes": {
+    "178749983": "EC5C3B4839AA",
+    "178749984": "8BA1377B5C3F",
+    "178749985": "A146C0E08475"
+   }
+  },
+  {
+   "frame": "20260823_211408.jpg",
+   "exif_utc": "2026-08-23T15:44:09Z",
+   "slot": 178749984,
+   "shows_code": true,
+   "expected_code": "8BA1377B5C3F",
+   "acceptable_codes": {
+    "178749983": "EC5C3B4839AA",
+    "178749984": "8BA1377B5C3F",
+    "178749985": "A146C0E08475"
+   }
+  },
+  {
+   "frame": "20260823_211414.jpg",
+   "exif_utc": "2026-08-23T15:44:15Z",
+   "slot": 178749985,
+   "shows_code": true,
+   "expected_code": "A146C0E08475",
+   "acceptable_codes": {
+    "178749984": "8BA1377B5C3F",
+    "178749985": "A146C0E08475",
+    "178749986": "F51C48B1F080"
+   }
+  },
+  {
+   "frame": "20260823_211419.jpg",
+   "exif_utc": "2026-08-23T15:44:19Z",
+   "slot": 178749985,
+   "shows_code": true,
+   "expected_code": "A146C0E08475",
+   "acceptable_codes": {
+    "178749984": "8BA1377B5C3F",
+    "178749985": "A146C0E08475",
+    "178749986": "F51C48B1F080"
+   }
+  },
+  {
+   "frame": "20260823_211423.jpg",
+   "exif_utc": "2026-08-23T15:44:24Z",
+   "slot": 178749986,
+   "shows_code": true,
+   "expected_code": "F51C48B1F080",
+   "acceptable_codes": {
+    "178749985": "A146C0E08475",
+    "178749986": "F51C48B1F080",
+    "178749987": "956CE380296A"
+   }
+  },
+  {
+   "frame": "20260823_211434.jpg",
+   "exif_utc": "2026-08-23T15:44:35Z",
+   "slot": 178749987,
+   "shows_code": true,
+   "expected_code": "956CE380296A",
+   "acceptable_codes": {
+    "178749986": "F51C48B1F080",
+    "178749987": "956CE380296A",
+    "178749988": "30DC28732B97"
+   }
+  },
+  {
+   "frame": "20260823_211436.jpg",
+   "exif_utc": "2026-08-23T15:44:36Z",
+   "slot": 178749987,
+   "shows_code": true,
+   "expected_code": "956CE380296A",
+   "acceptable_codes": {
+    "178749986": "F51C48B1F080",
+    "178749987": "956CE380296A",
+    "178749988": "30DC28732B97"
+   }
+  },
+  {
+   "frame": "20260823_211445.jpg",
+   "exif_utc": "2026-08-23T15:44:46Z",
+   "slot": 178749988,
+   "shows_code": true,
+   "expected_code": "30DC28732B97",
+   "acceptable_codes": {
+    "178749987": "956CE380296A",
+    "178749988": "30DC28732B97",
+    "178749989": "0A31D8377415"
+   }
+  },
+  {
+   "frame": "20260823_211448.jpg",
+   "exif_utc": "2026-08-23T15:44:48Z",
+   "slot": 178749988,
+   "shows_code": true,
+   "expected_code": "30DC28732B97",
+   "acceptable_codes": {
+    "178749987": "956CE380296A",
+    "178749988": "30DC28732B97",
+    "178749989": "0A31D8377415"
+   }
+  },
+  {
+   "frame": "20260823_211455.jpg",
+   "exif_utc": "2026-08-23T15:44:56Z",
+   "slot": 178749989,
+   "shows_code": true,
+   "expected_code": "0A31D8377415",
+   "acceptable_codes": {
+    "178749988": "30DC28732B97",
+    "178749989": "0A31D8377415",
+    "178749990": "339B3D275810"
+   }
+  },
+  {
+   "frame": "20260823_211458.jpg",
+   "exif_utc": "2026-08-23T15:44:59Z",
+   "slot": 178749989,
+   "shows_code": true,
+   "expected_code": "0A31D8377415",
+   "acceptable_codes": {
+    "178749988": "30DC28732B97",
+    "178749989": "0A31D8377415",
+    "178749990": "339B3D275810"
+   }
+  },
+  {
+   "frame": "20260823_211505.jpg",
+   "exif_utc": "2026-08-23T15:45:06Z",
+   "slot": 178749990,
+   "shows_code": true,
+   "expected_code": "339B3D275810",
+   "acceptable_codes": {
+    "178749989": "0A31D8377415",
+    "178749990": "339B3D275810",
+    "178749991": "D4415BC5523F"
+   }
+  },
+  {
+   "frame": "20260823_211511.jpg",
+   "exif_utc": "2026-08-23T15:45:12Z",
+   "slot": 178749991,
+   "shows_code": true,
+   "expected_code": "D4415BC5523F",
+   "acceptable_codes": {
+    "178749990": "339B3D275810",
+    "178749991": "D4415BC5523F",
+    "178749992": "8A808A2AB624"
+   }
+  },
+  {
+   "frame": "20260823_211515.jpg",
+   "exif_utc": "2026-08-23T15:45:15Z",
+   "slot": 178749991,
+   "shows_code": true,
+   "expected_code": "D4415BC5523F",
+   "acceptable_codes": {
+    "178749990": "339B3D275810",
+    "178749991": "D4415BC5523F",
+    "178749992": "8A808A2AB624"
+   }
+  },
+  {
+   "frame": "20260823_211528.jpg",
+   "exif_utc": "2026-08-23T15:45:28Z",
+   "slot": 178749992,
+   "shows_code": true,
+   "expected_code": "8A808A2AB624",
+   "acceptable_codes": {
+    "178749991": "D4415BC5523F",
+    "178749992": "8A808A2AB624",
+    "178749993": "95F861B07CFC"
+   }
+  },
+  {
+   "frame": "20260823_211531.jpg",
+   "exif_utc": "2026-08-23T15:45:31Z",
+   "slot": 178749993,
+   "shows_code": true,
+   "expected_code": "95F861B07CFC",
+   "acceptable_codes": {
+    "178749992": "8A808A2AB624",
+    "178749993": "95F861B07CFC",
+    "178749994": "6E0897CE6FCB"
+   }
+  },
+  {
+   "frame": "20260823_211534.jpg",
+   "exif_utc": "2026-08-23T15:45:35Z",
+   "slot": 178749993,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211635.jpg",
+   "exif_utc": "2026-08-23T15:46:37Z",
+   "slot": 178749999,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211638.jpg",
+   "exif_utc": "2026-08-23T15:46:40Z",
+   "slot": 178750000,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211705.jpg",
+   "exif_utc": "2026-08-23T15:47:05Z",
+   "slot": 178750002,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211707.jpg",
+   "exif_utc": "2026-08-23T15:47:07Z",
+   "slot": 178750002,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211711.jpg",
+   "exif_utc": "2026-08-23T15:47:11Z",
+   "slot": 178750003,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211712.jpg",
+   "exif_utc": "2026-08-23T15:47:13Z",
+   "slot": 178750003,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211714.jpg",
+   "exif_utc": "2026-08-23T15:47:15Z",
+   "slot": 178750003,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211718.jpg",
+   "exif_utc": "2026-08-23T15:47:19Z",
+   "slot": 178750003,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211741.jpg",
+   "exif_utc": "2026-08-23T15:47:42Z",
+   "slot": 178750006,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  },
+  {
+   "frame": "20260823_211754.jpg",
+   "exif_utc": "2026-08-23T15:47:54Z",
+   "slot": 178750007,
+   "shows_code": false,
+   "expected_code": null,
+   "acceptable_codes": null,
+   "reason": "frame does not show the code page"
+  }
+ ],
+ "assessment": {
+  "frames_total": 41,
+  "frames_with_code": 29,
+  "span_seconds": 180,
+  "distinct_slots": 19,
+  "distinct_codes": 19,
+  "meets_min_frames": true,
+  "meets_min_span": true,
+  "meets_min_slots": true,
+  "thresholds": {
+   "min_frames": 6,
+   "min_span_s": 60,
+   "min_slots": 4
+  }
+ },
+ "below_threshold": false,
+ "shortfall": []
+}
