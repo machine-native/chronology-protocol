@@ -1,11 +1,28 @@
 # Binding an external record into a reality sandwich
 
-**Status: specification. No binding has been performed.** The worked example
-below is real arithmetic over a real shipped bundle, and every value in it can be
-recomputed from this repository — but no SATROOT event, sensor batch or other
-external record currently carries a binding tag. When one does, it will be
-recorded in `live/anchor-evidence/` like every other claim here, and this line
-will say so.
+**Status: performed.** A SATROOT namespace was bound into a reality sandwich on
+2026-08-29 and anchored as epoch 5 in block 479 of the anchor chain. The worked
+example further down is reproducible arithmetic over a shipped vector; the
+binding recorded here is a live one.
+
+```
+B0                  height 478, 00000000f2243a00d315de07d8832bee1d4961f8d339d0a15deec931b6924de6
+challenge           4cdd540be1f1c720176f4e76afcc60059bff9f109cbfec55026993092ce26f22
+binding tag         e3389df3aefea62b674629f9015e410e789dc1c34fefca4752e9d7bbdb7b9a99   (system_id "SATROOT1")
+SATROOT state hash  sha256:6202c22dde1e2e78c0d882dc453b7d6f8d74678bf3b9df0ad99c5a775b5e11e2
+anchored            epoch 5, block 479
+```
+
+The tag sits in the genesis event's `nonce`, which SATROOT's replay engine folds
+into `genesis_metadata` and therefore into the namespace state hash. **The tag is
+committed by SATROOT's own replay, not by anything this project asserts** —
+recompute the state from the events and the tag is inside the result, or the hash
+differs. That distinction matters: a binding recorded in a sidecar file written by
+the presenter is a binding attested by the presenter, and SATROOT's own tenth
+review round found exactly that shape, a trust anchor read off the artefact under
+examination.
+
+Reproduce with `scripts/run_satroot_binding.py`.
 
 ## What this is for
 
@@ -172,5 +189,7 @@ from preference.
   bytes. A system that re-encodes its records — reordering JSON keys, changing
   whitespace — breaks the hash and therefore the upper bound. Bind the canonical
   serialisation, or bind a digest the system already treats as stable.
-- **It has not been exercised against a live external system.** Until it has,
-  every claim on this page is about arithmetic, not about practice.
+- **It bounds a namespace, not a business fact.** Epoch 5 proves the CHRNBIND1
+  namespace was replayed to that state inside the causal window. It says nothing
+  about whether the balances in it mean anything, which is SATROOT's question and
+  is answered by SATROOT's verifier.

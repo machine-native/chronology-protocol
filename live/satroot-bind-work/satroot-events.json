@@ -1,0 +1,20 @@
+[
+ {
+  "protocol": "SATROOT-1",
+  "version": "0.1",
+  "action": "genesis",
+  "root_id": "38ff9da029e66ee9b6a1b175025388caf7fb6d3bb0273812737d7dd6b347c473:0",
+  "sequence": 0,
+  "symbol": "CHRNBIND1",
+  "name": "Chronology-bound namespace",
+  "decimals": 0,
+  "max_supply": "1",
+  "mint_authority": "issuer",
+  "transfer_model": "account-ledger",
+  "initial_balances": {
+   "issuer": "1"
+  },
+  "rules_hash": "sha256:chrn-binding-v1",
+  "nonce": "chrn-binding/v1:e3389df3aefea62b674629f9015e410e789dc1c34fefca4752e9d7bbdb7b9a99"
+ }
+]

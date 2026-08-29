@@ -1,0 +1,10 @@
+{
+  "b0_hash": "00000000f2243a00d315de07d8832bee1d4961f8d339d0a15deec931b6924de6",
+  "b0_height": 478,
+  "session_id": "c2d0e2d95fbf5660be5d9a6021218b4c5eb73d554108f437d6c0834c5659c976",
+  "challenge": "4cdd540be1f1c720176f4e76afcc60059bff9f109cbfec55026993092ce26f22",
+  "system_id": "SATROOT1",
+  "binding_tag": "e3389df3aefea62b674629f9015e410e789dc1c34fefca4752e9d7bbdb7b9a99",
+  "satroot_state_hash": "sha256:6202c22dde1e2e78c0d882dc453b7d6f8d74678bf3b9df0ad99c5a775b5e11e2",
+  "issued_utc": "2026-08-29T07:01:58Z"
+}
