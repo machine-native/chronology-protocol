@@ -1,16 +1,15 @@
 {
   "source": "bitcoin.bitcoin-lab.org:18026",
-  "acquired_utc": "2026-08-30T21:32:37Z",
+  "acquired_utc": "2026-08-30T23:05:19Z",
   "wire": "v0.1 20-byte header, no checksum; values parsed from raw block bytes",
-  "tip_hash": "0000000045d86e0928e4d7ff2424accd7eb3635f4b4f12f0b74b44415a61094a",
-  "tip_height": 529,
-  "tip_nTime": 1788125096,
+  "tip_hash": "00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e",
+  "tip_height": 530,
+  "tip_nTime": 1788129201,
   "tip_nBits": "0x1d00ffff",
-  "candidate_height": 530,
-  "median_time_past": 1788107210,
-  "median_time_past_utc": "2026-08-30T16:26:50Z",
+  "candidate_height": 531,
+  "median_time_past": 1788107794,
+  "median_time_past_utc": "2026-08-30T16:36:34Z",
   "median_window_nTimes": [
-    1788096546,
     1788098837,
     1788101568,
     1788102263,
@@ -20,12 +19,12 @@
     1788108336,
     1788110769,
     1788120670,
-    1788125096
+    1788125096,
+    1788129201
   ],
   "next_bits": "0x1d00ffff",
   "next_bits_rule": "candidate height not a 2016-block boundary; v0.1 GetNextWorkRequired returns pindexLast->nBits",
   "tail_hashes": [
-    "0000000062cf90caaedba0fe1a7a1882cd454e6353638f3dd25c20c27984aee5",
     "0000000093c943c9c439e94d58a6b4cae1ca52e019082e40fb4ec2840336ec0e",
     "000000001e1b15b4139e5075329cc5404af24c714948f74a7727684da92db581",
     "0000000027cb222dd3f05e64a1ecf17efc762b5d02240a1e79bc020da1196317",
@@ -35,6 +34,7 @@
     "000000004428b4e02be02f9353b698b60ffb4f55ebf1e67f8dfef7d2c1c9697d",
     "000000008ca48ca723e4ef46e8775d42982050d5fcd7ee5cf33f72e16c68324c",
     "00000000a601ce6dc1ce24345463a46146b2414eb356359e07c5555ad5b7bb52",
-    "0000000045d86e0928e4d7ff2424accd7eb3635f4b4f12f0b74b44415a61094a"
+    "0000000045d86e0928e4d7ff2424accd7eb3635f4b4f12f0b74b44415a61094a",
+    "00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e"
   ]
 }
