@@ -71,26 +71,67 @@ def main() -> int:
     s = socket.create_connection((HOST, PORT), timeout=30)
     s.sendall(msg("version", struct.pack("<i", 209) + struct.pack("<Q", 1)
                   + struct.pack("<q", int(time.time())) + caddress()))
-    inv_hashes = None
-    deadline = time.time() + 45
-    while time.time() < deadline and inv_hashes is None:
-        cmd, body = read_message(s)
+    # An inv carries at most 500 entries. Asking once from the genesis locator
+    # therefore worked only while the chain was shorter than that, and stopped
+    # working the moment it passed height 500 -- which it did in August 2026.
+    # The fix is to page: ask again from the last hash received, and keep going
+    # until a short inv says the tip has been reached.
+    #
+    # Height is still derived by COUNTING the hashes rather than by asking any
+    # node for a number. That is the property worth preserving here: every value
+    # in the output comes from block bytes on the wire, never from a node's own
+    # reporting, and paging must not quietly become a request for a height.
+    def getblocks_from(h_internal: bytes) -> None:
+        loc = struct.pack("<i", 209) + varint(1) + h_internal + b"\x00" * 32
+        s.sendall(msg("getblocks", loc))
+
+    # This peer does not cap an inv at 500 -- it answered a genesis locator with
+    # 529 hashes, its entire inventory. So the end of the chain cannot be
+    # detected by a short page. What ends it is SILENCE: ask again from the last
+    # hash received, and a peer with nothing after it simply does not reply.
+    #
+    # Silence is therefore treated as the tip, but only once at least one page
+    # has arrived. Silence before any page is a failure, not an empty chain, and
+    # conflating the two would report height 0 for an unreachable node.
+    inv_hashes: list[bytes] = []
+    page_from = bytes.fromhex(GENESIS)[::-1]
+    pages = 0
+    started = time.time()
+    handshaken = False
+    s.settimeout(20)
+    while time.time() - started < 180:
+        try:
+            cmd, body = read_message(s)
+        except (TimeoutError, socket.timeout):
+            if inv_hashes:
+                break                              # asked for more, got nothing: tip
+            raise SystemExit("peer sent no inv before timing out")
         if cmd is None:
-            raise SystemExit("peer closed before inv")
+            if inv_hashes:
+                break
+            raise SystemExit("peer closed before any inv")
         if cmd == "version":
             s.sendall(msg("verack", b""))
-            loc = struct.pack("<i", 209) + varint(1) + bytes.fromhex(GENESIS)[::-1] + b"\x00" * 32
-            s.sendall(msg("getblocks", loc))
+            getblocks_from(page_from)
+            handshaken = True
         elif cmd == "inv":
             n = body[0] if body[0] < 0xFD else struct.unpack("<H", body[1:3])[0]
             off = 1 if body[0] < 0xFD else 3
-            inv_hashes = [body[off + i * 36 + 4: off + i * 36 + 36]
-                          for i in range(n)
-                          if struct.unpack("<I", body[off + i * 36: off + i * 36 + 4])[0] == 2]
-    if inv_hashes is None:
+            page = [body[off + i * 36 + 4: off + i * 36 + 36]
+                    for i in range(n)
+                    if struct.unpack("<I", body[off + i * 36: off + i * 36 + 4])[0] == 2]
+            if not page:
+                break
+            inv_hashes.extend(page)
+            pages += 1
+            page_from = page[-1]
+            getblocks_from(page_from)            # ask again; silence ends it
+    if not handshaken:
+        raise SystemExit("no version message from peer")
+    if not inv_hashes:
         raise SystemExit("no inv within deadline")
-    if len(inv_hashes) >= 500:
-        raise SystemExit("inv truncated at 500; locator paging required")
+    if pages > 1:
+        print(f"inv paged {pages}x for {len(inv_hashes)} blocks", file=sys.stderr)
     height = len(inv_hashes)                       # inv covers heights 1..height
     tail = inv_hashes[-11:]                        # internal byte order
     want = {bytes(h): i for i, h in enumerate(tail)}
