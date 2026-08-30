@@ -65,18 +65,29 @@ these keys cannot produce.
    epochs they signed.
 3. This note.
 
-**Git history has not been rewritten.** The keys remain in the history of a
-public repository and must be assumed permanently disclosed — rewriting would
-break every clone while un-publishing nothing, and this project's standing
-practice is that errors are corrected in public rather than deleted. Anyone who
-cloned before today has them regardless.
+4. **History rewritten and force-pushed**, 2026-08-31. `git filter-repo`
+   removed every key blob from all 71 commits, verified as zero matching objects
+   across `git rev-list --all --objects`.
+
+The first version of this note said history would not be rewritten, on the
+reasoning that rewriting breaks clones while un-publishing nothing. That
+reasoning depended on someone having cloned. The operator confirmed nobody had,
+which makes the rewrite cheap and the argument against it void, so it was done.
+Every commit hash prior to the rewrite is therefore superseded. A pre-rewrite
+bundle is retained offline.
 
 ## What is deliberately not claimed
 
-That the exposure was harmless. It was not: an evidence project leaking its
-signing keys is a real failure, and the bounded consequence is a property of the
-anchoring design rather than of the mistake.
+**That the keys were never disclosed.** They were pushed to a public repository
+and were fetchable for eight days and two days. GitHub may retain unreferenced
+objects, caches and forks beyond a force-push, and no rewrite reaches those. The
+correct assumption remains that this material is compromised; the rewrite reduces
+casual discovery and nothing more.
 
-That the keys should be rotated. They already are, structurally — each
-acquisition mints its own, so there is nothing ongoing to rotate. The exposed
-material signs two epochs that are already fixed in proof-of-work.
+**That the exposure was harmless.** An evidence project leaking its signing keys
+is a real failure. The bounded consequence is a property of the anchoring design,
+not of the mistake.
+
+**That the keys need rotating.** They already do, structurally — each acquisition
+mints its own, so there is nothing ongoing to rotate. The exposed material signs
+two epochs already fixed in proof-of-work.
