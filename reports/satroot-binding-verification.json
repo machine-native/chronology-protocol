@@ -1,0 +1,48 @@
+{
+  "bundle": "vectors\\valid\\satroot-binding-bundle.cbor",
+  "bytes": 436048,
+  "sha256": "ba881681d1852158eeb6c95c8dc92e75d1b7ff8aa8ddb678e902203d9260e5f0",
+  "epoch": 5,
+  "bound_system": "SATROOT1",
+  "bound_record_sha256": "70ae64c980d404bd5a8324e75dcac382cd85ed50735160fb5e6eff70ac21da60",
+  "binding_tag": "e3389df3aefea62b674629f9015e410e789dc1c34fefca4752e9d7bbdb7b9a99",
+  "b0": {
+    "hash": "00000000f2243a00d315de07d8832bee1d4961f8d339d0a15deec931b6924de6",
+    "height": 478
+  },
+  "block_c": {
+    "hash": "000000001853dc58d540808bf17feadc47cdede5f1ae20fcbfb33b03b1c31270",
+    "height": 479
+  },
+  "burial_depth": 54,
+  "b1_depth_frozen_at": 54,
+  "reproduce": "python scripts/assemble_binding_bundle.py --work live/satroot-bind-work --dest vectors/valid/satroot-binding-bundle.cbor --report reports/satroot-binding-verification.json --b1-depth 54",
+  "witnesses": 5,
+  "checkpoint_verdict": "TIME_CONFLICT",
+  "consensus_interval": null,
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_EXTERNAL_RECORD_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": "NOT_APPLICABLE"
+  },
+  "verdict": "SANDWICH_PASS_NO_TIME_CONSENSUS",
+  "note": "the sandwich bounds the record's DIGEST in time. Whether the record itself is meaningful is the originating system's question, not this one's."
+}

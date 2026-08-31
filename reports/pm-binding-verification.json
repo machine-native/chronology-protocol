@@ -1,0 +1,51 @@
+{
+  "bundle": "vectors\\valid\\pm-binding-bundle.cbor",
+  "bytes": 431735,
+  "sha256": "eac725c286ecc7638a32e590ddbdcc225aa19caca972e44b5a0d521ce1017156",
+  "epoch": 6,
+  "bound_system": "NANOPROOF-AIR/v1",
+  "bound_record_sha256": "1d652c1933747de3ff2290df66ccbbeb6411e458667feea629e12b14fa56216d",
+  "binding_tag": "3441812c8ab8fa9c2c98a6fbe209455a64bd6c0ed8e4c3dcdc4440b3604adecc",
+  "b0": {
+    "hash": "0000000045d86e0928e4d7ff2424accd7eb3635f4b4f12f0b74b44415a61094a",
+    "height": 529
+  },
+  "block_c": {
+    "hash": "00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e",
+    "height": 530
+  },
+  "burial_depth": 3,
+  "b1_depth_frozen_at": 3,
+  "reproduce": "python scripts/assemble_binding_bundle.py --work live/pm-bind-work --dest vectors/valid/pm-binding-bundle.cbor --report reports/pm-binding-verification.json --b1-depth 3",
+  "witnesses": 5,
+  "checkpoint_verdict": "CONSENSUS",
+  "consensus_interval": [
+    79092920719267663,
+    79092991894923887
+  ],
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_EXTERNAL_RECORD_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS",
+  "note": "the sandwich bounds the record's DIGEST in time. Whether the record itself is meaningful is the originating system's question, not this one's."
+}

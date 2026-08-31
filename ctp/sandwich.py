@@ -298,6 +298,7 @@ def verify_sandwich(b: SandwichBundle):
     ev_index = {}
     ok_nonce, ok_bind, ok_camera, ok_meas = True, True, True, True
     ok_rt, saw_rt, saw_camera = True, False, False
+    ok_external, saw_external, external_blobs = True, False, 0
     for blob in b.evidence:
         try:
             o = cbor.loads(blob)
@@ -340,6 +341,19 @@ def verify_sandwich(b: SandwichBundle):
                 ex = {"host": host, "t1_mono_ns": o[6], "t4_mono_ns": o[7]}
                 meas = derive_rt_measurement(ex, verified)
                 ev_index[digest_pair(DOM_EVIDENCE, blob)] = ("ROUGHTIME/v1", seq, meas)
+            elif typ == "EXTERNAL-RECORD/v1":
+                # A record produced by another system, bound into this session.
+                # Unlike the witness types it carries NO measurement: it does not
+                # claim an instant, it claims that a digest existed inside the
+                # causal window. So it is deliberately absent from ev_index and
+                # is excluded from the evidence/observation count below --
+                # requiring an observation for it would demand a time claim the
+                # blob does not make.
+                from .binding import binding_tag as _btag
+                saw_external = True
+                external_blobs += 1
+                if o[4] != _btag(q, o[2]):
+                    ok_external = False
             else:
                 ok_bind = False
         except Exception:
@@ -350,6 +364,8 @@ def verify_sandwich(b: SandwichBundle):
         checks["S_CAMERA_BINDING"] = ok_camera and saw_camera
     if saw_rt:
         checks["S_ROUGHTIME_SIGNATURES"] = ok_rt
+    if saw_external:
+        checks["S_EXTERNAL_RECORD_BINDING"] = ok_external
 
     # every observation's source evidence must resolve to a blob whose
     # deterministically re-derived measurement matches the signed claim,
@@ -379,7 +395,11 @@ def verify_sandwich(b: SandwichBundle):
                                               rel + meas["uncertainty_ps"])):
                 ok_meas = False
             matched += 1
-    checks["S_EVIDENCE_MEASUREMENT"] = ok_meas and matched == len(b.evidence) == len(b.history)
+    # External-record blobs are subtracted: they carry a digest, not a
+    # measurement, so no observation corresponds to them and demanding one would
+    # require a time claim they deliberately do not make.
+    measurable = len(b.evidence) - external_blobs
+    checks["S_EVIDENCE_MEASUREMENT"] = (ok_meas and matched == measurable == len(b.history))
 
     # core protocol checks (PQ signatures, chains, consensus, payload-in-C, C PoW)
     core, _ = verify_bundle(b.history, b.checkpoint, b.block_c_raw, None, b.genesis)
@@ -411,16 +431,33 @@ def verify_sandwich(b: SandwichBundle):
 
     # expectation is recomputed, never trusted (and never treated as evidence)
     cp = b.checkpoint.unsigned
-    ok_exp = False
-    if cp.interval is not None and origin_s is not None:
-        mid_rel = (cp.interval.lower + cp.interval.upper) // 2
-        ok_exp = era_expectation(origin_s, mid_rel) == b.expectation
-    checks["S_EXPECTATION_RECOMPUTED"] = ok_exp
+    if cp.interval is None:
+        # There is no agreed instant, so there is no Earth Rotation Angle to
+        # recompute. Reporting False here would say the expectation was WRONG,
+        # when the truth is that the bundle makes no such claim -- the same
+        # conflation of "cannot check" with "checked and failed" that this
+        # verifier already had to be corrected for once.
+        checks["S_EXPECTATION_RECOMPUTED"] = "NOT_APPLICABLE"
+    else:
+        ok_exp = False
+        if origin_s is not None:
+            mid_rel = (cp.interval.lower + cp.interval.upper) // 2
+            ok_exp = era_expectation(origin_s, mid_rel) == b.expectation
+        checks["S_EXPECTATION_RECOMPUTED"] = ok_exp
 
     if any(v == "UNAVAILABLE" for v in checks.values()):
         verdict = "INDETERMINATE_TOOLCHAIN"     # could not check, ≠ checked and failed
     elif not all(checks.values()):
         verdict = "FAIL"
+    elif cp.interval is None:
+        # Every structural check passed and the causal bound B0 < acquisition < C
+        # holds. What is absent is agreement among the witnesses about the wall
+        # clock, so the bundle proves ORDERING without proving an instant. That
+        # is a weaker claim than SANDWICH_PASS and a stronger one than FAIL, and
+        # collapsing it into either would mislead: FAIL invites discarding sound
+        # causal evidence, PASS asserts a time nobody agreed on.
+        verdict = ("SANDWICH_PASS_NO_TIME_CONSENSUS" if burial >= 1
+                   else "SANDWICH_PASS_NO_TIME_CONSENSUS_UNBURIED")
     elif burial >= 1:
         verdict = "SANDWICH_PASS"
     else:

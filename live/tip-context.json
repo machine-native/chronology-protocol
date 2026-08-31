@@ -1,18 +1,15 @@
 {
   "source": "bitcoin.bitcoin-lab.org:18026",
-  "acquired_utc": "2026-08-30T23:05:19Z",
+  "acquired_utc": "2026-08-31T06:31:24Z",
   "wire": "v0.1 20-byte header, no checksum; values parsed from raw block bytes",
-  "tip_hash": "00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e",
-  "tip_height": 530,
-  "tip_nTime": 1788129201,
+  "tip_hash": "0000000094661178d6e83e46dfa22be3429c5ef6da4d4e8e700831976d506a34",
+  "tip_height": 533,
+  "tip_nTime": 1788152222,
   "tip_nBits": "0x1d00ffff",
-  "candidate_height": 531,
-  "median_time_past": 1788107794,
-  "median_time_past_utc": "2026-08-30T16:36:34Z",
+  "candidate_height": 534,
+  "median_time_past": 1788120670,
+  "median_time_past_utc": "2026-08-30T20:11:10Z",
   "median_window_nTimes": [
-    1788098837,
-    1788101568,
-    1788102263,
     1788106413,
     1788107210,
     1788107794,
@@ -20,14 +17,14 @@
     1788110769,
     1788120670,
     1788125096,
-    1788129201
+    1788129201,
+    1788140694,
+    1788145603,
+    1788152222
   ],
   "next_bits": "0x1d00ffff",
   "next_bits_rule": "candidate height not a 2016-block boundary; v0.1 GetNextWorkRequired returns pindexLast->nBits",
   "tail_hashes": [
-    "0000000093c943c9c439e94d58a6b4cae1ca52e019082e40fb4ec2840336ec0e",
-    "000000001e1b15b4139e5075329cc5404af24c714948f74a7727684da92db581",
-    "0000000027cb222dd3f05e64a1ecf17efc762b5d02240a1e79bc020da1196317",
     "00000000b349a9175a9aba53e5c84f5539567573d09bbb8f4d9985bfd13481ac",
     "000000002b3543a55f21be237f3233e755614cfb38c8ede3663e9c7610c9e0c5",
     "00000000c5a0bd9a5ee907efb43d43f51c860b26794b1eeabeaabc056c25b6a1",
@@ -35,6 +32,9 @@
     "000000008ca48ca723e4ef46e8775d42982050d5fcd7ee5cf33f72e16c68324c",
     "00000000a601ce6dc1ce24345463a46146b2414eb356359e07c5555ad5b7bb52",
     "0000000045d86e0928e4d7ff2424accd7eb3635f4b4f12f0b74b44415a61094a",
-    "00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e"
+    "00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e",
+    "000000001d9830cd85b720d418c4f00370da312efda17f262ee7ca7be3b9dccd",
+    "00000000a8da8d9e920a44592232ea4959ccec20d6ade469816b98d521221d60",
+    "0000000094661178d6e83e46dfa22be3429c5ef6da4d4e8e700831976d506a34"
   ]
 }
