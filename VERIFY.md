@@ -231,7 +231,7 @@ python scripts/confirm_attestations.py
 
 It reads the required (height, merkle root) pairs out of every `.ots` proof,
 asks an explorer that has never heard of this project what those blocks actually
-contain, and compares. As of 2026-09-03 that is **9 proofs · 21 attestations ·
+contain, and compares. As of 2026-09-03 that is **10 proofs · 21 attestations ·
 13 distinct blocks**, all CONFIRMED, no mismatches. Point it at a different
 explorer with `--explorer` if you would rather not ask that one.
 
@@ -248,7 +248,12 @@ repeat them yourself if it matters to you.
 That means each sealed bundle existed **before its attesting Bitcoin blocks were
 mined** — a fact secured by Bitcoin's accumulated proof-of-work, not by us.
 
-**Eight of the nine proofs carry at least two Bitcoin attestations**, and the two
+The tenth proof, epoch 7's binding bundle, was stamped on 2026-09-03 and is
+still pending across its calendars — it carries no Bitcoin attestation yet,
+which is why the attestation and block counts are unchanged from nine proofs.
+That is what pending means, and it will upgrade on its own.
+
+**Eight of the ten proofs carry at least two Bitcoin attestations**, and the two
 binding bundles carry four each, from four independent calendar operators. The
 exception is `rolling-code-sandwich-bundle-depth0.cbor.ots`, which carries one.
 Every proof also still lists pending calendar commitments that will add further
