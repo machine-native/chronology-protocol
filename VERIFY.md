@@ -57,7 +57,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: **zero failures** out of 95 tests. Some may report `skipped` rather
+Expected: **zero failures** out of 97 tests. Some may report `skipped` rather
 than `passed` — several tests gate on evidence files that a given checkout may not
 carry (`live/chain-blocks.hex`, `.ots` proofs, a reference session), and a skip
 there means "this evidence is not present to check", never "this check failed".
@@ -220,22 +220,40 @@ curl -s https://blockstream.info/api/block-height/963190          # -> block has
 curl -s https://blockstream.info/api/block/<that-hash> | grep merkle_root
 ```
 
-Both roots match, and they were confirmed this way on 2026-08-21. **All six
-attestations have now been confirmed against blockstream.info** — blocks 963190,
-963207, 963408, 963413, 963431 and 963480, each returning exactly the merkle root its
-proof requires. One of them (963190) was independently confirmed by an outside verifier
-in [issue #1](https://github.com/machine-native/chronology-protocol/issues/1); the rest
-were checked by the author, so repeat them yourself if it matters to you — the whole
-point of this step is that it needs nothing from us. That means the sealed evidence
-bundle existed **before those Bitcoin blocks were mined** — a fact now secured by
-Bitcoin's accumulated proof-of-work, not by us.
+Both roots match, and they were confirmed this way on 2026-08-21.
 
-**Every one of the five proofs now carries at least two Bitcoin attestations.** The
-roughtime bundle was the last to arrive: it upgraded from `PENDING` to block 963480 on
-2026-08-23, confirmed against blockstream.info the same day. Each proof also still
-lists pending calendar commitments, which will add further attestations over time —
-`python scripts/ots_upgrade.py` collects them, and none of it changes what is already
-proved.
+**Every attestation in this repository has now been confirmed against
+blockstream.info.** You do not have to take that on trust, and you should not:
+
+```bash
+python scripts/confirm_attestations.py
+```
+
+It reads the required (height, merkle root) pairs out of every `.ots` proof,
+asks an explorer that has never heard of this project what those blocks actually
+contain, and compares. As of 2026-09-03 that is **9 proofs · 21 attestations ·
+13 distinct blocks**, all CONFIRMED, no mismatches. Point it at a different
+explorer with `--explorer` if you would rather not ask that one.
+
+If it cannot reach the network it reports INDETERMINATE and exits 2, not 1.
+"Could not check" is not "checked and failed", and this project treats the two as
+different findings because conflating them was the most serious defect outside
+review ever found here.
+
+One of the thirteen blocks (963190) was independently confirmed by a verifier
+outside this project in [issue #1](https://github.com/machine-native/chronology-protocol/issues/1).
+The rest were checked by the author, which is exactly why the script exists —
+repeat them yourself if it matters to you.
+
+That means each sealed bundle existed **before its attesting Bitcoin blocks were
+mined** — a fact secured by Bitcoin's accumulated proof-of-work, not by us.
+
+**Eight of the nine proofs carry at least two Bitcoin attestations**, and the two
+binding bundles carry four each, from four independent calendar operators. The
+exception is `rolling-code-sandwich-bundle-depth0.cbor.ots`, which carries one.
+Every proof also still lists pending calendar commitments that will add further
+attestations over time — `python scripts/ots_upgrade.py` collects them, and none
+of it changes what is already proved.
 
 If this repository vanished tomorrow, a saved bundle plus its `.ots` file plus the
 Bitcoin blockchain would still prove when it existed.

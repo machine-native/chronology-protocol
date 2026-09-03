@@ -75,3 +75,56 @@ def test_pytest_is_declared_as_a_dependency():
     text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert re.search(r"test\s*=\s*\[[^\]]*pytest", text), (
         "pyproject.toml instructs pytest but does not declare it")
+
+
+def _attestation_tally():
+    """(proofs, attestations, distinct blocks) read from the .ots files themselves.
+
+    Offline: this parses proofs on disk and asks no explorer. Confirming the
+    merkle roots against a real chain is `scripts/confirm_attestations.py`,
+    which needs the network and therefore does not belong in the suite.
+    """
+    att = re.compile(r"BITCOIN block (\d+)\s*\n\s*that block's merkle root must be: [0-9a-f]{64}")
+    proofs = sorted((ROOT / "vectors" / "valid").glob("*.ots"))
+    total, blocks = 0, set()
+    for f in proofs:
+        out = subprocess.run([sys.executable, str(ROOT / "scripts" / "ots_info.py"), str(f)],
+                             capture_output=True, text=True).stdout
+        found = att.findall(out)
+        total += len(found)
+        blocks.update(found)
+    return len(proofs), total, len(blocks)
+
+
+def test_verify_md_attestation_tally_is_current():
+    """VERIFY.md's headline evidence figure must match the proofs on disk.
+
+    This number only ever grows -- every `ots_upgrade.py` run turns pending
+    calendar commitments into Bitcoin attestations -- so a hand-written figure
+    goes stale silently and understates the evidence. It said "five proofs" and
+    "six attestations" while the repository shipped nine and twenty-one.
+    """
+    text = (ROOT / "VERIFY.md").read_text(encoding="utf-8")
+    m = re.search(r"\*\*(\d+) proofs · (\d+) attestations ·\s*\n?\s*(\d+) distinct blocks\*\*", text)
+    assert m, "VERIFY.md no longer states an attestation tally in the known form"
+    assert tuple(int(g) for g in m.groups()) == _attestation_tally(), (
+        f"VERIFY.md claims {m.groups()} but the proofs on disk carry "
+        f"{_attestation_tally()} (proofs, attestations, distinct blocks)")
+
+
+def test_no_document_claims_every_proof_has_two_attestations():
+    """Not every proof does, and saying so overstates the evidence.
+
+    `rolling-code-sandwich-bundle-depth0.cbor.ots` carries a single attestation.
+    A blanket "every proof carries at least two" was true when there were five
+    proofs and became false without anyone editing the sentence.
+    """
+    bad = []
+    for md in ROOT.rglob("*.md"):
+        if "dist-archive" in md.parts:
+            continue
+        for i, line in enumerate(md.read_text(encoding="utf-8").splitlines(), 1):
+            low = line.lower()
+            if re.search(r"every( one of the)?\s+\w*\s*proofs?\b.*at least two", low):
+                bad.append(f"{md.relative_to(ROOT)}:{i}: {line.strip()}")
+    assert not bad, "documents claim every proof carries two attestations:\n  " + "\n  ".join(bad)
