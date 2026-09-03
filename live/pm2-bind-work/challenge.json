@@ -1,0 +1,11 @@
+{
+  "b0_hash": "00000000aefe2de32e683b88a47b613c9f4f8d144ed6e7518083ac2da67e953e",
+  "b0_height": 627,
+  "session_id": "b06e51f4700c6f65effc2811442819e476e437d42103afa1d3e59b55f992cafd",
+  "challenge": "27b53b87bf387c976686fb0d2667ab1f2ead6f61505ef3978093fb8c527c6e89",
+  "system_id": "NANOPROOF-AIR/v1",
+  "binding_tag": "f9c1aec6895d2fb93680b2e72f37aa7aebcd4d64f2208b0814e765f2603e6677",
+  "batch_digest": "e058dc0de05f7ef00b8d06275cc3fbbead05546921daedb49b715c595b389cc3",
+  "acquisition": "C:\\Users\\Yoga\\Desktop\\workspace\\vscode_workspace_machine-native-foundation\\nanoproof-air\\live\\pm2-bound",
+  "issued_utc": "2026-09-03T15:22:43Z"
+}
