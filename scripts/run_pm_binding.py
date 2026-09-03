@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Epoch 6: bind a batch of real air measurements into a reality sandwich.
+"""Bind a batch of real air measurements into a reality sandwich.
 
-Epoch 5 bound a SATROOT namespace -- a record made of arithmetic. This binds a
-record made of air: 58 laser-scattering measurements of the particulate matter in
-a room in New Delhi, taken by a Plantower PMS7003, with the challenge inside the
-batch that carries them.
+Epoch 5 bound a SATROOT namespace -- a record made of arithmetic. Epoch 6 bound a
+record made of air: laser-scattering measurements of the particulate matter in a
+room in New Delhi, with the challenge inside the batch that carries them.
+
+Epoch 7 binds the same thing measured better. Two PMS7003 instead of one, so
+`co-location` is a check that ran rather than a check that could not, and a
+BME280 alongside them, so the record states the humidity the reading was taken
+in -- which decides whether an optical PM measurement means what it says.
 
 WHY THE ORDER IS FIXED
 
@@ -27,11 +31,12 @@ is why the tag is derived and printed before the fan is even read.
 
 WHAT THIS DOES NOT ESTABLISH
 
-That the readings are accurate. The sensor has never been compared against a
-reference instrument, its stated uncertainty is the manufacturer's figure, and
-its calibration record says `reference: NONE` and `drift_model: refuse`. The
-quality verdict is INCOMPLETE and will stay INCOMPLETE until there is something
-to compare against.
+That the readings are accurate. Neither sensor has met a reference instrument,
+their stated uncertainty is the manufacturer's figure, and both calibration
+records say `reference: NONE` and `drift_model: refuse`. Two units agreeing is
+consistency, not accuracy -- the same model from the same batch would agree
+perfectly while both being wrong -- so the verdict is INCOMPLETE and stays there
+until a reference exists.
 
 The claim is narrow and exact: THESE readings, hashed exactly as recorded, were
 taken inside this causal window. Whether the numbers are right is a different
@@ -41,6 +46,11 @@ answered it.
 Usage:
     python scripts/run_pm_binding.py --port COM8
     python scripts/run_pm_binding.py --port COM8 --dry-run
+
+The acquisition should run SHORTLY BEFORE the anchor is mined. B0 is fixed the
+moment the session opens, so a long gap between acquiring and mining widens the
+upper bound: readings taken at 15:00 and anchored at 20:00 are bounded only to
+that five-hour window, however tight the lower bound is.
 """
 from __future__ import annotations
 import argparse, hashlib, json, os, subprocess, sys, time
@@ -61,8 +71,9 @@ from ctp.pq import ensure_available
 from ctp.sandwich import (challenge, exchange_nonce, ntp_exchange,
                           derive_measurement, evidence_blob, ntp_unsigned)
 
-EPOCH = 6
-PREV_WORK = "live/satroot-bind-work"          # epoch 5
+EPOCH = 7
+PREV_WORK = "live/pm-bind-work"                # epoch 6
+SINGLE_SENSOR = False                         # False = ESP32 bridge, True = one CP2102
 SYSTEM_ID = "NANOPROOF-AIR/v1"
 NPA = Path("C:/Users/Yoga/Desktop/workspace/vscode_workspace_machine-native-foundation/nanoproof-air")
 
@@ -78,7 +89,12 @@ def fetch_tip():
 
 def acquire(port: str, q_hex: str, seconds: float, work: str):
     """Run the nanoproof-air reader with the challenge, so the tag is inside."""
-    cmd = [sys.executable, str(NPA / "scripts" / "read_pms7003.py"),
+    # Epoch 7 onward reads the ESP32 bridge: two PM sensors and a BME280 at
+    # once, so the batch carries humidity and a co-location check alongside the
+    # particulate readings. Epoch 6 used read_pms7003.py against a single sensor
+    # on a CP2102; that path still works and is what --single selects.
+    reader = "read_pms7003.py" if SINGLE_SENSOR else "read_bridge.py"
+    cmd = [sys.executable, str(NPA / "scripts" / reader),
            "--port", port, "--seconds", str(seconds),
            "--challenge-hex", q_hex, "--work", work]
     r = subprocess.run(cmd, cwd=str(NPA), capture_output=True, text=True)
@@ -97,8 +113,8 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--port", required=True)
     ap.add_argument("--seconds", type=float, default=150)
-    ap.add_argument("--work", default="live/pm-bind-work")
-    ap.add_argument("--npa-work", default="live/pm-bound")
+    ap.add_argument("--work", default="live/pm2-bind-work")
+    ap.add_argument("--npa-work", default="live/pm2-bound")
     ap.add_argument("--dry-run", action="store_true",
                     help="open a session and acquire, but build no checkpoint")
     a = ap.parse_args()
