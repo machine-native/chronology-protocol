@@ -20,10 +20,11 @@ Three things about such a report, none of them formalities:
 
 **A failure is more useful than a pass.** If a command errors, paste the exact
 output. That is a finding, and it will be recorded as found rather than quietly
-fixed. Outside review has already produced real defects this way — an undeclared
-dependency, stale counts, a sentence contradicting the fix it described, and the
-most serious: the verifier reporting `FAIL` where it should have said
-`INDETERMINATE_TOOLCHAIN`.
+fixed. Outside review has already produced three real defects this way — an
+undeclared dependency, a stale test count, and a sentence contradicting the fix it
+described — and an earlier reviewer's run exposed a fourth, arguably the worst: the
+verifier reporting `FAIL` where it should have said `INDETERMINATE_TOOLCHAIN`,
+implying the evidence was bad when only the toolchain was too old.
 
 **"I could not check this" is a valid result.** It is not the same as "I checked
 and it failed", and the difference matters enough that the codebase enforces it in
