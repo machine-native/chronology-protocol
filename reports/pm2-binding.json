@@ -1,7 +1,7 @@
 {
   "bundle": "vectors\\valid\\pm2-binding-bundle.cbor",
-  "bytes": 431489,
-  "sha256": "7e0bc7365d292671cde18076316fb58a34efd68cd16ee6c2d6cf0ca5da489342",
+  "bytes": 431653,
+  "sha256": "d1218475d110d766b24c71c75def65f4f7fa7c15790962526202583dc533e242",
   "epoch": 7,
   "bound_system": "NANOPROOF-AIR/v1",
   "bound_record_sha256": "e058dc0de05f7ef00b8d06275cc3fbbead05546921daedb49b715c595b389cc3",
@@ -14,9 +14,9 @@
     "hash": "000000004b9ececee24df9cfc0d50d7d128d03b1c73634280c10ab2c7641f27b",
     "height": 628
   },
-  "burial_depth": 0,
-  "b1_depth_frozen_at": 0,
-  "reproduce": "python scripts/assemble_binding_bundle.py --work live/pm2-bind-work --dest vectors/valid/pm2-binding-bundle.cbor --report reports/pm2-binding.json --b1-depth 0",
+  "burial_depth": 2,
+  "b1_depth_frozen_at": 2,
+  "reproduce": "python scripts/assemble_binding_bundle.py --work live/pm2-bind-work --dest vectors/valid/pm2-binding-bundle.cbor --report reports/pm2-binding.json --b1-depth 2",
   "witnesses": 5,
   "checkpoint_verdict": "CONSENSUS",
   "consensus_interval": [
@@ -46,6 +46,6 @@
     "S_B1_CHAIN_VALID": true,
     "S_EXPECTATION_RECOMPUTED": true
   },
-  "verdict": "SANDWICH_PASS_UNBURIED",
+  "verdict": "SANDWICH_PASS",
   "note": "the sandwich bounds the record's DIGEST in time. Whether the record itself is meaningful is the originating system's question, not this one's."
 }
