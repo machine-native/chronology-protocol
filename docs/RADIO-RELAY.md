@@ -39,7 +39,7 @@ forged block without valid work (`tests/test_radio.py`).
 | layer | status |
 |---|---|
 | fragmentation / reassembly / validation / airtime math | **tested** (7 tests) |
-| serial AT driver (`scripts/radio_relay.py`) | written to the RYLR998 datasheet, **not yet run on hardware** |
+| serial AT driver (`scripts/lora_relay.py`) | written to the RYLR998 datasheet, **not yet run on hardware** |
 | an actual over-the-air block transfer | **pending hardware** — the note in the script is removed when it happens |
 
 ## Hardware (~$40 total for both ends)
@@ -60,9 +60,9 @@ licence only becomes relevant for other bands/modes.
 ```bash
 pip install pyserial
 # end A — broadcast the newest five blocks, repeating within a 1% duty cycle:
-python scripts/radio_relay.py send --port COM7 --tail 5
+python scripts/lora_relay.py send --port COM7 --block live/mine/finalize.json
 # end B — listen, validate, append:
-python scripts/radio_relay.py recv --port COM8 --out received-blocks.hex
+python scripts/lora_relay.py receive --port COM8 --out live/radio-received
 ```
 
 Then prove it meant something: check the received file against the chain fetched
