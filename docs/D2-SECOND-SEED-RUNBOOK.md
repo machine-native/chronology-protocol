@@ -296,13 +296,23 @@ dependency here.
 
 ### Pinning it — what was done, 2026-09-07
 
-Pinning to a tag was the obvious answer and **is not available**: the genesis
-repository carries **zero tags**, and `provision.sh` clones with `--depth 1`, so
-the deployed tree has no history to reason about either. (A shallow clone also
-makes any `git log` churn analysis meaningless — it reports one commit because
-one commit is all there is.)
+**A correction, because the first version of this section was wrong.** It said
+the genesis repository carries *zero tags*, so pinning to one was unavailable.
+That reading came from running `git tag` **on the seed**, where the tree is a
+`--depth 1` clone — and shallow clones do not fetch tags. The repository
+actually has **18**. Checked against the full clone, the count is plain.
 
-So drift is made **loud and machine-checked** instead:
+The same shallow clone invalidates any churn measurement taken on the host:
+`git log --since=…` reports one commit because one commit is all that was
+fetched, not because the code is stable. **Measure provenance against a full
+clone, never against the deployed tree.**
+
+What was true is that no *existing* tag fits. `Bitcoin-v0.1.x` are chain
+releases and `v0.x.0-experimental` are lab versions; neither is a statement about
+which bytes a seed should run, and the most recent of them predates this code.
+So a tag for that purpose was created — see below.
+
+Drift is also made **loud and machine-checked**:
 
 1. **Detached HEAD** at the reviewed commit. A later `git pull` fails outright
    ("You are not currently on a branch") rather than silently fast-forwarding.
@@ -334,6 +344,39 @@ printf '%s\n' <reviewed-sha> | tee /etc/bitcoin-node.pin >/dev/null
 systemctl restart bitcoin-node        # refuses if the two disagree
 ```
 
-The right long-term fix still belongs upstream: tag the genesis repository, and
-have deployments clone a tag rather than a branch — `git clone --branch` accepts
-either. Until such a tag exists, this is the enforceable substitute.
+### The deployment tag
+
+Created 2026-09-07 in the genesis repository:
+
+    bitcoin-node-deploy-2026-09-07  ->  1dfd8210c6fd52a49c98e27411bf965c0f3957e5
+
+It names the exact source the seeds run, so a deployment clones a fixed point
+instead of whatever `main` happens to be. **`provision.sh` passes `--branch`,
+which accepts a tag, so pointing deployments at it needs no code change:**
+
+```bash
+curl -fsSL .../provision.sh | BRANCH=bitcoin-node-deploy-2026-09-07 bash -s -- <ipv4>
+```
+
+It points at `1dfd8210` rather than the tip because that is the commit running
+and verified in production. Nothing is lost by naming the older one:
+`derivatives/netnode` is tree `61c284e18ad187a4baa5ad3cbb6e9e0151d501d5` at both
+`1dfd8210` and `main`, so the node source is byte-identical either way.
+
+That check is worth repeating whenever the tag moves. **`main` had already
+advanced by one commit within a day of provisioning** — a blocks-and-fixes commit
+that touched no node code. Without a pin the seed would have taken it on the next
+pull; with one, the question becomes "does this change the node?", answerable by
+comparing tree hashes rather than by reading a diff.
+
+Fetch it into a shallow deployment with:
+
+```bash
+git -C /opt/obl fetch --depth 1 origin tag bitcoin-node-deploy-2026-09-07
+git -C /opt/obl describe --tags        # the deployment now names itself
+```
+
+**Future tags follow the same shape** — `bitcoin-node-deploy-<date>` — kept
+deliberately distinct from `Bitcoin-v0.1.x` (chain releases) and
+`v0.x.0-experimental` (lab versions), because a deployment pin is a different
+kind of claim from either.
