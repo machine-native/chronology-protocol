@@ -47,7 +47,7 @@ wrong, and the fix was to make the hardware answer rather than argue about it.
 If `probe` disagrees with anything documented here, believe `probe`.
 """
 from __future__ import annotations
-import argparse, hashlib, json, sys, time
+import argparse, hashlib, json, socket, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -237,9 +237,97 @@ def cmd_send(a):
     return 0
 
 
+def appears_isolated(probes: list, dns: dict) -> bool:
+    """No probe reached anything AND DNS did not resolve.
+
+    Both conditions, not either. A host with a working resolver but no route is
+    not isolated, and a host that reaches an address while DNS is broken is not
+    isolated either -- each on its own is a symptom of a misconfiguration rather
+    than of an air gap.
+    """
+    return not any(p["reachable"] for p in probes) and not dns["resolved"]
+
+
+def _write_json(path, obj) -> None:
+    path.write_text(json.dumps(obj, indent=2) + chr(10), encoding="utf-8",
+                    newline=chr(10))
+
+
+def _network_snapshot(label: str) -> dict:
+    """Record whether this host can reach anything, right now.
+
+    WHY THE RECEIVER ATTESTS TO ITS OWN ISOLATION
+
+    Experiment 1 on 2026-09-06 moved a block between two machines and rested its
+    central claim on the receiver having been air-gapped. The operator captured
+    ipconfig and a failed ping by hand before the run -- but there was no capture
+    between then and the block's arrival, leaving a three-minute window after the
+    block existed in which a reconnected machine could in principle have fetched
+    it from the chain instead of the air.
+
+    Nothing suggested it had. But the experiment was designed to make that
+    objection IMPOSSIBLE rather than merely implausible, and a gap that depends
+    on someone remembering to run a command at the right moment is not a design,
+    it is a habit. So the receiver now records this itself, at the start and end
+    of every session, into the same directory the blocks land in.
+
+    The programmatic probes are the evidence; the OS command output is included
+    verbatim because that is what a human reads, and because a reader should be
+    able to see the machine's own account rather than only this script's summary.
+    """
+    probes = []
+    for host, port in (("1.1.1.1", 53), ("8.8.8.8", 53), ("9.9.9.9", 53)):
+        t0 = time.time()
+        try:
+            socket.create_connection((host, port), timeout=3).close()
+            probes.append({"target": f"{host}:{port}", "reachable": True,
+                           "seconds": round(time.time() - t0, 3)})
+        except Exception as e:
+            probes.append({"target": f"{host}:{port}", "reachable": False,
+                           "error": f"{type(e).__name__}: {e}"})
+    try:
+        resolved = socket.gethostbyname("example.com")
+        dns = {"resolved": True, "answer": resolved}
+    except Exception as e:
+        dns = {"resolved": False, "error": f"{type(e).__name__}: {e}"}
+
+    raw = {}
+    for name, cmd in (("ipconfig", ["ipconfig", "/all"]),
+                      ("route", ["route", "print", "0.0.0.0"])):
+        try:
+            raw[name] = subprocess.run(cmd, capture_output=True, text=True,
+                                       timeout=20).stdout
+        except Exception as e:
+            raw[name] = f"({type(e).__name__}: {e})"
+
+    isolated = appears_isolated(probes, dns)
+    return {
+        "label": label,
+        "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "local": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+        "hostname": socket.gethostname(),
+        "outbound_probes": probes,
+        "dns": dns,
+        "appears_isolated": isolated,
+        "caveat": ("appears_isolated means three well-known resolvers were "
+                   "unreachable and DNS did not resolve. That is strong evidence "
+                   "of no route out, not proof: a host could still reach a local "
+                   "peer, or be firewalled selectively. It is a machine-checked "
+                   "observation, which is what the hand-run version was missing."),
+        "os_reported": raw,
+    }
+
+
 def cmd_receive(a):
     outdir = Path(a.out)
     outdir.mkdir(parents=True, exist_ok=True)
+
+    start_state = _network_snapshot("session start")
+    _write_json(outdir / "network-state-start.json", start_state)
+    print(f"network at session start: "
+          f"{'NO ROUTE OUT' if start_state['appears_isolated'] else 'REACHABLE'}"
+          f"  -> {outdir / 'network-state-start.json'}")
+
     ser = open_port(a.port, a.baud)
     asm = Reassembler()
 
@@ -292,6 +380,24 @@ def cmd_receive(a):
         print("\nstopped")
     finally:
         ser.close()
+
+    end_state = _network_snapshot("session end")
+    _write_json(outdir / "network-state-end.json", end_state)
+
+    # Both ends of the session, so the window between them is bounded by
+    # machine-checked observations rather than by anyone recollection.
+    iso_a = start_state["appears_isolated"]
+    iso_b = end_state["appears_isolated"]
+    if iso_a and iso_b:
+        print("network: NO ROUTE OUT at session start AND end. Anything that arrived")
+        print("         during this session did not arrive over the network.")
+    elif iso_a or iso_b:
+        print(f"network: ISOLATION CHANGED -- isolated at start {iso_a}, at end {iso_b}.")
+        print("         A block received here cannot be attributed to the radio on")
+        print("         this evidence alone. See network-state-*.json.")
+    else:
+        print("network: reachable at both ends. This session shows the radio works,")
+        print("         not that the radio was the only channel available.")
 
     print(f"\nfragments heard: {heard}   valid blocks: {accepted}")
     if heard and not accepted:

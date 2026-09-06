@@ -154,3 +154,58 @@ def test_a_hex_that_does_not_match_the_record_is_refused(tmp_path):
     with pytest.raises(SystemExit) as e:
         _load_block(rec)
     assert "does not match the digest" in str(e.value)
+
+
+# ---- the receiver's own account of its isolation -----------------------------
+
+def _rly():
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+    import lora_relay
+    return lora_relay
+
+
+def test_isolation_needs_both_no_route_and_no_dns():
+    """THE GAP EXPERIMENT 1 LEFT, 2026-09-06.
+
+    That run rested its central claim on the receiver being air-gapped, but the
+    only evidence was an ipconfig and a ping the operator ran by hand BEFORE the
+    session. Nothing was captured between then and the block's arrival, leaving
+    three minutes after the block existed in which a reconnected machine could
+    in principle have fetched it from the chain rather than the air.
+
+    The receiver now records this itself at both ends of the session. Isolation
+    requires BOTH no reachable probe AND no DNS: either alone is a symptom of a
+    misconfiguration, not of an air gap.
+    """
+    r = _rly()
+    unreachable = [{"target": "1.1.1.1:53", "reachable": False, "error": "x"}]
+    reachable = [{"target": "1.1.1.1:53", "reachable": True, "seconds": 0.01}]
+    no_dns = {"resolved": False, "error": "x"}
+    dns_ok = {"resolved": True, "answer": "93.184.216.34"}
+
+    assert r.appears_isolated(unreachable, no_dns) is True
+    assert r.appears_isolated(reachable, no_dns) is False
+    assert r.appears_isolated(unreachable, dns_ok) is False
+    assert r.appears_isolated(reachable, dns_ok) is False
+
+
+def test_a_single_reachable_probe_defeats_isolation():
+    """Three resolvers are probed. One answering is enough to say there is a
+    route out, which is the conservative direction: claiming isolation wrongly
+    would overstate the evidence for every block received in that session."""
+    r = _rly()
+    mixed = [{"target": "1.1.1.1:53", "reachable": False, "error": "x"},
+             {"target": "8.8.8.8:53", "reachable": False, "error": "x"},
+             {"target": "9.9.9.9:53", "reachable": True, "seconds": 0.2}]
+    assert r.appears_isolated(mixed, {"resolved": False, "error": "x"}) is False
+
+
+def test_the_isolation_claim_is_qualified_in_the_record():
+    """appears_isolated is an observation, not proof. A host could still reach a
+    local peer, or be selectively firewalled. The record must say so, because
+    this field is the one a reader will lean on hardest."""
+    r = _rly()
+    import inspect
+    src = inspect.getsource(r._network_snapshot)
+    assert "not proof" in src
+    assert "caveat" in src
