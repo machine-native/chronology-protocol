@@ -288,8 +288,52 @@ security channel. `bitcoinx` and `electrumsv_secp256k1` appear in
 `fastverify.py` but are optional libsecp256k1 accelerators behind an
 `ImportError` guard; absent, it falls back to OpenSSL. `pytest` is test-only.
 
-**It is not pinned.** `/opt/obl` tracks `origin/main` with no tag. And that
-repository is a **monorepo** holding the websites as well as the derivatives —
-so a `git pull` to update a website also moves the code of an internet-facing
-node. Pin to a tag and update deliberately; that coupling is a larger provenance
-risk than any dependency here.
+**It was not pinned** — `/opt/obl` tracked `origin/main`. That repository is a
+**monorepo** holding the websites as well as the derivatives, so a `git pull` to
+update a website also moves the code of an internet-facing node on a host with
+irreplaceable keys. That coupling is a larger provenance risk than any
+dependency here.
+
+### Pinning it — what was done, 2026-09-07
+
+Pinning to a tag was the obvious answer and **is not available**: the genesis
+repository carries **zero tags**, and `provision.sh` clones with `--depth 1`, so
+the deployed tree has no history to reason about either. (A shallow clone also
+makes any `git log` churn analysis meaningless — it reports one commit because
+one commit is all there is.)
+
+So drift is made **loud and machine-checked** instead:
+
+1. **Detached HEAD** at the reviewed commit. A later `git pull` fails outright
+   ("You are not currently on a branch") rather than silently fast-forwarding.
+2. **`/etc/bitcoin-node.pin`** records the expected commit, mode `0444`.
+3. **`ExecStartPre=/usr/local/sbin/verify-obl-pin.sh`** — the node verifies its
+   own source before starting and refuses if it does not match. It reads
+   `.git/HEAD` directly, so it needs no git binary and no writes, which matters
+   under `ProtectSystem=strict`.
+
+The check catches both failure shapes, and **both were tested by deliberately
+breaking them** rather than assumed:
+
+| control | result |
+|---|---|
+| pin names a different commit | refused — `obl-pin: MISMATCH. expected …, found …` |
+| `/opt/obl` put back on a branch | refused — `obl-pin: /opt/obl is on a BRANCH (ref: refs/heads/main)` |
+| pinned commit, detached | starts — `obl-pin: ok, 1dfd8210…` |
+
+With `Restart=on-failure` and `StartLimitBurst=5` in 10 s, a drifted node makes
+five attempts and then sits in `failed`. It does not loop forever, and it does
+not come up on unreviewed code.
+
+**To update deliberately:** review the new commit, then
+
+```bash
+git -C /opt/obl fetch --depth 1 origin main
+git -C /opt/obl checkout --detach <reviewed-sha>
+printf '%s\n' <reviewed-sha> | tee /etc/bitcoin-node.pin >/dev/null
+systemctl restart bitcoin-node        # refuses if the two disagree
+```
+
+The right long-term fix still belongs upstream: tag the genesis repository, and
+have deployments clone a tag rather than a branch — `git clone --branch` accepts
+either. Until such a tag exists, this is the enforceable substitute.
