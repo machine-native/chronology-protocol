@@ -128,3 +128,20 @@ def test_no_document_claims_every_proof_has_two_attestations():
             if re.search(r"every( one of the)?\s+\w*\s*proofs?\b.*at least two", low):
                 bad.append(f"{md.relative_to(ROOT)}:{i}: {line.strip()}")
     assert not bad, "documents claim every proof carries two attestations:\n  " + "\n  ".join(bad)
+
+
+def test_readme_attestation_tally_is_current():
+    """The README states the same tally as VERIFY.md, and both match the proofs.
+
+    Added 2026-09-07 after the README was written from an internal status note
+    that had gone stale -- it said 21 attestations across 13 blocks while the
+    proofs on disk carried 25 across 17. VERIFY.md was already guarded; the
+    README, which is what a stranger reads first, was not. An understatement is
+    still a number nobody can check.
+    """
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    m = re.search(r"\*\*(\d+) proofs · (\d+) attestations · (\d+) distinct blocks\*\*", text)
+    assert m, "README no longer states an attestation tally in the known form"
+    assert tuple(int(g) for g in m.groups()) == _attestation_tally(), (
+        f"README claims {m.groups()} but the proofs on disk carry "
+        f"{_attestation_tally()} (proofs, attestations, distinct blocks)")

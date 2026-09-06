@@ -242,3 +242,148 @@ quietly disappears teaches a reader nothing.
 The laboratory's own record of the event, written from the chain bytes rather than from
 this project's perspective, is in the original-bitcoin-laboratory genesis repository
 under `bitcoin-findings/2026-08-21-first-reorganization/`.
+
+# v0.5.0 — Four more epochs, a block moved by radio, and one command to check it all (2026-09-07)
+
+The largest release since the protocol went public, and the first in which most of the
+evidence comes from physical instruments rather than from the protocol exercising
+itself.
+
+## Four new anchors
+
+```
+epoch 4   height 322   a rolling code proving ELAPSED TIME, not merely an instant
+epoch 5   height 479   a record from another system given a checkable time bound
+epoch 6   height 530   115 real air measurements bound to proof-of-work
+epoch 7   height 628   958 observations, SANDWICH_PASS, buried 104 blocks deep
+```
+
+**Epoch 4** is the first upgrade to the camera witness since epoch 2. A handwritten
+challenge proves photographs came *after* B0 and nothing more — one code is one
+instant. A code changing every ten seconds, captured across 19 distinct slots, also
+proves the frames span real elapsed time. 41 frames, 29 carrying codes.
+
+**Epochs 5 and 6** exercise `docs/EXTERNAL-BINDING.md`: a record produced elsewhere
+obtains a time bound only if the binding tag travels *into* the other system. Building
+the second binding exposed that `verify_sandwich` did not recognise its own new
+evidence type, so both bindings initially failed their own verifier. Recorded here
+rather than quietly repaired.
+
+**Epoch 7** carries two PMS7003 particulate sensors and a BME280. The bridge forwards
+raw frames and raw ADC counts and interprets nothing, so every published value stays
+recomputable by a reader who distrusts the arithmetic.
+
+## Experiment 1 — a block crossed a room by radio, and could not have arrived any other way
+
+The weak form of this experiment is "a file moved between two machines with radios
+attached", to which the honest objection is: how do you know it did not go over the
+network, or was already there? The design makes that objection **physically
+impossible** rather than answering it.
+
+```
+15:54:06Z   receiver air-gapped; isolation RECORDED, not asserted
+16:12:05Z   block 732 mined -- EIGHTEEN MINUTES LATER
+16:14:59Z   transmitted: 306 bytes, 3 CHRB fragments, 3 passes, 9 sends, 0 lost
+            13.7 m, a cement wall, a wooden door, a cupboard
+            RSSI -52..-61 dBm, SNR 8-9 dB, complete on the first pass
+16:21:06Z   receiver validates proof-of-work LOCALLY, still offline
+16:23:17Z   reconnected; receiver queries the chain ITSELF: tip 732, hash identical
+```
+
+The block did not exist anywhere when the receiver lost its connection, so it cannot
+have been pre-staged, cached or synced. The received file's SHA-256 matches on both
+machines. `RADIO-RELAY.md` no longer says the driver is untested on hardware.
+
+Records: `live/lora-experiment/` (nine JSON evidence files).
+
+## One command, three outcomes
+
+`scripts/verify_all.py` runs every check in VERIFY.md and prints a single verdict:
+toolchain, test suite, two plain bundles, seven sandwich bundles, and attestation
+confirmation. **12 checks, all PASS.**
+
+Three outcomes, never two — `PASS`, `FAIL`, `INDETERMINATE`, exit 0/1/2 — and the third
+is exercised rather than assumed: `--skip-network` reports 11 passed, 0 failed, 1 could
+not be checked, and says plainly that nothing failing is not the same as success.
+
+That distinction is not decoration. Outside review found this project's verifier
+reporting `FAIL` where it should have said `INDETERMINATE_TOOLCHAIN` — implying the
+evidence was bad when only the toolchain was too old. It was the most serious defect
+outside review has found, and it is not being reintroduced in the tool built to
+summarise everything.
+
+## Attestations, and an omission that was invisible by construction
+
+`scripts/confirm_attestations.py` checks every `.ots` against a public block explorer.
+**21 attestations across 13 distinct blocks, all confirmed.** The script ships, so the
+count can be repeated rather than trusted.
+
+Writing it found that the upgraded proofs had never been committed: the public
+repository advertised **fifteen** attestations while holding **twenty-one**. Upgrades
+only ever add evidence, which is exactly why the omission produced no symptom. A count
+that can only be too low is still a count nobody can check.
+
+## Independent verification — closed, on the second attempt, under a stricter bar
+
+A verification report was received, recorded, and **withdrawn within hours** when a
+party in a position to be the verifier denied producing it. The failure was not that
+the report was false; it was that its provenance was never established. Hashing a file
+supplied by one party against a number supplied by the same party is circular.
+
+The bar is now: the artifact identified by digest, commit and toolchain, **and** the
+verifier publishing from somewhere they control. Closed 2026-08-22 by
+[issue #1](https://github.com/machine-native/chronology-protocol/issues/1) — a
+non-collaborator who cloned at `fc5933d`, ran the offline suite, confirmed an
+attestation against a public explorer, and stated their limits precisely.
+
+They found three real defects in two days. Two are now enforced by tests.
+
+**One report is a start, not a consensus.** More verifiers are still wanted, and mining
+remains open: every block on this chain was mined by this project, so the next accepted
+block belongs to whoever finds it.
+
+## Availability
+
+A second seed now serves the chain from a different provider in a different
+jurisdiction (`docs/D2-SECOND-SEED-RUNBOOK.md`). This buys **availability, not
+independence** — both seeds are still ours, and a reader who distrusts this project
+gains nothing from a second machine it also runs.
+
+## Not claimed
+
+This release does not claim the sensors report correct absolute mass —
+`reference-comparison/pm-mass` is honestly `NOT_RUN` and needs a reference instrument.
+It does not claim LoRa is a practical distribution channel: three fragments for 306
+bytes, a duty-cycled band and no back-channel are what they are. It does not claim more
+than one outside party has verified anything.
+
+## The release gate could not run, and said something false while not running
+
+`scripts/release_audit.py` is this project's own pre-release check. Preparing this
+release found three things wrong with it.
+
+It **crashed** on any machine without a C compiler. `run()` did not catch
+`FileNotFoundError`, so a missing `cc` aborted the whole audit and discarded every
+other step's result — no report was written at all. A gate that cannot run is not a
+gate.
+
+Once it could run, it would have called that missing compiler a **failure**. That is
+the conflation this project treats as its most serious defect class: "could not check"
+reported as "checked and failed" says the release is bad when nothing about it was
+examined. The audit now has three outcomes and exits 0/1/2 like every other verifier
+here, and prints what was not asked and why.
+
+And its report asserted **`live_anchor_claimed: false`** with a status of
+`RELEASE_CANDIDATE_PASS_PRE_POW` — both hardcoded, and both untrue since v0.1.1. Seven
+epochs are anchored. The field is now read from the evidence on disk, and the version
+comes from the tags rather than a constant that nobody remembered to bump.
+
+## A guard for the front page
+
+The README's attestation tally was written from an internal status note that had gone
+stale — it said 21 attestations across 13 blocks while the proofs on disk carried 25
+across 17. VERIFY.md was already protected by a test that parses the `.ots` files
+themselves; the README, which is what a stranger reads first, was not. It is now.
+
+An understatement is still a number nobody can check, and this is the second time a
+stale attestation count has been found in a published document.
