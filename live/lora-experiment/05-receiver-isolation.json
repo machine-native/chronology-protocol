@@ -1,0 +1,64 @@
+{
+  "record_type": "receiver_isolation",
+  "machine": "CoreX mini PC (receiver)",
+  "hostname": "DESKTOP-0GQRA3J",
+  "isolated_at_local": "2026-09-06T21:24:06.3363898+05:30",
+  "isolated_at_utc": "2026-09-06T15:54:06Z",
+  "why_this_timestamp_matters": "Everything after it depends on this. The block to be transmitted is mined AFTER this moment, so it did not exist anywhere in the world when this machine lost its network. It cannot have been pre-staged, cached or synced, which leaves the radio as the only channel. That is the whole design.",
+  "physical_adapters": [
+    {
+      "name": "Ethernet (Realtek PCIe GbE)",
+      "state": "Media disconnected"
+    },
+    {
+      "name": "WiFi (MediaTek Wi-Fi 6E MT7902)",
+      "state": "Media disconnected"
+    },
+    {
+      "name": "Wi-Fi Direct Virtual Adapter",
+      "state": "Media disconnected"
+    },
+    {
+      "name": "Wi-Fi Direct Virtual Adapter #2",
+      "state": "Media disconnected"
+    }
+  ],
+  "virtual_adapters_present": [
+    {
+      "name": "vEthernet (Default Switch), Hyper-V",
+      "ipv4": "172.18.64.1",
+      "default_gateway": null
+    },
+    {
+      "name": "Ethernet 2, VirtualBox Host-Only",
+      "ipv4": "192.168.56.1",
+      "default_gateway": null
+    }
+  ],
+  "virtual_adapter_note": "Both are host-only or internal switches with NO default gateway, and the host reports 'IP Routing Enabled: No'. Neither can carry traffic off the machine. They are recorded rather than omitted because a reader should see what was present, not only what was disconnected.",
+  "reachability_test": {
+    "command": "ping -n 2 1.1.1.1",
+    "result": "General failure / Request timed out, 100% loss"
+  },
+  "output_directory_before": "live\radio-received did not exist",
+  "side_effect": null,
+  "mining_state": {
+    "operator_action": "The operator stopped 'generate coins' on the bitcoin client in the VM BEFORE disconnecting that machine's network.",
+    "why_the_order_matters": "This was a deliberate stop, not a side effect of the air gap. An earlier draft of this record inferred that isolating the machine had incidentally prevented the VM from submitting; that was an inference and it understated what was actually done. Corrected to what the operator reported.",
+    "consequence": "No machine anywhere is mining this chain during the experiment, so the block mined on the laptop is uncontested and cannot be orphaned by a competing miner mid-run."
+  },
+  "separation": {
+    "distance_ft": 45,
+    "distance_m_approx": 13.7,
+    "obstructions_in_path": [
+      "a thick cement wall",
+      "a wooden door",
+      "a large wooden cupboard inside the receiving room"
+    ],
+    "obstruction_note": "Cement is the significant attenuator at 866 MHz; wood and furniture are minor by comparison. This is a through-structure path, not line of sight.",
+    "moved_after_isolation": true,
+    "note": "The receiver was isolated and its network state captured BEFORE it was moved, so the air-gap evidence describes the machine in the position it then stayed in.",
+    "predicted_rssi_dbm": "-65 to -80, from -17 dBm at ~0.5 m plus ~29 dB of additional path loss and 15-25 dB for the cement wall",
+    "prediction_recorded_before_the_run": true
+  }
+}

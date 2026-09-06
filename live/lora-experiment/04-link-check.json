@@ -1,0 +1,37 @@
+{
+  "record_type": "link_check",
+  "purpose": "Prove the radios and driver work before anything is air-gapped or mined. NOT evidence for the experiment: the block sent is the epoch 7 anchor, which is public and which the receiver could have obtained elsewhere. This establishes the link, not provenance.",
+  "utc": "2026-09-06T15:51:57Z",
+  "transmitter": {
+    "machine": "laptop",
+    "port": "COM8",
+    "address": 1
+  },
+  "receiver": {
+    "machine": "CoreX",
+    "port": "COM3",
+    "address": 2
+  },
+  "band_hz": 866000000,
+  "networkid": 18,
+  "crfop_dbm": 22,
+  "separation": "same desk, a few feet, line of sight",
+  "block": "000000004b9ececee24df9cfc0d50d7d128d03b1c73634280c10ab2c7641f27b",
+  "block_bytes": 306,
+  "fragments": "3 (240, 240, 198 ASCII chars), matching the predicted split",
+  "passes_sent": 3,
+  "result": "RECEIVED AND PROOF-OF-WORK VALID on the first pass",
+  "rssi_dbm": [
+    -18,
+    -17,
+    -17
+  ],
+  "snr_db": [
+    9,
+    8,
+    9
+  ],
+  "link_margin_note": "RYLR998 sensitivity at SF9/BW7 is around -120 dBm, so -17 dBm leaves on the order of 100 dB of margin. Each 6 dB buys a doubling of range, which is why a through-wall run across a building should be comfortable rather than marginal.",
+  "redundancy_behaviour": "Passes 2 and 3 arrived after the block was already complete and show pending={} -- the reassembler neither re-emitted nor corrupted anything. Repetition is the only redundancy available because there is no back-channel, and it behaved correctly.",
+  "first_hardware_run": "This is the first time a block has crossed a radio link in this project. RADIO-RELAY.md described the driver as written to the datasheet and not yet run on hardware; that is now false. The claim rests on the RECEIVER validating proof-of-work locally, not on the sender reporting +OK."
+}

@@ -1,0 +1,41 @@
+{
+  "record_type": "radio_transfer",
+  "transmit_began_utc": "2026-09-06T16:14:59Z",
+  "block": "00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205f46a0",
+  "height": 732,
+  "bytes": 306,
+  "receiver_isolated_utc": "2026-09-06T15:54:06Z",
+  "block_mined_utc": "2026-09-06T16:12:05Z",
+  "gap_minutes": 18,
+  "separation": "45 ft / ~13.7 m, through a thick cement wall, a wooden door, and a large wooden cupboard in the receiving room",
+  "fragments": "3 per pass (240/240/198 chars), 3 passes, 9 transmissions",
+  "completed_on_pass": 1,
+  "fragment_loss": "none -- all 9 arrived",
+  "rssi_dbm": [
+    -61,
+    -54,
+    -56,
+    -57,
+    -52,
+    -58,
+    -59,
+    -57,
+    -60
+  ],
+  "snr_db": [
+    8,
+    8,
+    8,
+    9,
+    8,
+    8,
+    8,
+    8,
+    9
+  ],
+  "prediction_miss": "The RSSI prediction recorded BEFORE the run was -65 to -80 dBm. Actual was -52 to -61. The estimate was too pessimistic: the cement wall cost materially less than assumed. Recorded as a miss rather than dropped, because a prediction is only worth writing down if the failures are kept too.",
+  "margin_note": "At about -55 dBm against a sensitivity near -120 dBm there is roughly 65 dB of margin left. SNR held at 8-9 dB, indistinguishable from the desk test, so the wall degraded signal strength without degrading the link quality.",
+  "redundancy_behaviour": "Passes 2 and 3 arrived after completion and show pending={} -- nothing was re-emitted or corrupted. Repetition was not needed at this range but the design tolerated it correctly.",
+  "receiver_validation": "The receiver checked proof-of-work LOCALLY, with no network, and never trusted the transmitter for a byte. That is what makes this a result rather than a file copy.",
+  "what_this_establishes": "The block did not exist anywhere when the receiver was air-gapped at 15:54:06Z; it was mined at 16:12:05Z and appeared on that machine at 16:15Z. It cannot have been pre-staged, cached or synced. The radio is the only channel by which it could have arrived."
+}

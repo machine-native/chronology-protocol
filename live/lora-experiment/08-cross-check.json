@@ -1,0 +1,24 @@
+{
+  "record_type": "independent_cross_check",
+  "receiver_still_isolated_at": "2026-09-06T21:51:06+05:30 (16:21:06Z)",
+  "artifact": "live/radio-received/radio-block-00000000001d9678.hex",
+  "artifact_written_local": "2026-09-06 21:45",
+  "artifact_sha256_receiver": "dd35739a76cbbf4db88e211b8d16a430a38bb0995549fdd2a1cb31de77039a86",
+  "artifact_sha256_transmitter": "dd35739a76cbbf4db88e211b8d16a430a38bb0995549fdd2a1cb31de77039a86",
+  "artifact_identical": true,
+  "reconnected_at": "2026-09-06T21:53:16+05:30 (16:23:16Z)",
+  "chain_query_by_receiver": {
+    "source": "bitcoin.bitcoin-lab.org:18026",
+    "acquired_utc": "2026-09-06T16:23:17Z",
+    "tip_height": 732,
+    "tip_hash": "00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205f46a0"
+  },
+  "result": "The block the receiver validated from the air is the active tip of the chain, confirmed by a node the receiver contacted itself over a connection that did not exist when the block arrived.",
+  "A_WEAKNESS_IN_THIS_EVIDENCE": {
+    "what": "The closing network snapshot at 21:51:06 is internally inconsistent. ipconfig reports every adapter 'Media disconnected', but the ping in the same command block returned 'Reply from 192.168.1.131: Destination host unreachable' -- a LAN address answering, which requires an interface to be up. At 21:24:06 the same ping gave 'General failure', which is what a genuinely networkless machine returns. So the network was at least partially returning by 21:51.",
+    "why_it_matters": "The block existed from 21:42:05 and the artifact was written at 21:45. Isolation was hard-verified at 21:24:06 and the receive session ran continuously across that window, but there is NO independent capture of the network state between 21:24 and 21:45. The three minutes from 21:42 to 21:45 are the only interval in which a reconnected machine could in principle have fetched block 732 from the chain instead of the air.",
+    "what_still_holds": "The operator disconnected at 21:24 and reports not reconnecting until after the receive ended. The fragments were received with plausible RSSI and SNR from address 1, which a chain fetch would not produce. The artifact is byte-identical to the transmitted file. Nothing suggests the block arrived by any other route.",
+    "what_would_close_it": "Capturing the network state immediately before and immediately after the receive, inside the same isolated session -- ideally by having the receiver script itself record it. That is a change to the tooling, not a change to the procedure, and it is the obvious next improvement.",
+    "recorded_because": "The design of this experiment was chosen specifically to make 'it could have arrived another way' impossible rather than merely denied. A gap in the evidence for that claim belongs in the record, not in a footnote nobody reads."
+  }
+}

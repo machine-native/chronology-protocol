@@ -1,0 +1,16 @@
+{
+  "record_type": "block_mined_after_isolation",
+  "block_hash": "00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205f46a0",
+  "height": 732,
+  "nonce": 2467874504,
+  "raw_block_bytes": 306,
+  "raw_block_sha256": "f20f5b85373101e68fe2e6f16fb3da7af44f6924a3aaeccf1f462c30342363a3",
+  "receiver_isolated_utc": "2026-09-06T15:54:06Z",
+  "mining_started_utc": "2026-09-06T15:56:13Z",
+  "round_2_started_utc": "2026-09-06T16:09:16Z",
+  "block_found_utc": "2026-09-06T16:12:05Z",
+  "rounds": 2,
+  "the_claim_this_supports": "This block was mined AFTER the receiver was air-gapped and evidenced. It therefore did not exist anywhere when that machine lost its network, and cannot have been pre-staged, cached or synced onto it. If it appears on the receiver, the radio is the only channel by which it could have arrived.",
+  "no_competing_miner": "The operator stopped 'generate coins' in the VM before disconnecting it, so no other miner was working this chain. The block is uncontested and cannot be orphaned mid-experiment.",
+  "prior_tip": "00000000604d43ff9e21d18dd8732f7218615ee08c8de25905df12aba3cb437a at 731"
+}
