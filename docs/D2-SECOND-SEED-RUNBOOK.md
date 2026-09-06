@@ -89,18 +89,41 @@ and is not one.
 
 Found doing exactly this on 2026-09-06.
 
+**Use a drop-in, not `sed` on the unit.** An earlier version of this document
+edited `bitcoin-node.service` directly. That works until the next `provision.sh`
+run, which is idempotent and **rewrites the unit** — silently discarding the
+edit. The node then restarts at height 0 with only its self-minted genesis:
+listening, healthy-looking, serving nothing.
+
 ```bash
-sed -i 's|--advertise ${ADVERTISE_IP}|--advertise ${ADVERTISE_IP} --connect bitcoin.bitcoin-lab.org:18026|'     /etc/systemd/system/bitcoin-node.service
+mkdir -p /etc/systemd/system/bitcoin-node.service.d
+cat > /etc/systemd/system/bitcoin-node.service.d/override.conf <<'EOF'
+[Service]
+ExecStart=
+ExecStart=/usr/bin/python3 -m netnode --chain bitcoin --datadir /var/lib/bitcoin-node --listen [::]:18026 --advertise ${ADVERTISE_IP} --connect <EXISTING-SEED-IPV4>:18026
+EOF
 systemctl daemon-reload && systemctl restart bitcoin-node
 journalctl -u bitcoin-node -n 10 --no-pager
 ```
 
-Expect `connected out to bitcoin.bitcoin-lab.org:18026`, and then a second
-`connected out to` line for a peer it learned by gossip. `blocks.dat` grows from
-274 bytes — one block — to the size of the chain.
+The empty `ExecStart=` is required: it clears the unit's value before the
+replacement, and without it systemd rejects the second assignment.
 
-`--connect` is repeatable, so a third seed should name **both** existing seeds
-rather than depending on one.
+Expect `connected out to <seed>:18026`, and then a second `connected out to`
+line for a peer it learned by gossip. `blocks.dat` grows from 274 bytes — one
+block — to the size of the chain.
+
+**Name the peer by ADDRESS, not by the round-robin name.** Once
+`bitcoin.bitcoin-lab.org` carries an A record for every seed, a node that dials
+that name can resolve to **itself** — the log says
+`not dialling bitcoin.bitcoin-lab.org:18026 — that is us`. On 2026-09-07 the
+netcup seed did exactly this and recovered only because the resolver also
+returned the other A record in the same answer. A resolution returning self
+alone leaves the node with **no outbound peer at all**, sitting at whatever
+height it already holds and looking entirely healthy.
+
+`--connect` is repeatable. Lead with the explicit address and keep the name as a
+secondary; a third seed should name **both** existing seeds by address.
 
 ## Verify it is really serving the same chain
 
@@ -183,8 +206,15 @@ Two fixes, both needed:
 **1. Advertise both families on the node.** `netnode --advertise` takes a
 comma-separated list. The provisioned unit had only the IPv4:
 
+Put this in the **same drop-in** as `--connect`, for the same reason — a
+`provision.sh` re-run writes only the IPv4:
+
 ```bash
-sed -i 's|Environment=ADVERTISE_IP=<v4>|Environment=ADVERTISE_IP=<v4>,<v6>|'     /etc/systemd/system/bitcoin-node.service
+# inside /etc/systemd/system/bitcoin-node.service.d/override.conf, [Service]
+Environment=ADVERTISE_IP=<v4>,<v6>
+```
+
+```bash
 systemctl daemon-reload && systemctl restart bitcoin-node
 ```
 
@@ -200,3 +230,66 @@ Then a v6 client gets two answers and the redundancy is real in both families.
 **Check it from a host that actually has IPv6.** A machine without it will
 resolve AAAA fine and still fail to connect, which looks like a broken seed and
 is a broken client.
+
+---
+
+## If the seed shares a host with anything that matters
+
+Added 2026-09-07, after an operator review of the netcup box.
+
+A seed is the only process on its host accepting **unauthenticated connections
+from the internet**. When it is co-tenanted — the netcup machine also runs the
+satledger payment API and its ed25519 signing keys, which cannot be regenerated
+without orphaning every existing ledger — that asymmetry deserves ceilings.
+
+`provision.sh` sets none: `MemoryMax=infinity`, no CPU quota. Steady state is
+~15 MB, so this is not urgent, but an unbounded P2P process can starve its
+neighbours under load or attack, and here the neighbour holds the keys.
+
+In the same drop-in:
+
+```
+MemoryMax=1G
+MemoryHigh=768M
+CPUQuota=50%
+TasksMax=256
+```
+
+1 GB is ~66× steady state, so it will not bite in normal operation.
+
+**What is already correct and should stay that way.** `provision.sh` runs the
+node under `DynamicUser=yes` with `ProtectSystem=strict` and
+`NoNewPrivileges=yes`, giving it its own uid/gid and **no supplementary
+groups**. Keep it that way: never root, and never in `docker` (root-equivalent)
+or `systemd-journal`. State stays inside `/var/lib/bitcoin-node`.
+
+**Verify the drop-in actually wins** rather than assuming it — the unit file
+still holds the old values, so the merge is the only thing making it true:
+
+```bash
+systemctl cat bitcoin-node                    # shows the merge order
+systemctl show bitcoin-node -p ExecStart --value | grep -o '\-\-connect [^ ]*'
+```
+
+## What `python3 -m netnode` actually is
+
+Worth recording, because an operator reviewing the host could not find it
+installed and the answer is not obvious.
+
+It is **not a PyPI package.** The unit sets
+`WorkingDirectory=/opt/obl/derivatives`, so `-m netnode` resolves to the local
+directory `/opt/obl/derivatives/netnode` — ~5,100 lines of first-party Python
+from `github.com/original-bitcoin-laboratory/genesis`. `import netnode` fails
+from any other working directory.
+
+**One third-party dependency on the running path:** `cryptography`, from the
+distribution's own `python3-cryptography` package, so it patches through the OS
+security channel. `bitcoinx` and `electrumsv_secp256k1` appear in
+`fastverify.py` but are optional libsecp256k1 accelerators behind an
+`ImportError` guard; absent, it falls back to OpenSSL. `pytest` is test-only.
+
+**It is not pinned.** `/opt/obl` tracks `origin/main` with no tag. And that
+repository is a **monorepo** holding the websites as well as the derivatives —
+so a `git pull` to update a website also moves the code of an internet-facing
+node. Pin to a tag and update deliberately; that coupling is a larger provenance
+risk than any dependency here.
