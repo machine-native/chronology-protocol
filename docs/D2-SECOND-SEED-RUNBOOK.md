@@ -65,6 +65,31 @@ sudo ufw status numbered      # BEFORE
 sudo ufw status numbered      # AFTER -- compare, re-add what you need
 ```
 
+## provision.sh alone leaves the node empty — add a peer
+
+**This step is not in `provision.sh` and the seed does not work without it.**
+
+The script stands a node up as *the* seed, not as a second one joining a network
+that already exists. It writes no outbound peer, so the node comes up at
+**height 0** with only the genesis it minted itself — listening, but with nothing
+to serve. A cross-check against it times out, which looks like a network fault
+and is not one.
+
+Found doing exactly this on 2026-09-06.
+
+```bash
+sed -i 's|--advertise ${ADVERTISE_IP}|--advertise ${ADVERTISE_IP} --connect bitcoin.bitcoin-lab.org:18026|'     /etc/systemd/system/bitcoin-node.service
+systemctl daemon-reload && systemctl restart bitcoin-node
+journalctl -u bitcoin-node -n 10 --no-pager
+```
+
+Expect `connected out to bitcoin.bitcoin-lab.org:18026`, and then a second
+`connected out to` line for a peer it learned by gossip. `blocks.dat` grows from
+274 bytes — one block — to the size of the chain.
+
+`--connect` is repeatable, so a third seed should name **both** existing seeds
+rather than depending on one.
+
 ## Verify it is really serving the same chain
 
 From this laptop, not from the VPS:

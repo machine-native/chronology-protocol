@@ -1,0 +1,27 @@
+{
+  "record_type": "d2_seed_added",
+  "utc": "2026-09-06T19:32:25Z",
+  "seed": {
+    "host": "89.58.17.204",
+    "port": 18026,
+    "provider": "netcup",
+    "jurisdiction": "Germany",
+    "os": "Ubuntu 24.04.4 LTS"
+  },
+  "existing_seed": {
+    "host": "bitcoin.bitcoin-lab.org",
+    "port": 18026,
+    "provider": "DigitalOcean"
+  },
+  "cross_check": {
+    "tool": "live/check_seeds.py",
+    "both_heights": 734,
+    "tip": "00000000615415d3...",
+    "result": "AGREE - same chain, level"
+  },
+  "host_key_verified": "SHA256:CIaC5hU5v0pJGNKj5M5uxg7zZrecCuoRRB69v7x65/Q, matching the fingerprint recorded in SAT-BACKUP on 2026-08-31 while the machine was under our control",
+  "coexistence": "The machine already runs satledger behind Caddy on 80/443. ufw was already active with those ports allowed, and provision.sh only ADDS rules rather than resetting them, so both survived. Verified after provisioning: 80 returns 308 (Caddy's HTTPS redirect) and 443 returns 400 (curl without SNI) -- both alive.",
+  "tooling_gap_found": "provision.sh writes no outbound peer. It stands a node up as THE seed, not as one joining an existing network, so the node came up at height 0 with only the genesis it minted itself -- listening, but with nothing to serve. The cross-check timed out, which looks like a network fault and is not one. Fixed by adding --connect to the systemd unit; the runbook now carries the step.",
+  "what_this_buys": "Availability. Two providers, two jurisdictions, two failure domains. NOT operator independence -- both seeds are ours, and a reader who distrusts this project gains nothing from a second machine the same project runs.",
+  "remaining": "DNS (seed2.bitcoin-lab.org), and a third seed on a third provider, ideally outside the operator's own jurisdiction, which is the part that begins to buy more than uptime."
+}
