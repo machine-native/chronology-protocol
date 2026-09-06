@@ -1,0 +1,13 @@
+{
+  "record_type": "radio_block_extended",
+  "checked_utc": "2026-09-06T18:42:16Z",
+  "radio_block": "00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205f46a0",
+  "radio_block_height": 732,
+  "child": "00000000937a4190cdedeb3910c9309cbb3c03d9c094d06078f90fa9e43fb478",
+  "child_height": 733,
+  "child_miner": "the laboratory VM on the CoreX, after mining was re-enabled",
+  "burial_depth": 1,
+  "why_this_was_checked": "A block mined during a pause can be orphaned when a competing miner restarts. The VM was stopped deliberately before the experiment and restarted after it, so whether it would extend our block or fork away from it was an open question worth answering rather than assuming.",
+  "result": "733 sits directly on 732. The block that crossed the radio link is part of the accepted chain with work built on top of it, not a transient tip.",
+  "what_this_is_not": "Not third-party validation. The VM is the same operator's machine, so this is the chain accepting and extending the block, not an independent party endorsing it. The independent element in this experiment remains the receiver validating proof-of-work locally while air-gapped, and the explorer confirmation of the attestations -- not this."
+}
