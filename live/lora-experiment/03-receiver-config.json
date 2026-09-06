@@ -1,0 +1,23 @@
+{
+  "record_type": "module_configuration",
+  "machine": "CoreX mini PC (receiver)",
+  "port": "COM3",
+  "configured_utc": "2026-09-06T15:42:18Z",
+  "as_found": {
+    "firmware": "RYLR998_REYAX_V1.2.4",
+    "address": 0,
+    "networkid": 18,
+    "band_hz": 915000000,
+    "parameter": "9,7,1,12",
+    "crfop_dbm": 22
+  },
+  "as_configured": {
+    "address": 2,
+    "networkid": 18,
+    "band_hz": 866000000,
+    "crfop_dbm": 22
+  },
+  "verified_by_readback": true,
+  "finding_both_modules": "BOTH RYLR998s shipped set to 915000000 Hz, the US ISM band. India's licence-exempt allocation is 865-867 MHz. This is therefore a factory default of the product rather than a one-off, and any deployment of this hardware outside the US must reconfigure the band before its first transmission. Neither module transmitted while so configured: probe is read-only and config preceded any send.",
+  "usb_fault_resolved": "The CoreX 'USB port fault' that stalled this experiment since 2026-08-23 was a MISSING CP210x DRIVER, not hardware. Windows does not ship it and Windows Update did not offer it. It presented as a total absence -- GetPortNames() empty -- because a driverless device is not classified under Ports, so the diagnostic filter used to look for it (Class -in Ports,USB) was structurally incapable of seeing the very condition it was written to diagnose. Querying by vendor id (InstanceId like *VID_10C4*) is the check that works."
+}

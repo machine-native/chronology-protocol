@@ -1,0 +1,25 @@
+{
+  "record_type": "module_configuration",
+  "machine": "laptop (transmitter)",
+  "port": "COM8",
+  "configured_utc": "2026-09-06T15:23:08Z",
+  "configured_local": "2026-09-06 20:53:08",
+  "first_contact": "This is the first time scripts/lora_relay.py has spoken to real hardware. RADIO-RELAY.md described it as written to the RYLR998 datasheet and not yet run; the module answered AT with +OK.",
+  "as_found": {
+    "firmware": "RYLR998_REYAX_V1.2.4",
+    "address": 0,
+    "networkid": 18,
+    "band_hz": 915000000,
+    "parameter": "9,7,1,12",
+    "crfop_dbm": 22
+  },
+  "regulatory_finding": "THE MODULE SHIPS ON 915 MHz, which is the US ISM band. India's licence-exempt allocation is 865-867 MHz, so transmitting as-found would have been outside it at 22 dBm. Nothing was transmitted: probe is read-only. This is why the procedure configures and re-probes rather than assuming factory defaults are appropriate to where the hardware is.",
+  "as_configured": {
+    "address": 1,
+    "networkid": 18,
+    "band_hz": 866000000,
+    "crfop_dbm": 22
+  },
+  "verified_by_readback": true,
+  "readback_note": "A command returning +OK has been accepted, not necessarily applied. The configuration above is the module's own answer to a fresh query, not an echo of what was typed."
+}

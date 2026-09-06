@@ -47,7 +47,7 @@ wrong, and the fix was to make the hardware answer rather than argue about it.
 If `probe` disagrees with anything documented here, believe `probe`.
 """
 from __future__ import annotations
-import argparse, json, sys, time
+import argparse, hashlib, json, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -155,10 +155,52 @@ def cmd_config(a):
 
 
 def _load_block(path: Path) -> bytes:
-    """Accept either a mine-mode JSON record or a raw .hex file."""
-    if path.suffix == ".json":
-        return bytes.fromhex(json.loads(path.read_text())["raw_block_hex"])
-    return bytes.fromhex(path.read_text().split()[0].strip())
+    """Accept either a mine-mode JSON record or a raw .hex file.
+
+    THE JSON PATH WAS BROKEN UNTIL 2026-09-06 and it took first contact with
+    real hardware to notice. It read a `raw_block_hex` key that the mining
+    pipeline has never written: finalize.json carries `raw_block_bytes` (a byte
+    COUNT, not the bytes) and `raw_block_sha256`. Sending a mined block would
+    have died on KeyError. No test covered this path, because the driver had
+    never been run against hardware and the failure needed a real file.
+
+    The block itself lives in reports/mined-block.hex. Rather than reading a hex
+    string out of the JSON, this resolves that file and CHECKS IT AGAINST THE
+    DIGEST THE JSON CARRIES -- which is strictly better than the original design
+    would have been, because the loader now verifies what it loaded instead of
+    trusting it.
+    """
+    if path.suffix != ".json":
+        return bytes.fromhex(path.read_text().split()[0].strip())
+
+    rec = json.loads(path.read_text())
+    if "raw_block_hex" in rec:
+        return bytes.fromhex(rec["raw_block_hex"])
+
+    want = rec.get("raw_block_sha256")
+    if not want:
+        raise SystemExit(
+            f"{path} carries neither raw_block_hex nor raw_block_sha256; "
+            "pass the .hex file directly instead")
+
+    candidates = [path.with_suffix(".hex"),
+                  path.parent / "mined-block.hex",
+                  ROOT / "reports" / "mined-block.hex"]
+    for hexfile in candidates:
+        if not hexfile.exists():
+            continue
+        raw = bytes.fromhex(hexfile.read_text().split()[0].strip())
+        got = hashlib.sha256(raw).hexdigest()
+        if got == want:
+            return raw
+        raise SystemExit(
+            f"{hexfile} does not match the digest in {path}. "
+            f"json says {want}, file is {got}. "
+            "Refusing to transmit a block that is not the one the record "
+            "describes.")
+    raise SystemExit(
+        f"{path} references a block by digest but no matching .hex was found in "
+        + ", ".join(str(c) for c in candidates))
 
 
 def cmd_send(a):
