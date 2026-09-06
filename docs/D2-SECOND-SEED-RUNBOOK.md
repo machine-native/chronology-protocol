@@ -52,18 +52,30 @@ script is idempotent, so a re-run is safe if anything is interrupted.
 
 What it does, all of it: installs python3/git/ufw/build-essential, clones the
 laboratory genesis to `/opt/obl`, runs the node as a systemd `DynamicUser` with
-state in `/var/lib/bitcoin-node`, and sets `ufw` to allow **SSH and 18026/tcp
-only**.
+state in `/var/lib/bitcoin-node`, verifies the genesis meets difficulty-1 before
+agreeing to serve it, and adds `ufw` rules for SSH and 18026/tcp.
 
-**Note the ufw rule.** If satledger serves anything on another port, that rule
-will close it. Check what the machine is currently exposing before running this,
-and re-add any port that must stay open:
+**It ADDS firewall rules; it does not reset them.** The three lines are
+`ufw allow OpenSSH`, `ufw allow 18026/tcp`, `ufw --force enable` — so existing
+rules survive. An earlier draft of this document said it allowed "SSH and 18026
+only", which was wrong and would have caused someone to prepare for damage that
+does not happen.
+
+The case that *would* bite: if `ufw` is currently **inactive** and something is
+served without it, `--force enable` applies a default-deny policy and closes
+whatever has no rule. So check first, and add rules for anything that must
+survive **before** provisioning:
 
 ```bash
-sudo ufw status numbered      # BEFORE
-# ... provision ...
-sudo ufw status numbered      # AFTER -- compare, re-add what you need
+sudo ufw status verbose          # active already? what is allowed?
+sudo ufw allow 80/tcp            # only if needed and not already present
+sudo ufw allow 443/tcp
 ```
+
+On 2026-09-06 this machine already had `ufw` active with 22, 80 and 443 allowed
+on both v4 and v6, so provisioning added 18026 and changed nothing else. Caddy
+kept serving throughout — verified afterwards: port 80 returns 308, port 443
+returns 400 to a curl without SNI. Both alive.
 
 ## provision.sh alone leaves the node empty — add a peer
 
