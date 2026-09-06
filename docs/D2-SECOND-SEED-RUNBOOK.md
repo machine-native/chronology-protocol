@@ -123,14 +123,37 @@ Expected: both seeds report the same genesis
 `00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a` and agree on
 the tip within a block or two.
 
-## DNS
+## DNS — mind which family the name belongs to
 
-Give it a name so the IP is not the interface:
+**Not `seed2`.** The two prefixes already in use mean different networks:
 
-    seed2.bitcoin-lab.org   A   <netcup-ipv4>
+    seed.bitcoin-lab.org      port 18009    the earlier chain
+                              round-robins 143.110.255.205, 178.62.236.102
+    bitcoin.bitcoin-lab.org   port 18026    Bitcoin (Aug 2026)
+                              168.144.27.117
 
-Then re-run `check_seeds.py` against the **name**, not the address — that is what
-a stranger will use, so that is what should be tested.
+This seed serves **18026**, so it belongs in the `bitcoin.` family. A `seed2`
+name would file it under a prefix that means a different chain — which is the
+kind of error that costs someone an hour before they check the port.
+
+    bitcoin2.bitcoin-lab.org   A   89.58.17.204
+
+**A second option, matching what `seed.` already does:** add the new address as
+a second A record on `bitcoin.bitcoin-lab.org` so the existing name round-robins
+across both. A stranger following VERIFY.md then reaches whichever is up without
+knowing there are two.
+
+The trade-off is real: DNS round-robin does not health-check, so a dead seed
+means roughly half of connections fail rather than none. The laboratory's own
+notes describe a health-aware resolver answering with the live set, which is the
+proper fix and does not exist yet.
+
+**Do both.** `bitcoin2` gives each seed an addressable name, which is what
+`check_seeds.py` needs to compare them; the round-robin entry is what makes the
+redundancy useful to someone who never reads this file.
+
+Then re-run `check_seeds.py` against the **names**, not the addresses — that is
+what a stranger will use, so that is what should be tested.
 
 ## When it is done
 
