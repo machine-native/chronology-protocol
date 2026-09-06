@@ -163,3 +163,40 @@ and the `check_seeds.py` output showing agreement. Two of three.
 The third seed should be on a **third provider in a third jurisdiction**, and
 ADR-0004 asks for at least one outside the operator's own — which is the part
 that starts to buy something more than availability.
+
+
+---
+
+## IPv6 defeats the round-robin unless you do two more things
+
+Found on 2026-09-06, after the A record was added and the round-robin appeared
+to be working.
+
+**The `AAAA` record pointed only at the first seed.** Modern resolvers prefer
+IPv6 (RFC 6724), so any IPv6-capable client resolves `bitcoin.bitcoin-lab.org`,
+gets the one AAAA answer, and reaches the original seed **every time**. The
+IPv4 round-robin is never consulted. The redundancy looks present and is not,
+for exactly the clients most likely to have modern networking.
+
+Two fixes, both needed:
+
+**1. Advertise both families on the node.** `netnode --advertise` takes a
+comma-separated list. The provisioned unit had only the IPv4:
+
+```bash
+sed -i 's|Environment=ADVERTISE_IP=<v4>|Environment=ADVERTISE_IP=<v4>,<v6>|'     /etc/systemd/system/bitcoin-node.service
+systemctl daemon-reload && systemctl restart bitcoin-node
+```
+
+Without this the node listens on `[::]` but never tells peers its IPv6 address,
+so gossip cannot spread it.
+
+**2. Add the AAAA record**, alongside the existing one:
+
+    bitcoin.bitcoin-lab.org   AAAA   <the new seed's IPv6>
+
+Then a v6 client gets two answers and the redundancy is real in both families.
+
+**Check it from a host that actually has IPv6.** A machine without it will
+resolve AAAA fine and still fail to connect, which looks like a broken seed and
+is a broken client.
