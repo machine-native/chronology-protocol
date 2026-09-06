@@ -23,5 +23,25 @@
   "coexistence": "The machine already runs satledger behind Caddy on 80/443. ufw was already active with those ports allowed, and provision.sh only ADDS rules rather than resetting them, so both survived. Verified after provisioning: 80 returns 308 (Caddy's HTTPS redirect) and 443 returns 400 (curl without SNI) -- both alive.",
   "tooling_gap_found": "provision.sh writes no outbound peer. It stands a node up as THE seed, not as one joining an existing network, so the node came up at height 0 with only the genesis it minted itself -- listening, but with nothing to serve. The cross-check timed out, which looks like a network fault and is not one. Fixed by adding --connect to the systemd unit; the runbook now carries the step.",
   "what_this_buys": "Availability. Two providers, two jurisdictions, two failure domains. NOT operator independence -- both seeds are ours, and a reader who distrusts this project gains nothing from a second machine the same project runs.",
-  "remaining": "DNS (seed2.bitcoin-lab.org), and a third seed on a third provider, ideally outside the operator's own jurisdiction, which is the part that begins to buy more than uptime."
+  "remaining": "DNS (seed2.bitcoin-lab.org), and a third seed on a third provider, ideally outside the operator's own jurisdiction, which is the part that begins to buy more than uptime.",
+  "dns": {
+    "naming_correction": "Named in the bitcoin.* family, not seed.*. seed.bitcoin-lab.org serves port 18009 and a different chain; bitcoin.bitcoin-lab.org serves 18026. Caught by the operator before the record was made.",
+    "records": {
+      "A": [
+        "168.144.27.117 (DigitalOcean)",
+        "89.58.17.204 (netcup)"
+      ],
+      "AAAA": [
+        "2400:6180:100:d0:0:1:7140:b001 (DigitalOcean)",
+        "2a0a:4cc0:0:5a:9443:fff:fead:13b1 (netcup)"
+      ]
+    },
+    "propagation_checked": "2026-09-06T19:46:21Z",
+    "a_records": "all of 1.1.1.1, 8.8.8.8 and 9.9.9.9 return both addresses",
+    "aaaa_records": "1.1.1.1 returns both; 8.8.8.8 and 9.9.9.9 still return only the first seed. Ordinary TTL propagation, not an error.",
+    "why_aaaa_mattered": "Resolvers prefer IPv6 (RFC 6724). With a single AAAA answer, every v6-capable client would have reached the first seed EVERY time and the IPv4 round-robin would never have been consulted -- redundancy that looks present and is not, for exactly the clients most likely to have modern networking.",
+    "node_side_fix": "netnode advertised only its IPv4, so peers could not learn its v6 address by gossip even though it listens on [::]. The unit now advertises both, comma-separated."
+  },
+  "final_cross_check": "bitcoin.bitcoin-lab.org, 89.58.17.204 and 168.144.27.117 all at height 734 on the same tip. All seeds agree.",
+  "status": "D2: two of three seeds"
 }
