@@ -15,7 +15,34 @@ open an issue with the output.
 - That the same bytes are attested by **public Bitcoin blocks**, via standard
   OpenTimestamps proofs that have nothing to do with this project.
 
-## 0. The one hard dependency, stated up front
+## 0a. If you only run one thing
+
+```bash
+python scripts/verify_all.py
+```
+
+Every check in this document, one verdict, no reading required. It reports each
+check as **PASS**, **FAIL**, or **INDETERMINATE**, and exits 0, 1 or 2
+respectively.
+
+**INDETERMINATE is not a softer failure.** It means a question was not asked —
+usually because OpenSSL is older than 3.5, or there was no network for the
+explorer check. Reporting that as FAIL would say this evidence is bad when
+nothing about the evidence was examined, and conflating those two was the most
+serious defect outside review has ever found here. The tool that summarises the
+checks is not going to reintroduce it.
+
+Add `--skip-network` to stay offline; the attestation check then reports
+INDETERMINATE rather than being silently dropped. Add `--json out.json` to keep
+a machine-readable record.
+
+**This is a shortcut, not a substitute.** The sections below explain what each
+check actually proves, which is the part worth your time if anything looks
+interesting. Run this first to find out whether it does.
+
+---
+
+## 0b. The one hard dependency, stated up front
 
 Verification needs **OpenSSL 3.5 or newer**, because the checkpoints are signed with
 ML-DSA-87 and SLH-DSA-SHAKE-256s and those arrived in 3.5. This is genuinely recent, and
