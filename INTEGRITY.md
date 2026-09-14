@@ -1,7 +1,8 @@
 # The two manifests, and why there are two
 
 An outside reviewer ran `sha256sum -c MANIFEST.sha256` on a fresh clone and got
-five failures. They were right, and their framing was exactly correct:
+five failures. They were right, and their framing was exactly correct (private
+correspondence, quoted here):
 
 > "That's a rhetorical wound out of all proportion to the actual defect […] but
 > `sha256sum -c MANIFEST.sha256` is the first thing a skeptic runs on a repo whose
@@ -14,12 +15,25 @@ Here is what was actually wrong, and what each file now means.
 This is the manifest of the **original sealed v0.1.0 package** (59 files), written
 once on 2026-08-19 and never regenerated. It attests what that package contained.
 
-Five of its entries no longer match the working tree, and **that is correct and
-expected**: `README.md`, `CLAIMS.md`, `LICENSING.md`, `RELEASE_NOTES.md` and
-`RELEASE_STATUS.json` have all been edited since, through the releases up to v0.4.1.
-The remaining 54 files — the protocol source, the schemas, the sealed evidence
-vectors — are byte-identical to the day they were sealed, which is the property that
-actually matters.
+As of 14 September 2026, **15 of its 59 entries no longer match the working tree, and
+that is expected.** The drift is confined to three classes of file, and the list is
+re-derivable with `sha256sum -c MANIFEST-v0.1.0-SEALED.sha256`:
+
+- **documents**, edited through the releases up to v0.5.0 and in the September 2026
+  corrections: `CLAIMS.md`, `LICENSING.md`, `README.md`, `RELEASE_NOTES.md`,
+  `RELEASE_STATUS.json`, `SECURITY.md`, `pyproject.toml`;
+- **verifier source**, changed on 2026-08-22 by the outside-review fixes (commits
+  `24ccc74` and `fc5933d`: a check the toolchain cannot perform is reported
+  `INDETERMINATE`, not `FAIL`) and once more since: `ctp/pq.py`, `ctp/verify.py`,
+  `scripts/verify_bundle.py`, `scripts/build_live_template.py` (`370af79`),
+  `scripts/release_audit.py` (`6141d83`), and `ctp/__init__.py` (version string only);
+- **tests** that exercise the changed code: `tests/test_pq.py`, `tests/test_renewal.py`.
+
+The remaining 44 files — every sealed evidence vector under `vectors/`, the five
+schemas, the native miner, the remaining protocol modules under `ctp/`, and the
+sealed reports — are byte-identical to the day they were sealed, which is the property
+that actually matters. The sealed evidence bundle in particular is unchanged, and its
+OpenTimestamps proof still verifies against it.
 
 The defect was never the drift; it was that a historical seal was named as though it
 were a current integrity check, so a skeptic's first command printed a warning with
@@ -39,7 +53,10 @@ sha256sum -c MANIFEST.sha256
 ```
 
 It should report **OK for every line**. If it does not, either your clone is damaged
-or the manifest was not regenerated — both are worth reporting.
+or the manifest was not regenerated — both are worth reporting. A test,
+`tests/test_docs_consistency.py::test_manifest_covers_every_tracked_file`, fails when a
+tracked file is missing from the manifest, so an omission is caught before release
+rather than by a reader.
 
 Be clear about what it proves: it detects corruption in transit and accidental
 modification. It does **not** prove authorship, because whoever writes the files can
@@ -58,3 +75,21 @@ anchored in public Bitcoin blocks, none of which can be forged by editing a file
 
 A verifier who only checks the first row has checked the weakest link. `VERIFY.md`
 walks all four.
+
+## Redactions
+
+On 14 September 2026 a handful of evidence files had local paths, a host name, a machine
+name, adapter models, private and public network addresses and a country name replaced
+by placeholders. The digests recorded at capture time in `live/MANIFEST-live.sha256` and
+`live/anchor-evidence/ACCEPTANCE.md` are left as they were, for the reason given above
+about seals; the digests of the redacted copies, and exactly what changed, are in
+[`live/REDACTIONS.md`](live/REDACTIONS.md). `MANIFEST.sha256` lists the redacted copies.
+
+One entry of `live/MANIFEST-live.sha256` differs from the tree for a reason unrelated to
+redaction: it records `live/chain-blocks.hex` as captured at height 221, and that file
+was regenerated at height 298 on 2026-08-23 (commit `c8b298d`) when the FPGA block was
+confirmed. The capture digest stands; the current file is listed in `MANIFEST.sha256`.
+
+Sentences in the sealed acceptance records that have since been found to overstate what
+the evidence shows are not edited; they are corrected beside the records, in
+[`live/anchor-evidence/CORRECTIONS.md`](live/anchor-evidence/CORRECTIONS.md).

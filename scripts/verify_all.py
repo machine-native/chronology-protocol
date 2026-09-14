@@ -94,6 +94,21 @@ def main() -> int:
     print(f"\nchronology-protocol verify-all  ({time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())})\n")
 
     tool_status, tool_detail = check_toolchain()
+    # the first thing a skeptic runs: every tracked file matches MANIFEST.sha256
+    try:
+        import hashlib as _h
+        _bad, _n = [], 0
+        for _line in Path("MANIFEST.sha256").read_text(encoding="utf-8").splitlines():
+            if not _line.strip():
+                continue
+            _digest, _name = _line.split(maxsplit=1); _name = _name.lstrip("*")
+            _n += 1
+            if not Path(_name).is_file() or _h.sha256(Path(_name).read_bytes()).hexdigest() != _digest:
+                _bad.append(_name)
+        record("manifest: every tracked file matches MANIFEST.sha256",
+               PASS if not _bad else FAIL, f"{_n - len(_bad)} of {_n} files match" + (": " + ", ".join(_bad[:5]) if _bad else ""))
+    except Exception as _e:
+        record("manifest: every tracked file matches MANIFEST.sha256", INDET, str(_e)[:160])
     record("toolchain: OpenSSL 3.5+ with ML-DSA-87 and SLH-DSA-SHAKE-256s",
            tool_status, tool_detail)
     pq_ok = tool_status == PASS

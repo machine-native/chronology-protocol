@@ -75,7 +75,7 @@ EPOCH = 7
 PREV_WORK = "live/pm-bind-work"                # epoch 6
 SINGLE_SENSOR = False                         # False = ESP32 bridge, True = one CP2102
 SYSTEM_ID = "NANOPROOF-AIR/v1"
-NPA = Path("C:/Users/Yoga/Desktop/workspace/vscode_workspace_machine-native-foundation/nanoproof-air")
+NPA = Path(os.environ.get("NANOPROOF_AIR", ROOT.parent / "nanoproof-air"))   # sibling checkout, or NANOPROOF_AIR=<path>
 
 
 def fetch_tip():

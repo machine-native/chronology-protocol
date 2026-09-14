@@ -155,8 +155,9 @@ A SATROOT event carrying that tag — this is the shape, not a real event:
 ```
 
 The `root_id` and `state_hash` above are the genuine values from SATROOT's
-recorded BSV mainnet anchor. The `chrn_binding` field is the proposal: **no
-SATROOT event contains one today.**
+recorded BSV mainnet anchor. The `chrn_binding` field shape shown above is
+illustrative; the live binding places the tag in the genesis event's `nonce`, as
+recorded at the top of this page.
 
 ## How the two chains divide the work
 

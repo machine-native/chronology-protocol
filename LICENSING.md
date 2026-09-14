@@ -2,7 +2,7 @@
 
 **As of v0.1.1, this repository is licensed under the Apache License, Version 2.0.**
 
-Copyright (c) 2026 Parth Mauria Saxena. See [`LICENSE`](LICENSE) for the full text.
+The copyright holder is named in [`NOTICE`](NOTICE); see [`LICENSE`](LICENSE) for the full text.
 
 History: the sealed v0.1.0 package deliberately granted no public license, pending a
 licensing decision before public distribution (the original text of this file recorded
@@ -13,3 +13,8 @@ The third-party technologies and source material referenced by the project remai
 subject to their own licenses. The laboratory chain this protocol anchors into
 (original-bitcoin-laboratory's Bitcoin (2026)) is MIT-licensed by that project and is
 not part of this repository.
+
+Every third-party item reused or referenced by this repository — libraries, tools, a
+vendor constraints file, an ecosystem snapshot, reference sources and the public services
+the acquisitions talked to — is listed with its licence or terms and a source URL in
+[`THIRD-PARTY.md`](THIRD-PARTY.md).

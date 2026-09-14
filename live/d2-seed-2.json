@@ -5,7 +5,7 @@
     "host": "89.58.17.204",
     "port": 18026,
     "provider": "netcup",
-    "jurisdiction": "Germany",
+    "jurisdiction": "a second provider in another country",
     "os": "Ubuntu 24.04.4 LTS"
   },
   "existing_seed": {

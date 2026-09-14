@@ -56,8 +56,10 @@ Bitcoin block 964841 carrying `SANDWICH_PASS_NO_TIME_CONSENSUS`. It stays as it
 is.
 
 **Epoch 5's causal claim is unaffected.** `B0 ≺ record ≺ C` comes from the
-challenge structure — a value derived from block 529's hash inside the record,
-and the record's digest inside block 530's coinbase. No part of it involves NTP.
+challenge structure — a value derived from block 478's hash inside the record,
+and the record's digest inside block 479's coinbase (corrected 14 Sep 2026: an
+earlier reading of this sentence named 529/530, which are epoch 6's blocks). No
+part of it involves NTP.
 What epoch 5 lacks is an agreed wall-clock instant, and it now lacks it for a
 reason that is understood and written down.
 

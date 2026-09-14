@@ -59,7 +59,8 @@ All five reported bundle digests match this repository's files byte-for-byte.
 They stated they could not retrieve the public Git commit from their runtime, so
 **pack ↔ public repository byte identity is not established**; and that they did not
 query a Bitcoin node or explorer, so **the five attestations were parsed but not
-checked against public Bitcoin**. Their own summary:
+checked against public Bitcoin**. Their own summary (private correspondence,
+quoted here):
 
 > "The supplied verification artifact executes successfully and passes its complete
 > local verification path." — not "every external provenance claim has independently
@@ -67,7 +68,8 @@ checked against public Bitcoin**. Their own summary:
 
 They further concluded that they could not close the criterion because they have no
 independent public identity from which to publish, and that publishing through this
-project's account "would once again make the provenance path run through you."
+project's account "would once again make the provenance path run through you"
+(private correspondence, quoted here).
 
 **That reasoning is correct and is adopted.** A party declining to claim a status they
 could have claimed is the strongest signal in this record.
@@ -107,7 +109,7 @@ opened 2026-08-22T08:28:23Z by GitHub user **`naxytra`**.
 
 That `naxytra` is a different person from the project author. **No reader can verify
 that from the outside**, and it is inherent to reports of this kind — a single report
-from a low-history account is weaker evidence than several from established ones.
+is weaker evidence than several from different parties.
 It is stated here rather than glossed, and the remedy is more verifiers, not stronger
 wording. The author has stated that `naxytra` is an independent entity.
 

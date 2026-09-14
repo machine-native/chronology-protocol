@@ -1,7 +1,7 @@
 # Contributing
 
 **The contribution this project most needs is not code. It is a verification report
-from someone who is not me.**
+from someone other than the author.**
 
 Everything here is checkable from bytes alone, and that is precisely why an outside
 run matters more than a patch: no amount of additional code can establish that a
@@ -30,7 +30,7 @@ implying the evidence was bad when only the toolchain was too old.
 and it failed", and the difference matters enough that the codebase enforces it in
 several places. Say which one you mean, and say if you skipped a step.
 
-**It has to come from an identity you control.** Not relayed through me. A report
+**It has to come from an identity you control.** Not relayed through the author. A report
 was once recorded here and then withdrawn precisely because its provenance ran
 through the project author, who accepted it because the result was flattering. That
 episode is kept in the repository rather than deleted:

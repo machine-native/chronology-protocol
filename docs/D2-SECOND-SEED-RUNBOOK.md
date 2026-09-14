@@ -1,8 +1,8 @@
 # D2 — adding a second seed on netcup
 
 Today **one** DigitalOcean droplet is the only reachable entry point to the anchor
-chain. If it goes away — provider action, a lapsed payment, a legal order, a dead
-disk — the chain becomes unreachable to strangers even though every byte survives.
+chain. If the first seed goes away for any reason, the chain becomes unreachable to
+strangers even though every byte survives.
 
 A netcup VPS is already paid for a year. That makes this account-and-DNS work
 rather than engineering: `provision.sh` already exists, is idempotent, and lists
@@ -10,8 +10,8 @@ everything it does.
 
 ## What this buys, and what it does not
 
-**Buys:** availability. Two providers, two jurisdictions (DigitalOcean and
-netcup, a German host), two failure domains. A stranger can still reach the chain
+**Buys:** availability. Two providers in two countries (DigitalOcean, and netcup
+as a second provider in another country), two failure domains. A stranger can still reach the chain
 when one disappears.
 
 **Does not buy:** operator independence. Both seeds would still be **ours**. A

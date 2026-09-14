@@ -4,6 +4,11 @@ An append-only, cryptographically renewable record of **physical-time observatio
 whose compact checkpoints are committed into January-2009-compatible Bitcoin blocks —
 without making Bitcoin an authority over physical time.
 
+The blocks are those of the anchor chain: Bitcoin (2026), the Original Bitcoin Laboratory's
+experimental chain, with its own genesis (`00000000ad12…`), difficulty 1, mined so far by this
+project's own machines — not the public Bitcoin network, and not money. Existence proofs in
+public Bitcoin blocks come separately, through OpenTimestamps, and are counted below.
+
 Every claim below is checkable from bytes, offline, without trusting this project.
 One command gives a verdict: `python scripts/verify_all.py`.
 
@@ -21,12 +26,14 @@ one before it, all offline-verifiable:
 | 4 | 322 | a rolling code proving **elapsed time**, not merely an instant |
 | 5 | 479 | a record from another system given a checkable time bound |
 | 6 | 530 | 115 real air measurements bound to proof-of-work |
-| 7 | 628 | 958 observations from two particulate sensors and a hygrometer, buried 104 deep |
+| 7 | 628 | 958 observations from two particulate sensors and a hygrometer, 104 deep at publication (2026-09-07) |
 
-**10 proofs · 25 attestations · 17 distinct blocks**, every block confirmed against a
-public explorer by `scripts/confirm_attestations.py` — which ships, so the count can be
-repeated rather than taken on trust. That proof-of-work is the only part of this
-evidence produced by people with no connection to this project.
+**10 proofs · 25 attestations · 17 distinct blocks** — OpenTimestamps proofs and the public
+Bitcoin blocks they land in — every one confirmed against a public explorer by
+`scripts/confirm_attestations.py`, which ships, so the count can be repeated rather than taken
+on trust. That public-Bitcoin proof-of-work is the only
+part of this evidence produced by people with no connection to this project; the anchor-chain
+blocks in the table were mined by this project.
 
 It also runs on hardware. A Cmod A7-35T FPGA mined block 298 at 6.9854 MH/s, and a
 306-byte block crossed 13.7 m and a cement wall by LoRa radio to a machine that had
@@ -105,8 +112,8 @@ hash identical. The received file's SHA-256 matches on both machines
 ## Air measurements bound to proof-of-work (epochs 6 and 7)
 
 Epoch 6 committed 115 real air measurements. Epoch 7 committed 958 observations from
-two PMS7003 particulate sensors and a BME280, verdict `SANDWICH_PASS`, now buried 104
-blocks deep. The bridge forwards raw sensor frames and raw ADC counts and interprets
+two PMS7003 particulate sensors and a BME280, verdict `SANDWICH_PASS`, buried 104
+blocks deep at publication (2026-09-07). The bridge forwards raw sensor frames and raw ADC counts and interprets
 nothing, so every value stays recomputable by a reader who distrusts the arithmetic.
 
 ## A record from another system, given a time bound (epoch 5)
@@ -165,9 +172,6 @@ Everything here is checkable from bytes. The one thing missing cannot be produce
 writing more code: **nobody outside the project has verified it and said so publicly.**
 Ten minutes, entirely offline, no accounts, nothing of ours running on your machine —
 [**CALL-FOR-VERIFICATION.md**](CALL-FOR-VERIFICATION.md).
-
-Mining is equally open: every block on the anchor chain so far was mined by this
-project, and the next accepted block belongs to whoever finds it.
 
 ## Independently verified
 
@@ -228,5 +232,5 @@ Seven releases, each tied to evidence that existed when it shipped:
 
 ## Licensing status
 
-Apache License 2.0, granted at v0.1.1 for public distribution. Copyright (c) 2026 Parth Mauria
-Saxena. See `LICENSE` and `LICENSING.md`.
+Apache License 2.0, granted at v0.1.1 for public distribution. Copyright holder as named in
+`NOTICE`. See `LICENSE` and `LICENSING.md`.

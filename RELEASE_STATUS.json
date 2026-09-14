@@ -1,7 +1,7 @@
 {
-  "release": "chronology-protocol-v0.1.1",
+  "release": "chronology-protocol-v0.5.0",
   "status": "PASS_LIVE_ANCHORED",
-  "tests": "103 passed",
+  "tests": "104 passed",
   "completed_engineering_checks_pass": true,
   "live_anchor_claimed": true,
   "protocol_genesis_id": {
@@ -21,5 +21,6 @@
     "anchor_nNonce": 2757362010,
     "target_chain_genesis": "00000000ad12f3ecd9b14e4276ac98936fb0d658f05dce95ad35d18fceee208a",
     "evidence": "live/anchor-evidence/ACCEPTANCE.md"
-  }
+  },
+  "status_note": "The sealed-package fields below describe the v0.1.x seal and its live anchor at height 221; later epochs are recorded in RELEASE_NOTES.md and the live records."
 }

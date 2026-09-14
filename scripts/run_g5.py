@@ -26,7 +26,8 @@ from ctp.roughtime import (rt_nonce, roughtime_exchange, verify_response,
                            derive_rt_measurement, rt_evidence_blob)
 
 # Long-term keys from the pinned ecosystem snapshot (docs/REALITY-SANDWICH.md §3;
-# provenance: cloudflare/roughtime ecosystem.json, fetched 2026-08-21)
+# provenance: cloudflare/roughtime ecosystem.json, fetched 2026-08-21;
+# that repository is Apache-2.0 — see THIRD-PARTY.md)
 RT_SERVERS = [
     ("roughtime.cloudflare.com", 2003, "0GD7c3yP8xEc4Zl2zeuN2SlLvDVVocjsPSL8/Rl/7zg="),
     ("time.txryan.com", 2002, "iBVjxg/1j7y1+kQUTBYdTabxCppesU/07D4PMDJk2WA="),

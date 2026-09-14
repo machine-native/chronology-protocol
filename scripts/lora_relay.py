@@ -131,7 +131,8 @@ def cmd_probe(a):
     print("The module answered. Before sending anything, confirm on BOTH modules:")
     print("  - NETWORKID is identical")
     print("  - BAND is identical, and legal where you are")
-    print("    (India: 865-867 MHz. EU: 868. US: 915. Check before transmitting.)")
+    print("    (the local licence-exempt band, 865-867 MHz here; other regions differ."
+          " Check before transmitting.)")
     print("  - ADDRESS differs between the two")
     return 0
 
@@ -420,8 +421,8 @@ def main():
             s.add_argument("--address", type=int, required=True)
             s.add_argument("--network", type=int, default=18)
             s.add_argument("--band", type=int, default=865000000,
-                           help="Hz. India 865-867 MHz, EU 868, US 915. Your "
-                                "responsibility to pick a legal one.")
+                           help="Hz. Default is the local licence-exempt band (865-867 MHz); "
+                                "other regions differ. Your responsibility to pick a legal one.")
         if name == "send":
             s.add_argument("--block", required=True)
             s.add_argument("--to", type=int, default=BROADCAST)

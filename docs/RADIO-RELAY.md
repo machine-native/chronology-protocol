@@ -88,10 +88,9 @@ sender.
 - Antennas are included with the modules. Range: hundreds of metres indoors,
   kilometres line-of-sight at SF9+.
 
-India note: LoRa at **865–867 MHz** is licence-exempt in India (no amateur
-licence needed at these power levels), so this profile can run legally without a
-ham licence. Set the module band accordingly (`AT+BAND=866000000`). An amateur
-licence only becomes relevant for other bands/modes.
+Band note: this profile runs in the local licence-exempt band (**865–867 MHz**) at
+these power levels. Set the module band accordingly (`AT+BAND=866000000`), and check
+the band rules where the hardware is before transmitting.
 
 ## Runbook (once hardware exists)
 

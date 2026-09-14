@@ -21,7 +21,7 @@ sending: version      (46 bytes)
 
 Bitcoin CMyApp::OnInit()
 Loading addresses...
-dbenv.open strAppDir=C:\Users\Yoga\Desktop\workspace\vscode_workspace_machine-native-foundation\chronology-protocol\live\node-evidence\datadir
+dbenv.open strAppDir=<repo>\live\node-evidence\datadir
 mapAddresses:
 -----
  addresses                 633870
@@ -50,8 +50,8 @@ mapKeys.size() = 1
 mapPubKeys.size() = 1
 mapWallet.size() = 0
 mapAddressBook.size() = 1
-addrLocalHost = 172.23.48.1:18026
-bound to addrLocalHost = 172.23.48.1:18026
+addrLocalHost = <private-ipv4>:18026
+bound to addrLocalHost = <private-ipv4>:18026
 
 ERROR: GetMyExternalIP() : connection to 72.233.89.199:80 failed
 
@@ -62,10 +62,10 @@ RefreshListCtrl starting
 RefreshListCtrl done
 IRC :*.freenode.net NOTICE * :*** Looking up your ident...
 IRC :*.freenode.net NOTICE * :*** Looking up your hostname...
-IRC :*.freenode.net NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (223.225.57.150) instead.
-IRC ERROR :Closing link: (208AAFXSW@223.225.57.150) [Registration timeout]
+IRC :*.freenode.net NOTICE * :*** Could not resolve your hostname: Domain not found; using your IP address (<public-ipv4>) instead.
+IRC ERROR :Closing link: (208AAFXSW@<public-ipv4>) [Registration timeout]
 IRC socket closed
-accepted connection from 172.23.48.1:49676
+accepted connection from <private-ipv4>:49676
 sending: version      (46 bytes)  
 MainFrameRepaint()
 ProcessMessages(9466 bytes)
@@ -2285,7 +2285,7 @@ AddToBlockIndex: new best=00000000fc80fe  height=221
 MainFrameRepaint()
 ProcessBlock: ACCEPTED
 recv failed: 10054
-disconnecting node 172.23.48.1:49676
+disconnecting node <private-ipv4>:49676
 MainFrameRepaint()
 DBFlush(false)
 StopNode()

@@ -1,4 +1,6 @@
 # Cmod A7-35T constraints — from the Digilent reference XDC for this board.
+# Derived from Digilent's Cmod-A7-Master.xdc (github.com/Digilent/digilent-xdc),
+# MIT License, Copyright (c) 2017 Digilent. See THIRD-PARTY.md.
 # Only the pins this design uses are enabled.
 
 ## 12 MHz on-board oscillator

@@ -18,8 +18,9 @@ work. Any module with a transparent AT `SEND`/`+RCV` interface will fit.
 HONESTY NOTE: the fragmentation, reassembly, corruption/forgery rejection and
 airtime math are fully unit-tested (tests/test_radio.py). The serial/AT paths in
 THIS file are written to the RYLR998 datasheet but have NOT yet run against a
-physical module — that is exactly the hardware step this profile is waiting on,
-and this note is removed only when a real over-the-air transfer has happened.
+physical module. Superseded by scripts/lora_relay.py, which ran against real
+modules on 2026-09-06 (records in live/lora-experiment/); this file is kept as
+written, as the design it documents.
 
 Duty cycle: the sender enforces a configurable duty-cycle cap (default 1%,
 the common 868 MHz limit; 433 MHz bands typically allow 10%). YOU are

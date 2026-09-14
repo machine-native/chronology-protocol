@@ -1,5 +1,5 @@
 {
-  "template": "C:\\Users\\Yoga\\Desktop\\workspace\\vscode_workspace_machine-native-foundation\\chronology-protocol\\reports\\live-template.json",
+  "template": "<repo>\\reports\\live-template.json",
   "block_hash": "00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b",
   "nonce": 2757362010,
   "raw_block_bytes": 306,

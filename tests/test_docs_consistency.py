@@ -145,3 +145,28 @@ def test_readme_attestation_tally_is_current():
     assert tuple(int(g) for g in m.groups()) == _attestation_tally(), (
         f"README claims {m.groups()} but the proofs on disk carry "
         f"{_attestation_tally()} (proofs, attestations, distinct blocks)")
+
+
+def test_manifest_covers_every_tracked_file():
+    """MANIFEST.sha256 lists every tracked file except itself.
+
+    Added 2026-09-14. The manifest is the first thing a skeptic checks, and a file
+    that was added to the tree without regenerating it is a file no checksum run
+    can catch. Untracked additions listed in the manifest are allowed; tracked
+    omissions are not. Skips outside a git checkout (a release archive).
+    """
+    import pytest
+    try:
+        r = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True)
+    except FileNotFoundError:
+        pytest.skip("git is not available")
+    if r.returncode != 0 or not r.stdout.strip():
+        pytest.skip("not a git checkout")
+    tracked = {line.strip() for line in r.stdout.splitlines() if line.strip()}
+    tracked.discard("MANIFEST.sha256")
+    listed = set()
+    for line in (ROOT / "MANIFEST.sha256").read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            listed.add(line.split(maxsplit=1)[1].lstrip("*"))
+    missing = sorted(tracked - listed)
+    assert not missing, "tracked files missing from MANIFEST.sha256:\n  " + "\n  ".join(missing)

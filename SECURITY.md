@@ -31,4 +31,4 @@ A production deployment should:
 - separate witness identity from keys;
 - record activation/revocation epochs;
 - support overlapping old/new signatures during rotation;
-- preserve historical public keys and signatures forever.
+- preserve historical public keys and signatures for as long as the record exists.

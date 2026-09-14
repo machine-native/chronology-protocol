@@ -7,13 +7,14 @@ open an issue with the output.
 
 ## What you will end up having checked
 
-- Four evidence bundles, each carrying post-quantum signatures over real acquired
-  evidence, verified **completely offline**.
+- Nine evidence bundles (ten OpenTimestamps proofs), each carrying post-quantum
+  signatures over real acquired evidence, verified **completely offline**.
 - That each one's checkpoint is committed inside a real proof-of-work block on a live
   chain, and that the causal chain from the challenge block to the anchor block is
   unbroken.
-- That the same bytes are attested by **public Bitcoin blocks**, via standard
-  OpenTimestamps proofs that have nothing to do with this project.
+- That the same bytes are attested by **public Bitcoin blocks** the author does not
+  control, via standard OpenTimestamps proofs (the proofs were created by this
+  project's script; the blocks they land in are what is independent).
 
 ## 0a. If you only run one thing
 
@@ -30,7 +31,7 @@ usually because OpenSSL is older than 3.5, or there was no network for the
 explorer check. Reporting that as FAIL would say this evidence is bad when
 nothing about the evidence was examined, and conflating those two was the most
 serious defect outside review has ever found here. The tool that summarises the
-checks is not going to reintroduce it.
+checks has not reintroduced it.
 
 Add `--skip-network` to stay offline; the attestation check then reports
 INDETERMINATE rather than being silently dropped. Add `--json out.json` to keep
@@ -84,7 +85,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: **zero failures** out of 103 tests. Some may report `skipped` rather
+Expected: **zero failures** out of 104 tests. Some may report `skipped` rather
 than `passed` — several tests gate on evidence files that a given checkout may not
 carry (`live/chain-blocks.hex`, `.ots` proofs, a reference session), and a skip
 there means "this evidence is not present to check", never "this check failed".
@@ -118,21 +119,35 @@ python scripts/verify_bundle.py vectors/valid/evidence-bundle-live-anchored.cbor
 Expected: **all 13 checks true**, verdict **`PASS`**. The same sealed evidence, now
 carried in a block that really satisfies difficulty-1 proof-of-work.
 
-## 4. Verify the three sandwich bundles (offline)
+## 4. Verify the seven sandwich and binding bundles (offline)
 
 ```bash
 python scripts/verify_sandwich.py vectors/valid/reality-sandwich-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/astro-sandwich-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/roughtime-sandwich-bundle.cbor
+python scripts/verify_sandwich.py vectors/valid/rolling-code-sandwich-bundle.cbor
+python scripts/verify_sandwich.py vectors/valid/satroot-binding-bundle.cbor
+python scripts/verify_sandwich.py vectors/valid/pm-binding-bundle.cbor
+python scripts/verify_sandwich.py vectors/valid/pm2-binding-bundle.cbor
 ```
 
-Each should print **`SANDWICH_PASS`** with every check `true`. What each one proves:
+Six should print **`SANDWICH_PASS`** with every check `true`; `satroot-binding` prints
+`SANDWICH_PASS_NO_TIME_CONSENSUS`, for the reason recorded in
+[`live/anchor-evidence/FINDING-sequential-polling-2026-08-31.md`](live/anchor-evidence/FINDING-sequential-polling-2026-08-31.md)
+(its causal claim holds; its NTP witnesses did not agree on a wall-clock instant).
+What the first three prove:
 
 | bundle | witnesses | what is special |
 |---|---|---|
 | `reality-sandwich` | 5 NTP operators | first real acquisition, causally bounded |
 | `astro-sandwich` | 5 NTP + 1 camera | a photographed Moon inside the bounds |
 | `roughtime-sandwich` | 2 Roughtime + 5 NTP | Ed25519-**signed** time evidence |
+
+The four later bundles — `rolling-code-sandwich` (epoch 4), `satroot-binding` (epoch
+5), `pm-binding` (epoch 6) and `pm2-binding` (epoch 7) — verify with the same script;
+what each establishes is in the README's epoch table and in `RELEASE_NOTES.md`. The
+`rolling-code-sandwich-bundle-depth0` vector is the epoch-4 bundle as first assembled,
+at burial depth 0, which is why nine bundles carry ten proofs.
 
 For the astronomical one you can also re-hash the original photographs and confirm they
 are the exact frames the bundle commits to:
@@ -168,7 +183,7 @@ python live/fetch_full_chain.py
 ```
 
 This downloads every block from the public seed, verifies prev-hash linkage from the
-fixed genesis, and writes `live/chain-blocks.hex`. Then confirm the four anchors are
+fixed genesis, and writes `live/chain-blocks.hex`. Then confirm the eight anchors (epochs 0–7) are
 really there:
 
 ```bash
@@ -186,7 +201,9 @@ for i, line in enumerate(open("live/chain-blocks.hex")):
 EOF
 ```
 
-Expected (heights grow as the chain does; the hashes do not change):
+Expected (heights grow as the chain does; the hashes do not change). The
+`live/chain-blocks.hex` that ships in this repository was captured at height 298, so
+against that file the scan prints these five lines:
 
 ```
 epoch 0  height 221  00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b
@@ -196,15 +213,30 @@ epoch 3  height 269  000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548
 epoch 0  height 298  000000004d255fbd71886cba88f5730185aed1a73fb2ac1a17dadd61c0016d48
 ```
 
-**The repeated `epoch 0` on the last line is expected and is not a defect.** Height 298
-was mined on 2026-08-23 by an FPGA built for this project, and it was mined without a
-fresh payload — so its coinbase carries a *copy* of the epoch-0 anchor rather than new
-evidence. It is a genuine proof-of-work block and it is not a new chronology claim.
-Only the four earlier heights carry anchors that assert anything, and each of those
-appears exactly once. Details in
-[`live/anchor-evidence/FPGA-BLOCK-298.md`](live/anchor-evidence/FPGA-BLOCK-298.md).
+After `fetch_full_chain.py` has refreshed the file from the seed, the scan continues
+(re-derived from the live seed on 2026-09-14, tip height 919):
 
-## 6. Check the Bitcoin attestations (independent of us entirely)
+```
+epoch 4  height 322  00000000d2627afbbba405d7c429142c34e3c8c0eb4b5cc8f5391ebeac47c742
+epoch 5  height 479  000000001853dc58d540808bf17feadc47cdede5f1ae20fcbfb33b03b1c31270
+epoch 6  height 530  00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e
+epoch 7  height 628  000000004b9ececee24df9cfc0d50d7d128d03b1c73634280c10ab2c7641f27b
+epoch 7  height 732  00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205f46a0
+```
+
+**The repeated `epoch 0` at height 298 is expected and is not a defect, and the same
+holds for the repeated `epoch 7` at height 732.** Height 298 was mined on 2026-08-23 by an FPGA built for
+this project; height 732 was mined on 2026-09-06 by this project's own miner during the
+radio experiment. Both were mined without a fresh payload, so each coinbase carries a
+*copy* of the preceding anchor (the same payload bytes as heights 221 and 628
+respectively) rather than new evidence. They are genuine proof-of-work blocks and they
+are not new chronology claims. Only the eight epoch heights — 221, 222, 253, 269, 322,
+479, 530 and 628 — carry anchors that assert anything, and each epoch's anchor first
+appears exactly once. Details in
+[`live/anchor-evidence/FPGA-BLOCK-298.md`](live/anchor-evidence/FPGA-BLOCK-298.md) and
+[`live/lora-experiment/`](live/lora-experiment/).
+
+## 6. Check the Bitcoin attestations (public blocks the author does not control)
 
 The evidence bundles are timestamped into the public Bitcoin blockchain with standard
 OpenTimestamps proofs. Prefer the **official client** — it is not ours:
@@ -267,7 +299,7 @@ If it cannot reach the network it reports INDETERMINATE and exits 2, not 1.
 different findings because conflating them was the most serious defect outside
 review ever found here.
 
-One of the thirteen blocks (963190) was independently confirmed by a verifier
+One of the seventeen blocks (963190) was independently confirmed by a verifier
 outside this project in [issue #1](https://github.com/machine-native/chronology-protocol/issues/1).
 The rest were checked by the author, which is exactly why the script exists —
 repeat them yourself if it matters to you.
@@ -280,12 +312,12 @@ carries four Bitcoin attestations from four independent calendar operators —
 blocks 965353, 965355, 965361 and 965419. It upgraded on its own, which is what
 pending means.
 
-**Nine of the ten proofs carry at least two Bitcoin attestations**, and the two
+**Nine of the ten proofs carry at least two Bitcoin attestations**, and the three
 binding bundles carry four each, from four independent calendar operators. The
 exception is `rolling-code-sandwich-bundle-depth0.cbor.ots`, which carries one.
-Every proof also still lists pending calendar commitments that will add further
-attestations over time — `python scripts/ots_upgrade.py` collects them, and none
-of it changes what is already proved.
+Every proof also still lists pending calendar commitments; further attestations
+are added as calendars complete them — `python scripts/ots_upgrade.py` collects
+them, and none of it changes what is already proved.
 
 If this repository vanished tomorrow, a saved bundle plus its `.ots` file plus the
 Bitcoin blockchain would still prove when it existed.

@@ -122,7 +122,7 @@ def readme(att, anch, chain_len, built_utc, prov=None) -> str:
     A("This is a cold-storage deposit of the Chronology Protocol: a record of physical-")
     A("time observations that were cryptographically sealed and then committed into two")
     A("independent proof-of-work blockchains, so that WHEN they were made can be checked")
-    A("by anyone, forever, without trusting the people who made them.")
+    A("by anyone, for as long as the record exists, without trusting the people who made them.")
     A("")
     A(f"Deposit built:  {built_utc}")
     if prov:
@@ -131,7 +131,7 @@ def readme(att, anch, chain_len, built_utc, prov=None) -> str:
         A("                github.com/machine-native/chronology-protocol")
         A("                Compare this deposit against that commit to establish that")
         A("                it is the published record and not something assembled for you.")
-    A("Author:         Parth Mauria Saxena (parthod0x)")
+    A("Author:         parthod0x (copyright holder as named in NOTICE)")
     A("Licence:        Apache-2.0 (see LICENSE)")
     A("")
     A("If you are reading this long after 2026 and the original project is gone, you")

@@ -20,7 +20,8 @@ results including the photograph digests.
 
 ## Why it was withdrawn
 
-A party corresponding to the described verifier reviewed the record and responded:
+A party corresponding to the described verifier reviewed the record and responded
+(private correspondence, quoted here):
 
 > "In this conversation I never received `chronology-protocol-verification-pack.zip`.
 > I therefore did not produce the claimed pack SHA-256 match, `sha256sum -c` PASS,

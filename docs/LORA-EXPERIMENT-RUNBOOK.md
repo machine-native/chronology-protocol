@@ -30,12 +30,12 @@ One radio per machine, so **one USB-A port each**. The two-ports-on-one-machine
 requirement in the older runbook was for running both radios on a single box, and
 does not apply here.
 
-    LAPTOP (this machine)          CoreX (mini PC)
+    LAPTOP (this machine)          RECEIVER (small-form-factor PC)
     transmitter                    receiver
     CP2102 + RYLR998               CP2102 + RYLR998
     online, mines the block        AIR-GAPPED throughout
 
-The laptop is the mobile end, so it carries the radio to distance. The CoreX
+The laptop is the mobile end, so it carries the radio to distance. The receiver
 stays put and stays offline.
 
 ---
@@ -97,14 +97,14 @@ deliberate. **If it disagrees with anything written here, believe the module.**
 
 ## Phase 3 — configure both, then re-probe
 
-India: **865–867 MHz is licence-exempt** at these power levels. No amateur
-licence is required.
+Both modules are configured to the local licence-exempt band (**865–867 MHz**) at
+these power levels. Check the band rules where the hardware is before transmitting.
 
 ```powershell
 # transmitter (laptop)
 python scripts\lora_relay.py config --port COM<n> --address 1 --network 18 --band 866000000
 
-# receiver (CoreX)
+# receiver
 python scripts\lora_relay.py config --port COM<n> --address 2 --network 18 --band 866000000
 ```
 
@@ -118,7 +118,7 @@ on the same desk. Receiver first, always — a transmission with nobody listenin
 is simply lost.
 
 ```powershell
-# CoreX
+# receiver
 python scripts\lora_relay.py receive --port COM<n> --out live\radio-linktest --seconds 300
 
 # laptop
@@ -142,7 +142,7 @@ fault is downstream; no bytes means the port or the driver.
 
 **5a. Air-gap the receiver, and prove it.**
 
-On the CoreX: WiFi off, ethernet unplugged. Then capture evidence, because "we
+On the receiver: WiFi off, ethernet unplugged. Then capture evidence, because "we
 turned it off" is a claim and a command output is a record:
 
 ```powershell
@@ -177,7 +177,7 @@ than the receiver's isolation**, which is the whole point.
 Receiver first:
 
 ```powershell
-# CoreX, still offline
+# receiver, still offline
 python scripts\lora_relay.py receive --port COM<n> --out live\radio-received --seconds 900
 ```
 
@@ -199,7 +199,7 @@ stays open. Still no network at this point.
 
 **5f. Only now, reconnect and cross-check.**
 
-Bring the CoreX back online and let it fetch the chain **itself**:
+Bring the receiver back online and let it fetch the chain **itself**:
 
 ```powershell
 python live\fetch_tip_context.py bitcoin.bitcoin-lab.org 18026

@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you use this software or its evidence records, cite it as below."
+title: "Chronology Protocol"
+abstract: "An append-only, cryptographically renewable record of physical-time observations whose checkpoints are committed into proof-of-work blocks, with offline verification."
+authors:
+  - family-names: "Saxena"
+    given-names: "Parth Mauria"
+    alias: "parthod0x"
+    email: "parthms.id@gmail.com"
+license: Apache-2.0
+repository-code: "https://github.com/machine-native/chronology-protocol"
+version: 0.5.0
+date-released: 2026-09-06

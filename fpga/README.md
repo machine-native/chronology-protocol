@@ -1,4 +1,4 @@
-# FPGA miner — Cmod A7-35T (work in progress)
+# FPGA miner — Cmod A7-35T (running on hardware; mined block 298)
 
 A SHA-256d miner in hardware for the anchor chain: our own silicon mining our own
 chain. Started 2026-08-21; **running on a board and measured at 6.9854 MH/s on
@@ -208,7 +208,7 @@ live anchor chain, and case 4's output, byte-reversed, is that block's real hash
 ```
 
 If the core were wrong in a single bit, that value could not appear. Vectors are
-regenerated from `live/chain-blocks.hex`, so they can never drift from reality.
+regenerated from `live/chain-blocks.hex`, so they do not drift from reality.
 
 Reproduce:
 
@@ -228,7 +228,7 @@ vvp sim/top.vvp
 
 ## Measured after synthesis — the estimate was wrong twice over
 
-Vivado has now built it (`timing.rpt`, `utilisation.rpt`, `drc.rpt` in this folder,
+Vivado has now built it (`timing.rpt`, `utilisation.rpt`, `drc.rpt` in this folder, with the host name in their headers replaced by `<host>` — see `live/REDACTIONS.md`;
 copied from the build machine on 2026-08-22). **Those three files describe the
 single-core 12 MHz build**, not the 12-core configuration measured later; they are kept
 as the record of the first bitstream that ran rather than overwritten each time. Timing closes comfortably:
@@ -248,7 +248,7 @@ clocking       no MMCM/PLL — running straight off the board oscillator
 > 0.024 is a hold path, where small positive slack is normal. One number answering two
 > questions is how a healthy build gets mistaken for a broken one.
 
-That last line is the problem, and it is mine. **The Cmod A7's oscillator is 12 MHz**,
+That last line is the problem, and it is the author's. **The Cmod A7's oscillator is 12 MHz**,
 while the earlier estimate below assumed 100 MHz and never said so. At 132 cycles per
 nonce — a figure hardware has now confirmed to within 0.3%:
 
@@ -260,7 +260,7 @@ nonce — a figure hardware has now confirmed to within 0.3%:
 | 75 MHz MMCM, 12 cores | **6.7242** |
 | 77.419 MHz MMCM, 12 cores | **6.9854** |
 
-All three are measurements on hardware. The full table, the configurations still
+All five are measurements on hardware. The full table, the configurations still
 untried, and the two wrong verdicts this section reached along the way are below.
 
 A full 2³² nonce sweep as built takes **13.2 hours**, measured. It cannot compete for a block, and
@@ -270,8 +270,10 @@ The good news is that the path to the ~5 MH/s figure is now *measured* rather th
 guessed: the core is smaller than estimated so **9 fit** instead of 6, and timing has
 enough slack for a 6× clock multiplier.
 
-**Both are now written and simulated** — an MMCM and an interleaved core array — but
-neither has been built or measured, so every number for them below remains a projection.
+**Both were written and simulated first** — an MMCM and an interleaved core array — and
+both have since been built and measured (the table above, up to 6.9854 MH/s); the numbers
+below are the projections as they stood before those measurements, kept so the estimate
+can be compared with the result.
 
 ## Scaling up: MMCM and a parallel core array
 

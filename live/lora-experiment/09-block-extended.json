@@ -5,7 +5,7 @@
   "radio_block_height": 732,
   "child": "00000000937a4190cdedeb3910c9309cbb3c03d9c094d06078f90fa9e43fb478",
   "child_height": 733,
-  "child_miner": "the laboratory VM on the CoreX, after mining was re-enabled",
+  "child_miner": "the laboratory VM on the receiver, after mining was re-enabled",
   "burial_depth": 1,
   "why_this_was_checked": "A block mined during a pause can be orphaned when a competing miner restarts. The VM was stopped deliberately before the experiment and restarted after it, so whether it would extend our block or fork away from it was an open question worth answering rather than assuming.",
   "result": "733 sits directly on 732. The block that crossed the radio link is part of the accepted chain with work built on top of it, not a transient tip.",

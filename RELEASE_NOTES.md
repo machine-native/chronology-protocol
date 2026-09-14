@@ -60,7 +60,7 @@ block   00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b   heigh
 chain   Bitcoin (2026), genesis 00000000ad12f3ec…   nNonce 2757362010
 ```
 
-Evidence, in four independent forms — the operated seed's active chain, an independent
+Evidence, in four forms — the operated seed's active chain, an independent
 full-chain linkage re-verification, an unmodified released Jan09-derived client's own
 acceptance log, and the bundle verifier's `PASS` verdict (all 13 checks true) — is in
 [`live/anchor-evidence/ACCEPTANCE.md`](live/anchor-evidence/ACCEPTANCE.md). The
@@ -110,14 +110,14 @@ non-claim in the normative document applies.
 # v0.2.1 — Cross-checked expectation, corrected constant, real-Bitcoin sidecar anchors (2026-08-19)
 
 **A cross-check did its job, and the error is stated rather than buried.** The
-astrolabe-engine (an independent celestial-model implementation whose Sun/Moon
-positions carry its own `reference` grade, 10″, validated against JPL Horizons and
-IMCCE; cited by name, version and commit in the bundle) was run against
+astrolabe-engine (a celestial-model implementation that is not publicly available,
+wrapping astronomy-engine; its prediction is recorded as a labelled expectation, not
+as evidence; cited by name, version and commit in the bundle) was run against
 the sandwich's consensus instant. Its GAST disagreed with the bundle's stored ERA by
 ~100°: the v0.2.0 integer implementation had `ERA_A_NANO` a factor of 1000 too large
 (pico-turns written as nano-turns). Corrected, the two now agree to the physics:
 engine GAST 140.0929°, bundle ERA 139.7493°, difference +0.3436° = the equation of
-origins. A float-reference regression test pins this forever (suite: 26).
+origins. A float-reference regression test pins this for as long as the record exists (suite: 26).
 
 - `vectors/valid/reality-sandwich-bundle.cbor` re-assembled with the corrected
   expectation (only the labeled `EXPECTATION_NOT_EVIDENCE` field changed; every
@@ -131,8 +131,8 @@ origins. A float-reference regression test pins this forever (suite: 26).
   independent public calendars. These add an economically real upper causal bound on
   the same bytes from the public Bitcoin chain; pending attestations become Bitcoin
   block attestations after calendar aggregation (`ots upgrade` with any standard
-  client). Two of four calendars were unreachable (expired TLS certificates on their
-  side) — stated, and two independent attestations were obtained.
+  client). Two of four calendars were unreachable (expired TLS certificates at
+  those endpoints) — stated, and two independent attestations were obtained.
 
 ---
 
@@ -212,7 +212,7 @@ The epoch chain now reads 0 → 1 → 2 → 3, every link committed into proof-o
 difficulty-1 work and the public seed advertised it as its tip, but the laboratory's
 miner produced a competing block at the same height and extended it — two blocks beat
 one, and our block left the active chain. This is the anchor chain's first
-reorganization, and the direct consequence of it having had two independent miners
+reorganization, and the direct consequence of it having had two machines run by one operator mining
 since 2026-08-19.
 
 ```
@@ -377,6 +377,14 @@ And its report asserted **`live_anchor_claimed: false`** with a status of
 `RELEASE_CANDIDATE_PASS_PRE_POW` — both hardcoded, and both untrue since v0.1.1. Seven
 epochs are anchored. The field is now read from the evidence on disk, and the version
 comes from the tags rather than a constant that nobody remembered to bump.
+
+> Note (14 September 2026): the shipped `reports/release-audit.json` is the sealed
+> v0.1.0 audit output, listed in `MANIFEST-v0.1.0-SEALED.sha256`, and has not been
+> regenerated since. `release_audit.py` calls `run_milestone1.py`, which rewrites
+> `vectors/valid/evidence-bundle.cbor` with fresh keys, so running it in a checkout
+> that carries the sealed vectors would replace a sealed, Bitcoin-attested record.
+> It is therefore not run here; the corrected gate logic above is exercised by the
+> test suite and by `scripts/verify_all.py` instead.
 
 ## A guard for the front page
 

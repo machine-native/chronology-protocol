@@ -8,7 +8,7 @@ project about evidence does not get to hide its own.
 26 post-quantum private signing keys, in two acquisition directories:
 
 ```
-live/g6-work/keys/            epoch 4, committed 2026-08-23 in 1e76c4e
+live/g6-work/keys/            epoch 4, committed 2026-08-23 in 1e76c4e (pre-rewrite hash, superseded — see below)
 live/satroot-bind-work/keys/  epoch 5, committed 2026-08-29
 ```
 

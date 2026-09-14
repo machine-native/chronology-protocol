@@ -23,7 +23,7 @@
       "verdict": "PASS"
     },
     {
-      "machine": "CoreX mini PC (receiver)",
+      "machine": "the receiver (a small-form-factor PC)",
       "v_3v3": 3.342,
       "v_5v": 5.163,
       "verdict": "PASS"

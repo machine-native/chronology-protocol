@@ -8,7 +8,7 @@
     "address": 1
   },
   "receiver": {
-    "machine": "CoreX",
+    "machine": "the receiver (a small-form-factor PC)",
     "port": "COM3",
     "address": 2
   },

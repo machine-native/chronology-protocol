@@ -61,7 +61,7 @@ from ctp.sandwich import (challenge, exchange_nonce, ntp_exchange,
 EPOCH = 5
 PREV_WORK = "live/g6-work"                  # epoch 4
 SYSTEM_ID = "SATROOT1"
-SATROOT_SRC = Path("C:/Users/Yoga/Desktop/workspace/vscode_workspace_satroot/satroot")
+SATROOT_SRC = Path(os.environ.get("SATROOT_SRC", ROOT.parent / "satroot"))   # sibling checkout, or SATROOT_SRC=<path>
 
 # The real one-satoshi mainnet outpoint SATROOT bound as a namespace root,
 # recorded in that project's ANCHORS.md. Used here as the root_id so the
