@@ -4,7 +4,7 @@
   "measured_utc": "2026-09-06T15:11:45Z",
   "measured_local": "2026-09-06 20:41:45",
   "why": "+5V and 3V3 are adjacent on the CP2102 header. 5 V destroys an RYLR998 and there is no spare, so this is the step with no undo. Recorded before the modules were attached, because a measurement written down afterwards is a recollection rather than evidence.",
-  "instrument": "handheld multimeter, DC volts, red lead in VohmmA socket",
+  "instrument": "Themisto TH-M100 AC/DC True RMS digital multimeter, 6000 counts, 10 A, CAT III 600 V. DC volts, red lead in the V/ohm/mA socket.",
   "method": "black probe on GND (pin 5 counting from the DTR end), red on pin 6 (3V3) then pin 4 (+5V). BOTH rails measured deliberately: a single 3.3 V reading cannot distinguish the correct pin from a miscount, whereas 3.3 on pin 6 AND 5.0 on pin 4 confirms the pin identification itself.",
   "header_order_from_dtr_end": [
     "DTR",
@@ -30,5 +30,12 @@
     }
   ],
   "rylr998_tolerance": "3.3 V nominal, headroom to about 3.6 V; both rails are comfortably inside spec and the two agree within 27 mV",
-  "cleared_for_wiring": true
+  "cleared_for_wiring": true,
+  "instrument_identification": {
+    "how": "Identified on 2026-09-27 from photographs of the meter, and confirmed by the operator.",
+    "why_it_is_recorded_this_way": "The original entry said only 'handheld multimeter', which is unattributable: a reader cannot judge whether 3.369 V carries three meaningful decimals without knowing the instrument. At 6000 counts a 6 V range resolves 1 mV, so three decimals sit inside its resolution.",
+    "the_honest_limit": "The photographs postdate the measurement by three weeks. That this is the same meter rests on the operator's confirmation, not on anything recorded at the bench on 2026-09-06. The readings themselves are unchanged.",
+    "photographs": "MN-BACKUP/06-hardware-photos/bench-and-instruments/ (13077-13092, 16825-16831)",
+    "added_utc": "2026-09-27"
+  }
 }

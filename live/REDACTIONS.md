@@ -49,3 +49,14 @@ no capture digest and are not tabulated.
 
 The two debug logs and `fpga/timing.rpt` use CRLF line endings, as the programs that
 wrote them did; the redaction preserved that, and the line count of each is unchanged.
+
+## Later amendments to files listed above
+
+A digest in the right-hand column is what the redaction produced on 14 September 2026.
+It is not a promise that the file has never changed since. Where one has, it is listed
+here so the chain of digests stays followable; `MANIFEST.sha256` at the repository root
+always lists the current copy.
+
+| file | change | sha256 after redaction | sha256 now |
+|---|---|---|---|
+| `live/lora-experiment/01-rail-measurements.json` | 2026-09-27: the instrument was identified. `"handheld multimeter"` became the make, model, count and category, with a block recording that the identification came from photographs taken three weeks after the measurement and was confirmed by the operator. **No reading, verdict or timestamp changed.** | `9c9d640ab10c7669055ec1761c54902d34ee0a9f86419017b16c22c1758c8fb4` | `51ede2f61e70d0708e445003f7b6bebfa3a2f9bffe66a195b6a38e6a6e2120e6` |

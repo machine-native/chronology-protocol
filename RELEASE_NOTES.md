@@ -395,3 +395,81 @@ themselves; the README, which is what a stranger reads first, was not. It is now
 
 An understatement is still a number nobody can check, and this is the second time a
 stale attestation count has been found in a published document.
+
+# v0.5.1 — Identifying strings out, claims brought to what the evidence supports (2026-09-27)
+
+A housekeeping release in the sense that no new evidence was gathered, and not one in
+the sense that it corrects three public claims that were stronger than the record.
+
+## The claims, corrected
+
+**"Independent miners" were two machines run by one operator.** The chain has been
+mined from a laboratory VM and from a second machine; both are ours. Sealed acceptance
+records said otherwise in three places — *"a party outside that VM … a first for this
+chain beyond its own operator"*, and twice *"that same independent miner"*.
+
+Those records are named by digest in `live/MANIFEST-live.sha256` and are not edited.
+The corrections sit beside them in `live/anchor-evidence/CORRECTIONS.md`, with the
+sealed sentence quoted and the corrected reading given. **Operator diversity remains
+something this record does not have**, and the one thing it most needs.
+
+A third: *"classic protocol dead everywhere"* becomes *not served by any of the four
+endpoints tried* — nothing was established about endpoints that were not tried.
+
+**The anchor chain is named for what it is** at first mention in the README: the
+laboratory's experimental Bitcoin (2026), its own genesis, difficulty 1, mined by this
+project, not the public network and not money. The only proof-of-work in this record
+produced by anyone outside the project is the public-Bitcoin work behind the
+OpenTimestamps attestations, and the README now says so in as many words.
+
+## Identifying strings removed from the live records
+
+Local filesystem paths, two residential addresses, a host name, a machine name, adapter
+models, private and public network addresses, and two country names are replaced by
+placeholders across seventeen files.
+
+Every replacement is listed in `live/REDACTIONS.md` with **the digest as captured and
+the digest after**. The capture-time digests in `live/MANIFEST-live.sha256` and in
+`ACCEPTANCE.md` are left exactly as written — a manifest regenerated after the fact
+stops being a record of the capture, which is the whole reason it exists. `INTEGRITY.md`
+states the present seal count (44 of 59) and which classes of file moved.
+
+Nothing else in those files changed: not a hash, not a timestamp, not a measurement, not
+a verdict. The binding scripts now take sibling checkouts from an environment variable
+rather than absolute paths, so the paths cannot come back.
+
+## The instrument behind the rail measurement
+
+`live/lora-experiment/01-rail-measurements.json` recorded the pre-wiring check — the
+step with no undo, where 5 V on the wrong pin destroys an RYLR998 — as taken with a
+*"handheld multimeter"*. That is unattributable: a reader cannot judge whether `3.369 V`
+carries three meaningful decimals without knowing the instrument.
+
+It is a **Themisto TH-M100 AC/DC True RMS digital multimeter, 6000 counts, 10 A,
+CAT III 600 V**. At 6000 counts a 6 V range resolves 1 mV, so three decimals sit inside
+its resolution.
+
+**How that is known is recorded with it**, because it matters: the meter was identified
+from photographs taken on 2026-09-27, three weeks after the measurement, and confirmed
+by the operator. Nothing recorded at the bench on 2026-09-06 names it. No reading,
+verdict or timestamp changed.
+
+The same photographs corroborate the two header orders the experiment depended on —
+`DTR·RXD·TXD·+5V·GND·3V3` on the CP2102 and `GND·TXD·RXD·RST·VDD` on the RYLR998 —
+which until now rested only on the note that recorded them.
+
+## Hygiene
+
+`MANIFEST.sha256` covers every tracked file and is checked two ways: by
+`verify_all.py`, which now reports **13 checks**, and by a test that fails if a tracked
+file is missing from it. `CITATION.cff` for citation; `THIRD-PARTY.md` naming a URL and
+licence for each reused item; origin headers on the embedded SHA-256 page, the
+Digilent-derived constraints and the Roughtime key.
+
+## Still not claimed
+
+Operator diversity. Correct absolute mass from the PM sensors —
+`reference-comparison/pm-mass` remains `NOT_RUN` for want of a reference instrument.
+More than one outside verifier. And now stated explicitly: of the two particulate
+sensors, **only one has an identity read from its own label**; the other is identified
+by which port it was plugged into, which would not survive the two being swapped.
