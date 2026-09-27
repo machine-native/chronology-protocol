@@ -85,7 +85,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: **zero failures** out of 104 tests. Some may report `skipped` rather
+Expected: **zero failures** out of 107 tests. Some may report `skipped` rather
 than `passed` — several tests gate on evidence files that a given checkout may not
 carry (`live/chain-blocks.hex`, `.ots` proofs, a reference session), and a skip
 there means "this evidence is not present to check", never "this check failed".
@@ -321,6 +321,36 @@ them, and none of it changes what is already proved.
 
 If this repository vanished tomorrow, a saved bundle plus its `.ots` file plus the
 Bitcoin blockchain would still prove when it existed.
+
+## 6a. Re-derive the astronomical prediction (needs the engine, which you probably do not have)
+
+The epoch-2 bundle carries the open-astrolabe engine's prediction for the capture
+instant, labelled `EXPECTATION_NOT_EVIDENCE`. Until 2026-09-27 that was a *recorded*
+number: produced once by running the engine elsewhere and pasted in.
+
+It is now re-derivable:
+
+```bash
+ASTROLABE_ENGINE=<path to a built checkout> python scripts/reproduce_astrolabe_expectation.py
+```
+
+On this machine every value re-derives inside the 10-arcsecond tolerance the engine
+itself declares, the worst disagreement being **0.013 arcsec** — a residual traceable
+to a 4.6 ms difference in the ΔT value the original run used.
+
+**This check is deliberately not part of `verify_all.py`.** The engine lives in a
+separate repository that is currently private, so for almost every reader this would
+report INDETERMINATE and turn a clean run into "not everything was checked". That
+verdict would be *honest* but useless: it would attach to every verification of
+evidence that is independently checkable, for the sake of one value that is not.
+
+Run without the engine it exits 2 and says INDETERMINATE, never FAIL. A missing
+dependency is not a finding about the evidence.
+
+**What re-deriving it does and does not buy.** It rules out the number having been
+recorded wrongly. It says nothing whatever about the sky: a model agreeing with itself
+is not an observation, which is why the label stays. The photographs are the evidence;
+this is the expectation they were compared against.
 
 ## 7. Do something we have not done
 
