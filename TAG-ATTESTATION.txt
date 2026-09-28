@@ -1,0 +1,54 @@
+ATTESTATION OVER UNSIGNED TAGS
+chronology-protocol                                                       NOT money.
+
+I, parthod0x, holder of OpenPGP key
+B128 526A F85A E4A8 F22B  949F B014 5F74 B78C F1DA,
+state that at the time this file was signed, the tags listed below resolved to the
+commits and trees given beside them.
+
+WHY THIS FILE EXISTS
+  Ten tags carry no signature of their own, and EIGHT OF THEM CANNOT. A lightweight
+  tag is a bare ref with no object, so there is nothing for a signature to attach to
+  -- not an oversight that can be corrected in place. v0.1.0 through v0.4.1 are
+  lightweight. Re-creating them as signed tags would move what ten published releases
+  point at while removing nothing: GitHub and every clone already hold the old refs.
+  So they are attested here instead of being rewritten.
+
+  v0.5.0 and v0.5.1 ARE annotated tag objects and could have been signed at creation.
+  They were not. That is an oversight rather than a limitation, and the remedy for
+  releases after this file is to sign the tag when it is made; this attestation is
+  what remains available for the ten that already exist.
+
+*** WHAT THIS DOES NOT PROVE -- READ THIS BEFORE RELYING ON IT ***
+  It proves these names pointed at these commits WHEN THIS FILE WAS SIGNED, and the
+  OpenTimestamps proof beside it fixes that moment in the Bitcoin chain.
+  It does NOT prove they pointed there originally. If a tag had been moved before this
+  file was written, nothing here would reveal it. This is weaker than a signed tag and
+  is not a substitute for one; it is what remains available after the fact.
+
+HOW TO CHECK A ROW
+  git -C <repo> rev-list -n1 <tag>        must equal the commit below
+  git -C <repo> rev-parse <tag>^{tree}    must equal the tree below
+  gpg --verify TAG-ATTESTATION.txt.asc TAG-ATTESTATION.txt
+
+TAGS
+  kind        tag      commit                                    tree
+
+  lightweight v0.1.0   90b3f924fa0e19b3efcafe8e37a728cae6d940e2  52941e8f94ca804c2c1d3ee33becda2fe1e19376
+  lightweight v0.1.1   8442478579905aa757e3dfe28675b9137b7e450a  556bf4c13964197b622eae4a1e084a1ce78b70f3
+  lightweight v0.2.0   45de866584b21e6204deb8f0e9ae0e1c3562e369  f0e92913d01f306938b3b288ed2239e19fd4fecd
+  lightweight v0.2.1   f4a96a160294b52e0f53768a6f021af7af101729  d95cd6d882f66046cef1b076f72bcf2d57488449
+  lightweight v0.3.0   4fbd8ed374bce5dd389d78d939508ef9af6ab7de  d7605f367d9d05d4422ba0af3efa73c22e55e5ee
+  lightweight v0.3.1   a0893354d68bdb7b735c588b9d9277fbc82ba769  6dfa1ef2121bafc16f22d7cfe11bb96d36bf4700
+  lightweight v0.4.0   9c66a9fe262518d21a2f5ca9f57a50e2be5e0a4b  dc6762b91d2111edd0048facfa5258774fc431da
+  lightweight v0.4.1   03389925df97fc145495fb384f2e45a06ce70f44  0234b9156faa10d70fc1e1c0475cd04d03402414
+  annotated   v0.5.0   6141d8367b880c3ba2acf250c096253243416f87  3fc8eccc7b4714a89d566aea5194522b327ec844
+  annotated   v0.5.1   8d2163cd5aa40bf36797c9ae112bcf76877614de  c8c2f2a106eb13e856cf0ae77478388d5122bf11
+
+  Ten tags: eight lightweight, two annotated and unsigned. Read on 28 September 2026
+  from the working clone; `git ls-remote --tags origin` served the same ten.
+
+NOT A CLAIM ABOUT THE CONTENTS
+  This file says where a name pointed. It says nothing about whether the code at that
+  commit is correct, nor about any measurement the repository records. Those carry
+  their own evidence and their own limits, stated where they are made.
