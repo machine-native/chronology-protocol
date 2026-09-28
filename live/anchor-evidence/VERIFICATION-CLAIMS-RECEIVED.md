@@ -158,31 +158,6 @@ project; the next accepted block belongs to whoever finds it.
 
 ---
 
-## A name collision, raised and answered (2026-09-28)
-
-Anyone auditing this record will notice that the filer of issue #1 uses the handle
-**`naxytra`**, and that a project of the same name appears in this portfolio's own
-internal planning documents as the holder of its economic capability. That looks,
-at first glance, exactly like the failure this project withdrew a verification
-claim for on 2026-08-22: a report whose provenance was never established.
-
-It was raised for that reason, and answered: **naxytra is an independent third
-party entity.** The verification stands.
-
-Recording it here rather than leaving it to be found. A reader who spots the name
-and finds nothing about it has to assume the worst, and would be right to. The
-project's own rule is that when an error or an appearance of one exists in its
-foundation, it says so first and loudest rather than waiting for someone else to
-present it as a catch.
-
-**What this does not change.** The limit already stated in this file stands
-unaltered: no reader can verify *from outside* that the filer is a different party
-from the author. That is inherent to reports of this kind, and the remedy is more
-verifiers rather than stronger wording about the one there is. One report is a
-start, not a consensus.
-
----
-
 ## Standing invitation
 
 Anyone may run [`VERIFY.md`](../../VERIFY.md). If you publish the result somewhere you
