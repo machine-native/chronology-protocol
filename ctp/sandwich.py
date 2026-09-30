@@ -284,7 +284,28 @@ def _header_pow_ok(header: bytes) -> bool:
     return int(block_hash(header), 16) <= target_from_bits(bits)
 
 
-def verify_sandwich(b: SandwichBundle):
+NOT_CHECKED = "NOT_CHECKED"
+
+
+def verify_sandwich(b: SandwichBundle, extensions: Optional[dict] = None):
+    """Verify a sandwich bundle offline.
+
+    `extensions` maps an evidence type this module does not implement to a callable
+    `(unsigned_observation, blob, blobs_of_that_type) -> (result, facts)`, where
+    result is True, False or NOT_CHECKED. The extension verifies every observation
+    whose sources cite such a blob, entirely: its sources, its interval, anything
+    else the type defines. This module still checks that the blob is bound to the
+    session (q, B0, session id), that the observation is signed and chained, and
+    that it is in the anchored checkpoint.
+
+    Evidence of a type that neither this module nor a supplied extension knows is
+    NOT_CHECKED: this verifier cannot say whether it is sound, and will not say it
+    failed. NOT_CHECKED ranks below FAIL, so appending such a blob to a bundle can
+    never turn a failure into anything else, and above PASS: a bundle with any of it
+    is INDETERMINATE_UNCHECKED_EVIDENCE, never a SANDWICH_PASS. The toolchain's
+    UNAVAILABLE and its verdict are unchanged.
+    """
+    extensions = extensions or {}
     checks = {}
     b0_header = b.b0_raw[:80]
     b0_hash = block_hash(b0_header)
@@ -299,6 +320,8 @@ def verify_sandwich(b: SandwichBundle):
     ok_nonce, ok_bind, ok_camera, ok_meas = True, True, True, True
     ok_rt, saw_rt, saw_camera = True, False, False
     ok_external, saw_external, external_blobs = True, False, 0
+    ext_blobs = {}           # evidence digest -> (type, blob): verified by an extension
+    unchecked = {}           # evidence digest -> type: known to nobody here
     for blob in b.evidence:
         try:
             o = cbor.loads(blob)
@@ -354,6 +377,10 @@ def verify_sandwich(b: SandwichBundle):
                 external_blobs += 1
                 if o[4] != _btag(q, o[2]):
                     ok_external = False
+            elif typ in extensions:
+                ext_blobs[digest_pair(DOM_EVIDENCE, blob)] = (typ, blob)
+            elif isinstance(typ, str):
+                unchecked[digest_pair(DOM_EVIDENCE, blob)] = typ
             else:
                 ok_bind = False
         except Exception:
@@ -380,8 +407,36 @@ def verify_sandwich(b: SandwichBundle):
         origin_s = None
     if origin_s is None:
         ok_meas = False
+    ext_facts, unchecked_obs, ok_ext = [], 0, True
     for so in b.history:
         u = so.unsigned
+        cited = {DigestPair(s.evidence.sha256, s.evidence.shake384) for s in u.sources}
+        if cited & (set(ext_blobs) | set(unchecked)):
+            # Every source of such an observation must cite the same one blob:
+            # an extension answers for a whole observation or for none of it.
+            if len(cited) != 1:
+                ok_meas = False
+                continue
+            (key,) = cited
+            matched += 1
+            if key in unchecked:
+                unchecked_obs += 1
+                continue
+            typ, blob = ext_blobs[key]
+            same = [bb for (t, bb) in ext_blobs.values() if t == typ]
+            try:
+                result, efacts = extensions[typ](u, blob, same)
+            except Exception as e:                      # an extension that breaks
+                result, efacts = False, {"error": str(e)[:200]}
+            if result is False:
+                ok_ext = False
+            elif result == NOT_CHECKED:
+                unchecked_obs += 1
+            elif result is not True:
+                ok_ext = False
+            ext_facts.append({"type": typ, "witness_id": u.witness_id.hex(),
+                              "sequence": u.sequence, "result": result, **efacts})
+            continue
         for src in u.sources:
             key = DigestPair(src.evidence.sha256, src.evidence.shake384)
             if key not in ev_index or origin_s is None:
@@ -400,6 +455,10 @@ def verify_sandwich(b: SandwichBundle):
     # require a time claim they deliberately do not make.
     measurable = len(b.evidence) - external_blobs
     checks["S_EVIDENCE_MEASUREMENT"] = (ok_meas and matched == measurable == len(b.history))
+    if ext_blobs:
+        checks["S_EXTENSION_EVIDENCE"] = ok_ext
+    if unchecked or unchecked_obs:
+        checks["S_UNCHECKED_EVIDENCE"] = NOT_CHECKED
 
     # core protocol checks (PQ signatures, chains, consensus, payload-in-C, C PoW)
     core, _ = verify_bundle(b.history, b.checkpoint, b.block_c_raw, None, b.genesis)
@@ -447,6 +506,10 @@ def verify_sandwich(b: SandwichBundle):
 
     if any(v == "UNAVAILABLE" for v in checks.values()):
         verdict = "INDETERMINATE_TOOLCHAIN"     # could not check, ≠ checked and failed
+    elif any(v is False for v in checks.values()):
+        verdict = "FAIL"
+    elif any(v == NOT_CHECKED for v in checks.values()):
+        verdict = "INDETERMINATE_UNCHECKED_EVIDENCE"
     elif not all(checks.values()):
         verdict = "FAIL"
     elif cp.interval is None:
@@ -462,6 +525,11 @@ def verify_sandwich(b: SandwichBundle):
         verdict = "SANDWICH_PASS"
     else:
         verdict = "SANDWICH_PASS_UNBURIED"
-    return checks, verdict, {"b0_hash": b0_hash, "b0_height": b.b0_height,
-                             "block_c_hash": block_hash(c_header), "burial_depth": burial,
-                             "challenge": q.hex()}
+    out = {"b0_hash": b0_hash, "b0_height": b.b0_height,
+           "block_c_hash": block_hash(c_header), "burial_depth": burial,
+           "challenge": q.hex()}
+    if ext_facts:
+        out["extensions"] = ext_facts
+    if unchecked:
+        out["unchecked_evidence_types"] = sorted(set(unchecked.values()))
+    return checks, verdict, out

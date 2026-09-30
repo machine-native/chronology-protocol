@@ -2,12 +2,17 @@
 """Standalone offline verifier for a reality-sandwich bundle.
 
 Usage:
-  python scripts/verify_sandwich.py [BUNDLE.cbor] [--photos DIR]
+  python scripts/verify_sandwich.py [BUNDLE.cbor] [--photos DIR] [--extension MODULE:NAME]
 
 Needs no network. Needs OpenSSL 3.5+ only for the post-quantum signature checks.
 With --photos, every file in a v2 bundle's photo manifest must exist in DIR and
 hash to its recorded sha256 (S_PHOTO_FILES).
-Exit 0 iff the verdict is SANDWICH_PASS or SANDWICH_PASS_UNBURIED.
+With --extension, MODULE:NAME names a dict {evidence type: verifier} (see
+ctp.sandwich.verify_sandwich) for evidence types this repository does not
+implement; the module must be importable. Without one, such evidence is
+NOT_CHECKED and the verdict is INDETERMINATE_UNCHECKED_EVIDENCE.
+Exit 0 iff the verdict is SANDWICH_PASS or SANDWICH_PASS_UNBURIED; 2 for any
+INDETERMINATE verdict; 1 otherwise.
 """
 from pathlib import Path
 import sys, json, hashlib
@@ -15,14 +20,20 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from ctp.sandwich import SandwichBundle, verify_sandwich
 
-args = [a for a in sys.argv[1:] if not a.startswith("--")]
-photos_dir = None
-if "--photos" in sys.argv:
-    photos_dir = Path(sys.argv[sys.argv.index("--photos") + 1])
+argv = sys.argv[1:]
+photos_dir = extensions = None
+if "--photos" in argv:
+    photos_dir = Path(argv[argv.index("--photos") + 1])
+if "--extension" in argv:
+    import importlib
+    mod, _, name = argv[argv.index("--extension") + 1].partition(":")
+    extensions = getattr(importlib.import_module(mod), name)
+flag_values = {argv[i + 1] for i, a in enumerate(argv[:-1]) if a in ("--photos", "--extension")}
+args = [a for a in argv if not a.startswith("--") and a not in flag_values]
 path = Path(args[0]) if args else ROOT / "vectors" / "valid" / "reality-sandwich-bundle.cbor"
 raw = path.read_bytes()
 b = SandwichBundle.from_bytes(raw)
-checks, verdict, facts = verify_sandwich(b)
+checks, verdict, facts = verify_sandwich(b, extensions)
 if photos_dir is not None and b.version >= 2:
     ok = bool(b.photo_manifest)
     for name, digest in (b.photo_manifest or {}).items():
@@ -45,4 +56,4 @@ def _explain(verdict):
 print(json.dumps({"bundle": str(path), "sha256": hashlib.sha256(raw).hexdigest(),
                   "facts": facts, "checks": checks, "verdict": verdict}, indent=2))
 _explain(verdict)
-raise SystemExit(0 if verdict.startswith("SANDWICH_PASS") else (2 if verdict=="INDETERMINATE_TOOLCHAIN" else 1))
+raise SystemExit(0 if verdict.startswith("SANDWICH_PASS") else (2 if verdict.startswith("INDETERMINATE") else 1))

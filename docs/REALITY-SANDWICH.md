@@ -105,6 +105,29 @@ chains, consensus rule, Merkle root, payload-in-coinbase, C PoW); header linkage
 B0 → C; burial-chain validity. Verdicts: `SANDWICH_PASS` (buried ≥ 1),
 `SANDWICH_PASS_UNBURIED`, `FAIL`.
 
+### 4b. Evidence types implemented elsewhere
+
+A witness profile does not have to live in this repository to sit in a sandwich.
+`verify_sandwich(bundle, extensions)` takes a map from evidence type to a verifier
+`(observation, blob, blobs_of_that_type) -> (result, facts)`; the command line takes
+`--extension MODULE:NAME`. For such evidence this repository still checks everything
+it owns — the blob's binding to q, B0 and the session, the observation's signatures
+and witness chain, its place in the anchored checkpoint, the blocks. The extension
+answers for the rest of the observation, all of it or none of it, and its facts are
+reported under `extensions`.
+
+Evidence that neither this repository nor a supplied extension implements is
+`NOT_CHECKED`, reported under `unchecked_evidence_types`, and the verdict is
+`INDETERMINATE_UNCHECKED_EVIDENCE` (exit 2): this verifier cannot say whether it is
+sound and will not say it failed. `NOT_CHECKED` ranks **below** `FAIL` — a bundle that
+fails on its own still fails when evidence nobody can check is added to it — and above
+every pass, so it can never be quietly dropped. An extension that raises is a `FAIL`.
+The toolchain's `UNAVAILABLE` and `INDETERMINATE_TOOLCHAIN` are unchanged.
+
+Before this, an unknown type was simply a `FAIL`: "checked and failed" for evidence
+that had not been checked at all, the same conflation the toolchain verdict was
+introduced to stop.
+
 ## 5. The expectation field (not evidence)
 
 The bundle carries the Earth Rotation Angle computed from the consensus midpoint by the
@@ -161,3 +184,5 @@ the physical sky:
   economic. The construction is chain-agnostic; its strength scales with the anchor
   chain's work.
 - The expectation field is a model output, never evidence (§5).
+- An extension's verdict is the extension's (§4b): a pass says the evidence met the
+  checks that extension implements, and nothing about checks it does not.

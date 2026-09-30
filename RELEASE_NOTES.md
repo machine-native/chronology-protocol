@@ -473,3 +473,23 @@ Operator diversity. Correct absolute mass from the PM sensors —
 More than one outside verifier. And now stated explicitly: of the two particulate
 sensors, **only one has an identity read from its own label**; the other is identified
 by which port it was plugged into, which would not survive the two being swapped.
+
+# Unreleased — evidence types implemented elsewhere
+
+`verify_sandwich` accepts extensions: verifiers for evidence types this repository
+does not implement, supplied by the caller (`--extension MODULE:NAME` on the command
+line). A witness profile maintained in another repository can now sit in a sandwich
+and be checked by this verifier plus its own extension, while everything this
+repository owns about that evidence — binding, signatures, chain, checkpoint,
+anchoring — is still checked here. See `docs/REALITY-SANDWICH.md` §4b.
+
+One behaviour changes, deliberately. Evidence of a type nobody here implements used to
+make the verdict `FAIL`. It is now `NOT_CHECKED` and the verdict
+`INDETERMINATE_UNCHECKED_EVIDENCE`, because the evidence was not checked, not checked
+and found wanting — the same distinction the toolchain verdict already draws. The new
+state ranks below `FAIL`, so it cannot soften a bundle that fails for any other
+reason; a test pins exactly that. Every shipped bundle verifies to the verdict it had
+before.
+
+Tests: 121 (seven new, in `tests/test_sandwich_extensions.py`, using a stand-in
+evidence type so they depend on nothing outside this repository).
