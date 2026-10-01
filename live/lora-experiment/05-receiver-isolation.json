@@ -2,7 +2,6 @@
   "record_type": "receiver_isolation",
   "machine": "the receiver (a small-form-factor PC)",
   "hostname": "<receiver-host>",
-  "isolated_at_local": "2026-09-06T21:24:06.3363898+05:30",
   "isolated_at_utc": "2026-09-06T15:54:06Z",
   "why_this_timestamp_matters": "Everything after it depends on this. The block to be transmitted is mined AFTER this moment, so it did not exist anywhere in the world when this machine lost its network. It cannot have been pre-staged, cached or synced, which leaves the radio as the only channel. That is the whole design.",
   "physical_adapters": [

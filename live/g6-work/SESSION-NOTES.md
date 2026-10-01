@@ -6,7 +6,6 @@
     challenge     issued 2026-08-23T15:41:46Z
     seed          C315EEC56B91AFF8, 10-second slots
     frames        15:42:26Z to 15:47:54Z
-    place         New Delhi, India
     camera        samsung Galaxy M56 5G
 
 ## What the frames are

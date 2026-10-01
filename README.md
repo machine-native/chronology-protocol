@@ -160,7 +160,7 @@ unsigned-but-fine (±30–200 ms) consolidated without changing the consensus ru
 
 ## The first astronomical ChronologyProof (v0.3.0)
 
-On 2026-08-20 a real observation of the Moon over New Delhi — ten photographs with a
+On 2026-08-20 a real observation of the Moon — ten photographs with a
 challenge code derived from block 252's hash handwritten inside the frames — was
 checkpointed beside five NTP witnesses and mined into height 253, an adjacent-block
 causal window, buried by ten laboratory blocks overnight. The bundle carries the

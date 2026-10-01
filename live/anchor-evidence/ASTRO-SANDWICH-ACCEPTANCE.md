@@ -3,7 +3,7 @@
 A real optical observation of the Moon, causally sandwiched between live proof-of-work
 blocks, checkpointed with post-quantum signatures beside network-time witnesses, and
 compared against a deterministic celestial-model expectation. Observer and operator:
-parthod0x, New Delhi, India. The authoritative artifact is
+parthod0x. The authoritative artifact is
 `vectors/valid/astro-sandwich-bundle.cbor` (offline verifier:
 `scripts/verify_sandwich.py BUNDLE --photos DIR`).
 
@@ -34,7 +34,7 @@ B1…  heights 254-263 mined overnight by the laboratory's own miner — burial 
 ## Prediction vs observation
 
 The bundle carries the open-astrolabe engine's expectation for the capture midpoint
-over New Delhi (`prediction_json`, label `EXPECTATION_NOT_EVIDENCE`):
+at the observer's position (`prediction_json`, label `EXPECTATION_NOT_EVIDENCE`):
 
 ```
 predicted  azimuth 216.6° (SW)   altitude 24.0°   illuminated fraction 0.552

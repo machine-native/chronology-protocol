@@ -61,3 +61,23 @@ always lists the current copy.
 |---|---|---|---|
 | `live/lora-experiment/01-rail-measurements.json` | 2026-09-27: the instrument was identified. `"handheld multimeter"` became the make, model, count and category, with a block recording that the identification came from photographs taken three weeks after the measurement and was confirmed by the operator. **No reading, verdict or timestamp changed.** | `9c9d640ab10c7669055ec1761c54902d34ee0a9f86419017b16c22c1758c8fb4` | `51ede2f61e70d0708e445003f7b6bebfa3a2f9bffe66a195b6a38e6a6e2120e6` |
 | `reports/mined-block.json` | 2026-10-01: replaced by the receipt for the epoch-8 anchor (block 1270), whose `template` field held a local filesystem path when captured (sha256 `ada14d074875367f80a59709572e5bb88231a7c97afd62c57b37190fd43ebddb`); it was replaced by `<repo>` before commit, and `scripts/finalize_mined_block.py` now writes the path relative to the working copy, so the next receipt needs no redaction. **No hash, nonce or status changed.** | `7f7ebf22ab71ffbf6dc8379e2a35c3a0513f281a9928a0bf49ab6dda26c0d2a8` | `8b76e1d44bc7060208da7dcc4cb820fcfd7817d0ca97c5e494adc585074faa7a` |
+| `live/lora-experiment/01-rail-measurements.json` | 2026-10-01: the local-clock twin of `measured_utc` removed. Records are UTC-only. **No reading, verdict or UTC timestamp changed.** | `51ede2f61e70d0708e445003f7b6bebfa3a2f9bffe66a195b6a38e6a6e2120e6` | `83366023fd1556d2599e056c87b047fc764424e6f65bde5ef817f891a1f28f8e` |
+| `live/lora-experiment/02-transmitter-config.json` | 2026-10-01: the local-clock twin of `configured_utc` removed. **Nothing else changed.** | `40633d99f4540053d80189eb753eb5181e99d0e532e4b97979408d6089099899` | `f8fc7bf4f7b8b4516ed6b3b0788e396510c3daf92d8a6d107714eb2d6f21cec1` |
+| `live/lora-experiment/05-receiver-isolation.json` | 2026-10-01: the local-clock twin of `isolated_at_utc` removed. **Nothing else changed.** | `b950cefbe62477ec269bc0758a2edd002b157da196391deb7682230d732cddda` | `f6da6aa2190abe19474c492237503e717040a54f85a1906e0ef483fa75a38b02` |
+| `live/lora-experiment/08-cross-check.json` | 2026-10-01: every local clock time restated in UTC (local minus 5 h 30 min; each conversion agrees with a UTC value recorded elsewhere in the experiment), and `artifact_written_local` renamed `artifact_written_utc`. **No instant, digest or finding changed.** | `ff99c4c879186d52fa79bae3f54584e2e66bce9715e590e0ccbc15ef69e68e4d` | `aed1b691759ab1f34eb2e3fc4a555e369dec87657b42dcc20038e5ab54d0fe90` |
+
+## Location, 2026-10-01
+
+This project is internet-first and its records are UTC-only. On 2026-10-01 the
+observer's city was removed from the documents and scripts that named it (README,
+RELEASE_NOTES, the astro-sandwich acceptance record, the epoch-4 session notes, and
+the docstring of `scripts/run_pm_binding.py`); the capture scripts no longer carry a
+place or a time zone, and take both from the operator when needed
+(`CTP_OBSERVER_PLACE`, `CTP_CAMERA_UTC_OFFSET_S`, `--camera-utc-offset`).
+
+What remains, and why: the epoch-2 and epoch-4 bundles and their camera evidence blobs
+carry an operator-stated city reference point, and `live/g2b-work/astrolabe-prediction.json`
+carries the coordinates the Moon prediction was computed for. Those bytes are committed
+in proof-of-work blocks and OpenTimestamps proofs, and a topocentric prediction cannot be
+re-derived without its observer position; changing them would destroy the evidence
+rather than redact it. They are the minimum the evidence requires.

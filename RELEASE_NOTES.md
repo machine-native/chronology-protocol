@@ -139,7 +139,7 @@ origins. A float-reference regression test pins this for as long as the record e
 # v0.3.0 — The first astronomical ChronologyProof (2026-08-21)
 
 **Sandwich v2: a real optical observation of the sky, inside the causal bounds.** On
-the evening of 2026-08-20 the operator photographed the gibbous Moon over New Delhi
+the evening of 2026-08-20 the operator photographed the gibbous Moon
 with a fresh challenge code — the first 16 hex digits of q, derived from block 252's
 hash five minutes earlier — handwritten on paper inside the frames. Ten original
 frames (EXIF intact, sha256-manifested) became a `CAMERA-PHOTO/v1` witness beside
@@ -525,3 +525,13 @@ Seven tests in `tests/test_sandwich_extensions.py` cover this, using a stand-in
 evidence type so they depend on nothing outside this repository.
 
 Tests: 127.
+
+# Unreleased — records are UTC-only
+
+The observer's city is removed from the documents and scripts that named it, and the
+LoRa experiment's records restate their local clock times in UTC. The capture scripts
+no longer carry a place or a time zone; the operator supplies them when a capture
+needs them. What stays, and why — evidence bytes committed in proof-of-work blocks,
+and the coordinates a topocentric prediction cannot be re-derived without — is set
+out with every digest in `live/REDACTIONS.md`. No instant, measurement, digest of
+anchored evidence or verdict changed.

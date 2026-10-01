@@ -3,7 +3,6 @@
   "machine": "laptop (transmitter)",
   "port": "COM8",
   "configured_utc": "2026-09-06T15:23:08Z",
-  "configured_local": "2026-09-06 20:53:08",
   "first_contact": "This is the first time scripts/lora_relay.py has spoken to real hardware. RADIO-RELAY.md described it as written to the RYLR998 datasheet and not yet run; the module answered AT with +OK.",
   "as_found": {
     "firmware": "RYLR998_REYAX_V1.2.4",

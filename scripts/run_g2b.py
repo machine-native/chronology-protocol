@@ -8,7 +8,7 @@ single-record camera witness over the original photo files, and produces the epo
 checkpoint (chained to the epoch-1 sandwich checkpoint) and its anchor payload.
 """
 from __future__ import annotations
-import glob, hashlib, json, sys, time
+import glob, hashlib, json, os, sys, time
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -25,8 +25,19 @@ from ctp.sandwich import (challenge, exchange_nonce, ntp_exchange, derive_measur
                           evidence_blob, ntp_unsigned, camera_evidence_blob,
                           camera_unsigned, SandwichBundle, PS)
 
-IST_OFFSET_S = 5 * 3600 + 1800
-PLACE = "New Delhi, India (28.6139 N, 77.2090 E, operator-stated city)"
+# Records are UTC-only. A place is recorded only if the operator supplies one, and the
+# camera's clock offset from UTC must be stated for each run rather than assumed.
+PLACE = os.environ.get("CTP_OBSERVER_PLACE", "not stated")
+
+
+def camera_utc_offset_s() -> int:
+    v = os.environ.get("CTP_CAMERA_UTC_OFFSET_S")
+    if v is None:
+        raise SystemExit("set CTP_CAMERA_UTC_OFFSET_S: seconds the camera's EXIF clock "
+                         "is ahead of UTC")
+    return int(v)
+
+
 CLOCK_MARGIN_PS = 120 * PS               # handheld phone clock, honest margin
 
 
@@ -49,7 +60,7 @@ def main():
         sub = ex["Exif"].get(piexif.ExifIFD.SubSecTimeOriginal, b"0").decode()
         import calendar
         t = time.strptime(dto, "%Y:%m:%d %H:%M:%S")
-        unix_utc = calendar.timegm(t) - IST_OFFSET_S      # EXIF wall time is IST
+        unix_utc = calendar.timegm(t) - camera_utc_offset_s()   # EXIF wall time is local
         frac_ns = int(int(sub) * 10 ** (9 - len(sub))) if sub.isdigit() else 0
         exif_ns[name] = unix_utc * 10**9 + frac_ns
     times = sorted(exif_ns.values())

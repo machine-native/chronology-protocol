@@ -2,7 +2,6 @@
   "record_type": "pre_wiring_rail_measurement",
   "experiment": "Experiment 1 -- block transfer by LoRa radio between two machines",
   "measured_utc": "2026-09-06T15:11:45Z",
-  "measured_local": "2026-09-06 20:41:45",
   "why": "+5V and 3V3 are adjacent on the CP2102 header. 5 V destroys an RYLR998 and there is no spare, so this is the step with no undo. Recorded before the modules were attached, because a measurement written down afterwards is a recollection rather than evidence.",
   "instrument": "Themisto TH-M100 AC/DC True RMS digital multimeter, 6000 counts, 10 A, CAT III 600 V. DC volts, red lead in the V/ohm/mA socket.",
   "method": "black probe on GND (pin 5 counting from the DTR end), red on pin 6 (3V3) then pin 4 (+5V). BOTH rails measured deliberately: a single 3.3 V reading cannot distinguish the correct pin from a miscount, whereas 3.3 on pin 6 AND 5.0 on pin 4 confirms the pin identification itself.",

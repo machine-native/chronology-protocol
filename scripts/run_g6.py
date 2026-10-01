@@ -44,7 +44,7 @@ Usage:
     python scripts/run_g6.py --dry-run            # check frames, touch nothing
 """
 from __future__ import annotations
-import argparse, calendar, glob, hashlib, json, sys, time
+import argparse, calendar, glob, hashlib, json, os, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -66,7 +66,7 @@ from ctp.sandwich import (challenge, exchange_nonce, ntp_exchange, derive_measur
 
 EPOCH = 4
 PREV_WORK = "live/g5-work"                 # epoch 3
-PLACE = "New Delhi, India (28.6139 N, 77.2090 E, operator-stated city)"
+PLACE = os.environ.get("CTP_OBSERVER_PLACE", "not stated")   # records are UTC-only
 CAMERA = "samsung Galaxy M56 5G"
 WITNESS_ID = "samsung-galaxy-m56-5g/parthod0x"
 CLOCK_MARGIN_PS = 120 * PS                 # handheld phone clock, honest margin
@@ -76,7 +76,7 @@ MIN_SPAN_S = 60
 MIN_SLOTS = 4
 
 
-def load_frames(work: Path, ist_offset_s: int):
+def load_frames(work: Path, camera_utc_offset_s: int):
     """Digest every original frame and read its self-asserted capture time."""
     paths = sorted(glob.glob(str(work / "photos" / "*.jpg")))
     if not paths:
@@ -94,7 +94,7 @@ def load_frames(work: Path, ist_offset_s: int):
                 "transit -- messaging apps and cloud sync strip EXIF. Copy the "
                 "originals off the phone by USB.")
         sub = ex["Exif"].get(piexif.ExifIFD.SubSecTimeOriginal, b"0").decode()
-        unix_utc = calendar.timegm(time.strptime(dto, "%Y:%m:%d %H:%M:%S")) - ist_offset_s
+        unix_utc = calendar.timegm(time.strptime(dto, "%Y:%m:%d %H:%M:%S")) - camera_utc_offset_s
         frac_ns = int(int(sub) * 10 ** (9 - len(sub))) if sub.isdigit() else 0
         exif_ns[name] = unix_utc * 10**9 + frac_ns
     return photos, exif_ns
@@ -199,7 +199,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--work", default="live/g6-work")
-    ap.add_argument("--ist-offset", type=int, default=5 * 3600 + 1800,
+    ap.add_argument("--camera-utc-offset", type=int, required=True,
                     help="seconds the EXIF wall clock is ahead of UTC")
     ap.add_argument("--allow-weak", action="store_true",
                     help="proceed on a series below threshold, recording the shortfall")
@@ -219,7 +219,7 @@ def main():
         raise SystemExit("challenge.json does not match its own B0 and session_id")
     seed16, slot_s = ch["seed16"], ch.get("slot_seconds", 10)
 
-    photos, exif_ns = load_frames(work, a.ist_offset)
+    photos, exif_ns = load_frames(work, a.camera_utc_offset)
     times = sorted(exif_ns.values())
     code_frames = parse_code_frames(a.code_frames, exif_ns.keys())
     rows = rolling_expectation(exif_ns, seed16, slot_s, code_frames)

@@ -3,7 +3,7 @@
 
 Epoch 5 bound a SATROOT namespace -- a record made of arithmetic. Epoch 6 bound a
 record made of air: laser-scattering measurements of the particulate matter in a
-room in New Delhi, with the challenge inside the batch that carries them.
+room, with the challenge inside the batch that carries them.
 
 Epoch 7 binds the same thing measured better. Two PMS7003 instead of one, so
 `co-location` is a check that ran rather than a check that could not, and a
