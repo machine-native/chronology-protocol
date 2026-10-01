@@ -35,7 +35,7 @@ nothing whatever about the prediction.
 Exit codes:  0 held - 1 failed - 2 not yet (or the chain could not be read)
 """
 from __future__ import annotations
-import argparse, hashlib, json, struct, subprocess, sys, time
+import argparse, hashlib, io, json, struct, subprocess, sys, time
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -146,6 +146,45 @@ def next_work_required(headers, height_of_last: int):
     }
 
 
+def restamp_manifest() -> None:
+    """Keep MANIFEST.sha256 consistent after --refresh rewrites the chain dump.
+
+    `live/chain-blocks.hex` is TRACKED and ships inside the evidence deposit, so a
+    refresh that leaves the manifest stale makes verify_all.py report FAIL on the
+    manifest check. A reader who refreshed and then verified would conclude the
+    evidence was broken -- the cry-wolf failure this project treats as worse than
+    having no check at all.
+
+    ONLY the one line is rewritten. Regenerating the manifest wholesale would
+    quietly absorb any other drift in the tree, which is exactly the silent
+    absolution a manifest exists to prevent.
+
+    `live/MANIFEST-live.sha256` is deliberately NOT touched. It records digests as
+    captured on 2026-08-19, and a capture-time manifest regenerated after the fact
+    stops being a record of the capture. The two are meant to diverge; this file
+    has been updated seven times since that capture.
+    """
+    rel = "live/chain-blocks.hex"
+    digest = hashlib.sha256((ROOT / rel).read_bytes()).hexdigest()
+    man = ROOT / "MANIFEST.sha256"
+    out = man.read_text(encoding="utf-8").splitlines()
+    hits = [i for i, line in enumerate(out)
+            if line.endswith("*" + rel) or line.endswith(" " + rel)]
+    if len(hits) != 1:
+        print("  WARNING  expected one manifest line for " + rel + ", found "
+              + str(len(hits)) + "; leaving MANIFEST.sha256 alone")
+        return
+    if out[hits[0]].split()[0] == digest:
+        return
+    out[hits[0]] = digest + " *" + rel
+    # The newline argument is not cosmetic: this repository sets `* -text` with
+    # autocrlf off, and Python's text mode writes CRLF on Windows, which would
+    # silently rewrite every line of the manifest rather than the one intended.
+    with io.open(man, "w", encoding="utf-8", newline=chr(10)) as fh:
+        fh.write(chr(10).join(out) + chr(10))
+    print("  manifest line for " + rel + " restamped -> " + digest[:12] + "...")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -161,6 +200,7 @@ def main() -> int:
         if r.returncode != 0:
             print("  could not refresh the chain:\n" + (r.stderr or r.stdout)[-600:])
             return 2
+        restamp_manifest()
 
     headers = load_chain()
     if not headers:
