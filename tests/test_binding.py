@@ -142,3 +142,24 @@ def test_both_hex_and_raw_encodings_are_accepted_and_named():
 def test_blob_rejects_a_wrong_length_hash():
     with pytest.raises(ValueError):
         external_record_blob(0, "S", b"\x00" * 31, b"\x11" * 32, "00" * 32, b"\x00" * 32)
+
+
+GALILEO_BUNDLE = VECTORS / "galileo-binding-bundle.cbor"
+GALILEO_CAPTURE = ROOT / "live" / "galileo-bind-work" / "galileo-capture.bert"
+
+
+def test_the_galileo_capture_is_upper_bound_only_here():
+    """Epoch 8 commits satellite data, which cannot carry the tag. This repository
+    must say UPPER_ONLY for it, never BOUND: the lower bound is Galileo's own key
+    release, checked by time-witness, not by anything here."""
+    if not GALILEO_BUNDLE.exists():
+        pytest.skip("galileo-binding-bundle.cbor not present")
+    b = SandwichBundle.from_bytes(GALILEO_BUNDLE.read_bytes())
+    capture = GALILEO_CAPTURE.read_bytes()
+    checks, verdict = verify_binding(b, "GALILEO-E1B-CAPTURE", capture)
+    assert verdict == "UPPER_ONLY"
+    assert checks["SANDWICH_COMMITS_TO_RECORD"] is True
+    assert checks["RECORD_SHA256"] == hashlib.sha256(capture).hexdigest()
+    altered = bytearray(capture)
+    altered[len(altered) // 2] ^= 1
+    assert verify_binding(b, "GALILEO-E1B-CAPTURE", bytes(altered))[1] == "UNBOUND"

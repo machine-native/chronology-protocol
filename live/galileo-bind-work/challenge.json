@@ -1,0 +1,12 @@
+{
+  "b0_hash": "00000000d6af3dcb626d21bd4a26d59ad6e48cedc3339b20ee38f67f556fec49",
+  "b0_height": 1269,
+  "session_id": "46dbaca4c498c6124478933ac8fbec35a68aebb2f26e14d34954ca8f9e2abf1f",
+  "challenge": "7cb501ffc097e2bdba5258dbc1ffa2098d9772ff4867be31bb72b2e942c0169d",
+  "system_id": "GALILEO-E1B-CAPTURE",
+  "lower_bound_source": "Galileo OSNMA key release inside the record (checked by time-witness); the record cannot carry a binding tag",
+  "issued_utc": "2026-10-01T14:56:26Z",
+  "record_sha256": "e44702b5f912dbf7946339690383db5e6b3a3204d5496722ce1f1b532f838882",
+  "record_file": "galileo-capture.bert",
+  "closed_utc": "2026-10-01T15:14:05Z"
+}

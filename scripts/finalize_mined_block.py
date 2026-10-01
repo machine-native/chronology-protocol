@@ -33,7 +33,9 @@ raw=header+raw0[80:]
 out=ROOT/"reports"/"mined-block.hex"
 out.write_text(raw.hex()+"\n")
 receipt={
-    "template":str(tp),
+    # A path inside the working copy is recorded relative to it: an absolute path
+    # names the machine and its user, which has no place in a published receipt.
+    "template":("<repo>/"+tp.resolve().relative_to(ROOT).as_posix()) if tp.resolve().is_relative_to(ROOT) else tp.name,
     "block_hash":h,
     "nonce":int.from_bytes(header[76:80],"little"),
     "raw_block_bytes":len(raw),

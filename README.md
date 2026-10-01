@@ -14,7 +14,7 @@ One command gives a verdict: `python scripts/verify_all.py`.
 
 ## What has actually been done
 
-Seven checkpoints, each committed into a real proof-of-work block, each chained to the
+Eight checkpoints, each committed into a real proof-of-work block, each chained to the
 one before it, all offline-verifiable:
 
 | epoch | block | what it establishes |
@@ -27,9 +27,10 @@ one before it, all offline-verifiable:
 | 5 | 479 | a record from another system given a checkable time bound |
 | 6 | 530 | 115 real air measurements bound to proof-of-work |
 | 7 | 628 | 958 observations from two particulate sensors and a hygrometer, 104 deep at publication (2026-09-07) |
+| 8 | 1270 | a capture of Galileo satellite signals, bounded below by Galileo itself and above by the block |
 
-**10 proofs · 25 attestations · 17 distinct blocks** — OpenTimestamps proofs and the public
-Bitcoin blocks they land in — every one confirmed against a public explorer by
+**11 proofs · 25 attestations · 17 distinct blocks** — OpenTimestamps proofs and the public
+Bitcoin blocks they land in (the epoch-8 proof is pending until Bitcoin confirms it) — every attestation confirmed against a public explorer by
 `scripts/confirm_attestations.py`, which ships, so the count can be repeated rather than taken
 on trust. That public-Bitcoin proof-of-work is the only
 part of this evidence produced by people with no connection to this project; the anchor-chain
@@ -115,6 +116,17 @@ Epoch 6 committed 115 real air measurements. Epoch 7 committed 958 observations 
 two PMS7003 particulate sensors and a BME280, verdict `SANDWICH_PASS`, buried 104
 blocks deep at publication (2026-09-07). The bridge forwards raw sensor frames and raw ADC counts and interprets
 nothing, so every value stays recomputable by a reader who distrusts the arithmetic.
+
+## Galileo satellite signals, bounded from both sides (epoch 8)
+
+Epoch 8 commits a 17-minute capture of Galileo navigation pages. The capture cannot
+carry this protocol's binding tag, so this repository alone shows only its upper
+bound (`UPPER_ONLY`). The lower bound is Galileo's: its navigation-message
+authentication releases signing keys that were secret until their 30-second
+sub-frame, so a capture containing a verified key cannot predate that release.
+[time-witness](https://github.com/machine-native/time-witness) checks that half and
+reports both: Galileo key release (GST week 1414, 400380 s) ≺ capture ≺ block 1270.
+See [`docs/EXTERNAL-BINDING.md`](docs/EXTERNAL-BINDING.md).
 
 ## A record from another system, given a time bound (epoch 5)
 

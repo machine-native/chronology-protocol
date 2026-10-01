@@ -474,7 +474,37 @@ More than one outside verifier. And now stated explicitly: of the two particulat
 sensors, **only one has an identity read from its own label**; the other is identified
 by which port it was plugged into, which would not survive the two being swapped.
 
-# Unreleased — evidence types implemented elsewhere
+# v0.5.2 — Galileo satellite signals inside an anchored epoch (2026-10-01)
+
+## Epoch 8: a record bounded from both sides, by two parties neither of which is this project
+
+Epoch 8 (block 1270, B0 at 1269) commits a 17-minute capture of Galileo E1-B
+navigation pages, 12,574 frames relayed by the public galmon network, recorded
+after B0. Five NTP operators witness the session on the same challenge (verdict
+`CONSENSUS`); the checkpoint chains to epoch 7. Bundle:
+`vectors/valid/galileo-binding-bundle.cbor`, buried 2 blocks at assembly; the
+capture itself ships as `live/galileo-bind-work/galileo-capture.bert`.
+
+The capture cannot carry the binding tag -- its bytes are the satellites' -- so
+`verify_binding()` reports `UPPER_ONLY`, and a new test pins that it must. The
+lower bound comes from Galileo's navigation-message authentication: a signing key
+kept secret until its 30-second sub-frame, verified offline under the published
+trust anchor, puts the capture no earlier than GST week 1414, 400380 s. That check
+lives in [time-witness](https://github.com/machine-native/time-witness), which
+takes this bundle and the capture and reports `GALILEO_BOUND`:
+
+    Galileo key release  <  capture  <  block 1270  (< burial)
+
+The ritual is `scripts/run_galileo_binding.py` (`--open`, capture, `--close`), the
+same steps as epochs 5-7 with the record supplied rather than built.
+
+## `capture_retarget.py --refresh` leaves the manifest consistent
+
+Refreshing the chain dump rewrote a tracked file and left the root manifest
+failing its own check. `--refresh` now restamps only that one manifest line; the
+frozen `live/MANIFEST-live.sha256` is deliberately untouched.
+
+## Evidence types implemented elsewhere
 
 `verify_sandwich` accepts extensions: verifiers for evidence types this repository
 does not implement, supplied by the caller (`--extension MODULE:NAME` on the command
@@ -491,5 +521,7 @@ state ranks below `FAIL`, so it cannot soften a bundle that fails for any other
 reason; a test pins exactly that. Every shipped bundle verifies to the verdict it had
 before.
 
-Tests: 121 (seven new, in `tests/test_sandwich_extensions.py`, using a stand-in
-evidence type so they depend on nothing outside this repository).
+Seven tests in `tests/test_sandwich_extensions.py` cover this, using a stand-in
+evidence type so they depend on nothing outside this repository.
+
+Tests: 127.

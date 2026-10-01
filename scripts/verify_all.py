@@ -45,6 +45,7 @@ SANDWICH_BUNDLES = [
     "satroot-binding-bundle.cbor",
     "pm-binding-bundle.cbor",
     "pm2-binding-bundle.cbor",
+    "galileo-binding-bundle.cbor",
 ]
 
 

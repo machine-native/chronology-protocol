@@ -1,8 +1,8 @@
 {
   "template": "<repo>\\reports\\live-template.json",
-  "block_hash": "00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205f46a0",
-  "nonce": 2467874504,
+  "block_hash": "000000007b2aa16971a0bec5dc346b1be20965c9743ab4cbfe1347684b6d39c6",
+  "nonce": 2002182432,
   "raw_block_bytes": 306,
-  "raw_block_sha256": "f20f5b85373101e68fe2e6f16fb3da7af44f6924a3aaeccf1f462c30342363a3",
+  "raw_block_sha256": "1c787807a7814d21e6af89bed766518c8f9afa5ab30ff74859965439c1e893ed",
   "status": "MINED_LOCALLY_NOT_YET_NODE_ACCEPTED"
 }

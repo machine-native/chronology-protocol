@@ -118,6 +118,33 @@ A verifier that returned "pass" for `UPPER_ONLY` would let a backdated record
 wear a sandwich. That is the specific mistake this vocabulary exists to prevent,
 and it is the one a caller in a hurry would otherwise make.
 
+### A record that brings its own lower bound (epoch 8)
+
+Some records cannot carry a tag. Epoch 8 commits a 17-minute capture of Galileo
+satellite navigation pages (`live/galileo-bind-work/galileo-capture.bert`,
+system_id `GALILEO-E1B-CAPTURE`): its bytes are what the satellites broadcast, and
+nothing a receiver adds to them would be evidence of anything. Here
+`verify_binding()` reports `UPPER_ONLY`, and that verdict is correct: this
+repository can show only that the capture existed before block 1270.
+
+The lower bound comes from outside this repository. Galileo's navigation-message
+authentication releases signing keys that were secret until their 30-second
+sub-frame, so a capture containing a verified key was assembled no earlier than
+that key's release, whoever recorded it. That check belongs to the repository that
+implements it, [time-witness](https://github.com/machine-native/time-witness)
+(`scripts/verify_galileo_epoch.py`), which takes this bundle and the capture and
+reports both bounds:
+
+```
+B0                  height 1269, 00000000d6af3dcb626d21bd4a26d59ad6e48cedc3339b20ee38f67f556fec49
+record sha256       e44702b5f912dbf7946339690383db5e6b3a3204d5496722ce1f1b532f838882
+Galileo lower bound GST week 1414, time of week 400380 (key release, verified offline)
+anchored            epoch 8, block 1270, 000000007b2aa16971a0bec5dc346b1be20965c9743ab4cbfe1347684b6d39c6
+```
+
+Neither bound is this project's word: the lower is Galileo's key schedule under a
+trust anchor the European GNSS Service Centre publishes, the upper is proof-of-work.
+
 ## Worked example
 
 Real values, from `vectors/valid/reality-sandwich-bundle.cbor` in this
