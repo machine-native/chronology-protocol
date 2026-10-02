@@ -29,8 +29,8 @@ one before it, all offline-verifiable:
 | 7 | 628 | 958 observations from two particulate sensors and a hygrometer, 104 deep at publication (2026-09-07) |
 | 8 | 1270 | a capture of Galileo satellite signals, bounded below by Galileo itself and above by the block |
 
-**11 proofs · 25 attestations · 17 distinct blocks** — OpenTimestamps proofs and the public
-Bitcoin blocks they land in (the epoch-8 proof is pending until Bitcoin confirms it) — every attestation confirmed against a public explorer by
+**11 proofs · 29 attestations · 21 distinct blocks** — OpenTimestamps proofs and the public
+Bitcoin blocks they land in — every one confirmed against a public explorer by
 `scripts/confirm_attestations.py`, which ships, so the count can be repeated rather than taken
 on trust. That public-Bitcoin proof-of-work is the only
 part of this evidence produced by people with no connection to this project; the anchor-chain

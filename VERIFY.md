@@ -293,9 +293,8 @@ python scripts/confirm_attestations.py
 
 It reads the required (height, merkle root) pairs out of every `.ots` proof,
 asks an explorer that has never heard of this project what those blocks actually
-contain, and compares. As of 2026-10-01 that is **11 proofs · 25 attestations ·
-17 distinct blocks**, all CONFIRMED, no mismatches; the epoch-8 proof carries no
-attestation yet, pending Bitcoin confirmation. Point it at a different
+contain, and compares. As of 2026-10-02 that is **11 proofs · 29 attestations ·
+21 distinct blocks**, all CONFIRMED, no mismatches. Point it at a different
 explorer with `--explorer` if you would rather not ask that one.
 
 If it cannot reach the network it reports INDETERMINATE and exits 2, not 1.
