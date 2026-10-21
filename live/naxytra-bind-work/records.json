@@ -1,0 +1,25 @@
+{
+  "record_type": "external_records_verified",
+  "system_id": "NAXYTRA-ATTESTATION/1",
+  "verified_utc": "2026-10-21T10:19:54Z",
+  "how": "each attestation fetched from the public executor; SHA-256 of its RFC 8785 form (sorted keys, no whitespace, utf-8) recomputed here and found equal to the digest the external system stated; bindings[0] checked equal to {scheme ctp/1, system_id NAXYTRA-ATTESTATION/1, tag}; tag found inside the signed object",
+  "what_is_kept_here": "digests and identifiers only; attestation content stays with the external system",
+  "records": [
+    {
+      "seq": 0,
+      "attestation_id": "att_7901a5f0869e",
+      "record_sha256": "ba7d2d3345db22d978cba53072ded71c7b426459c31f84697de717e9369a08c9",
+      "fetch": "https://xytara-mcp-executor.onrender.com/attestations/att_7901a5f0869e",
+      "recompute_matches": true,
+      "tag_present_in_signed_bytes": true
+    },
+    {
+      "seq": 1,
+      "attestation_id": "att_9ba842d872c4",
+      "record_sha256": "79dee98c1a4d562f8b04748d9b20096603166dff49d2789ebb5085d403a856cf",
+      "fetch": "https://xytara-mcp-executor.onrender.com/attestations/att_9ba842d872c4",
+      "recompute_matches": true,
+      "tag_present_in_signed_bytes": true
+    }
+  ]
+}
