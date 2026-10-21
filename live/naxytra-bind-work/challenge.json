@@ -1,0 +1,13 @@
+{
+  "record_type": "external_binding_session",
+  "system_id": "NAXYTRA-ATTESTATION/1",
+  "opened_utc": "2026-10-21T09:18:21Z",
+  "b0_height": 1364,
+  "b0_hash": "00000000d21695ac15ca9c434cdd6ce23fe3740067ee1ef58cf20aa538dea60c",
+  "session_id": "2943e0f1fcb56738e546a43ab4d2a8533d13c0c40452c35377d547dbcc4f98a0",
+  "challenge": "4e54d6f3235f29f48600e3416a426f5d0975ad8dd51ad9372992c7978c02a01e",
+  "binding_tag": "2b4ca38ea86773b0ef3e21ef395a4641be7e5189bfb6d336eac253454c280512",
+  "what_crosses_to_the_external_system": "binding_tag only. q never leaves this record.",
+  "what_the_external_system_returns": "attestation_sha256 of the JCS form, signatures included",
+  "next": "NTP round on this challenge, external_record_blob, checkpoint, mine C, bury, OTS"
+}
