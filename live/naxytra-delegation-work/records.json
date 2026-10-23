@@ -1,0 +1,19 @@
+{
+  "record_type": "external_records_verified",
+  "system_id": "NAXYTRA-DELEGATION-LOG/1",
+  "verified_utc": "2026-10-23T10:45:43Z",
+  "how": "re-fetched from the public checkpoint route; SHA-256 of the RFC 8785 form recomputed here; bindings[0] and tag checked inside the signed object",
+  "records": [
+    {
+      "seq": 0,
+      "checkpoint_id": "att_61682b456a1d",
+      "record_sha256": "77e32857f4fe6d1b86d5f08690ae61f6f82ea07cd4af8bd37e0b27606c70895f",
+      "log_head": "9ad615dc0cad8b78c497a116ae487403a231f809c4c4c9324d5ffc3b39077632",
+      "issued_utc": "2026-10-23T10:44:29.212Z",
+      "fetch": "https://xytara.onrender.com/v1/delegation-log/checkpoint",
+      "recompute_matches": true,
+      "tag_present_in_signed_bytes": true,
+      "verdict": "VERIFIED"
+    }
+  ]
+}
