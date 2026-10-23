@@ -535,3 +535,64 @@ needs them. What stays, and why — evidence bytes committed in proof-of-work bl
 and the coordinates a topocentric prediction cannot be re-derived without — is set
 out with every digest in `live/REDACTIONS.md`. No instant, measurement, digest of
 anchored evidence or verdict changed.
+
+# v0.5.3 — Epoch 10: the first consumer (2026-10-23)
+
+The first epoch whose record was produced by a party that will pay for the anchor.
+Two signed attestations from another system — real paid transaction-status records
+on a public chain, system id `NAXYTRA-ATTESTATION/1` — bound into a reality sandwich
+and mined into **block 1365**.
+
+## The round trip, and why it needed two new scripts
+
+Every earlier external binding ran in one script because the record was local. This
+one is a round trip: the session opens here, the tag goes out, the other party signs
+its records with the tag **inside the signed bytes**, and the digests come back. So
+the ritual is now two halves — `scripts/open_binding_session.py` and
+`scripts/close_binding_session.py` — and the closer refuses to re-mint anything: a
+fresh B0 would orphan whatever the other party had already bound to the first tag.
+
+Each digest was recomputed here from the public source's RFC 8785 form before
+binding, and the tag confirmed inside each signed object. The bundle carries digests
+only; the records' content never enters this repository.
+
+```
+B0            1364
+records       2 (seq 0, seq 1), each its own EXTERNAL-RECORD/v1 blob
+witnesses     five NTP operators, two exchanges each, every nonce echoed
+checkpoint    epoch 10, chained to epoch 9
+C             1365, found on round 1
+burial        2 at assembly (the chain stands at 1368)
+verdict       SANDWICH_PASS
+bundle        vectors/valid/naxytra-binding-bundle.cbor
+              sha256 dc14bc557abc666288950220ff2117012dd9a90106434a404735f012010947a5
+OTS           .ots stamped at four calendars, pending Bitcoin attestation
+```
+
+## A decision recorded rather than made quietly
+
+With the laboratory VM idle for two days, publishing at burial depth 0 was
+considered and a dry run assembled. The verifier returned **`SANDWICH_PASS_UNBURIED`**
+— the binding held, but depth is fixed inside the bundle bytes, so the artifact would
+have read `UNBURIED` permanently while every other shipped epoch reads
+`SANDWICH_PASS`. Held for two blocks instead. That is why the verifier has a named
+verdict for the case: so the choice is visible, not silent.
+
+## Epoch 9
+
+Not in this repository. It was bound through this protocol by a downstream
+repository that records its own binding. This repository does not list its
+consumers, so the table in the README goes 8 → 10, and says so.
+
+## Also in this release
+
+`capture_retarget.py --refresh` now restamps the one manifest line it changes, so a
+refresh-then-verify no longer reports a false FAIL (v0.5.1-era defect, mine). A
+second round-trip session is open for a different system id and its first record is
+verified and closed as epoch 11, awaiting burial; it publishes separately.
+
+## Not claimed
+
+That the other system's records are meaningful — the sandwich bounds a digest in
+time, and whether the record it names is true is that system's question. That the
+OTS proof is attested — it is pending. Operator diversity on the anchor chain.

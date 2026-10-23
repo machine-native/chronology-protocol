@@ -1,5 +1,5 @@
 {
-  "release": "chronology-protocol-v0.5.2",
+  "release": "chronology-protocol-v0.5.3",
   "status": "PASS_LIVE_ANCHORED",
   "tests": "127 passed",
   "completed_engineering_checks_pass": true,

@@ -46,6 +46,7 @@ SANDWICH_BUNDLES = [
     "pm-binding-bundle.cbor",
     "pm2-binding-bundle.cbor",
     "galileo-binding-bundle.cbor",
+    "naxytra-binding-bundle.cbor",
 ]
 
 
