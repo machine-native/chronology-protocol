@@ -1,6 +1,6 @@
 {
   "source": "bitcoin.bitcoin-lab.org:18026",
-  "acquired_utc": "2026-10-21T10:37:57Z",
+  "acquired_utc": "2026-10-23T10:21:19Z",
   "wire": "v0.1 20-byte header, no checksum; values parsed from raw block bytes",
   "tip_hash": "0000000027a50682d7fb8f36b8ce81b9606612ae10fbc92265523d5661dba473",
   "tip_height": 1365,

@@ -31,3 +31,8 @@ fpga/sim/*.vvp
 # nothing, and indoor test frames are megabytes of noise in an evidence
 # repository. Real sessions -- g2b-work, g5-work, g6-work -- stay tracked.
 live/*-rehearsal/
+
+# Written by the naxytra session (weekly delegation-log checkpoint digests). Read-only
+# input to the binding ritual; every line is re-verified against the public checkpoint
+# route before anything is bound. Untracked so a sibling write never touches the manifest.
+live/naxytra-delegation-work/incoming/
