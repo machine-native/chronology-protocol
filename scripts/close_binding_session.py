@@ -77,7 +77,7 @@ def main() -> int:
     print(f"  tag       {tag.hex()}  (re-derived, matches)")
     print(f"  records   {len(bound)} VERIFIED")
     for r in bound:
-        print(f"    seq {r['seq']}  {r.get('checkpoint_id', r.get('attestation_id','?'))}  {r['record_sha256']}")
+        print(f"    seq {r['seq']}  {r.get('id', r.get('checkpoint_id', r.get('attestation_id','?')))}  {r['record_sha256']}")
 
     genesis = build_protocol_genesis((ROOT / "SPEC.md").read_bytes(),
                                      (ROOT / "INVARIANTS.md").read_bytes())
@@ -145,7 +145,7 @@ def main() -> int:
 
     print(json.dumps({
         "epoch": cp.epoch, "system_id": system_id, "binding_tag": tag.hex(),
-        "records": [{"seq": r["seq"], "id": r.get("checkpoint_id", r.get("attestation_id")),
+        "records": [{"seq": r["seq"], "id": r.get("id", r.get("checkpoint_id", r.get("attestation_id"))),
                      "record_sha256": r["record_sha256"]} for r in bound],
         "witnesses": sorted(complete) + [f"{system_id} x{len(bound)}"],
         "previous_epoch": prev.unsigned.epoch,

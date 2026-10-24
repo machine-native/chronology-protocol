@@ -649,3 +649,26 @@ embedded the orphan permanently.
 
 That the log's content is correct — the sandwich bounds a digest in time. That the OTS
 proof is attested — it is pending.
+
+## Preimages were briefly unopenable from the issuer — archived here now
+
+After epoch 11 published, the issuing system reported that it had kept checkpoints
+only in memory: redeploys re-signed the same log head under new ids, and the bound
+record `att_61682b456a1d` was no longer served. Checking further found the same for
+**epoch 10**: both of its attestations now return 404 from the issuer.
+
+The anchors are unaffected — each bundle still bounds its digests in time, and every
+verdict stands. What was at risk was *openability*: a third party holding only the
+bundle could not fetch the signed record and confirm it hashes to the bound digest.
+
+All three preimages survive on this side and recompute exactly — epoch 10's two from
+the copies kept when they were verified on 2026-10-21, epoch 11's from a capture made
+by the issuer's own session in the minute the checkpoint was issued. They are now
+archived beside each work directory (gitignored — record content does not enter this
+repository) and in the operator's offline vault. The issuer has moved to durable
+storage with by-id routes and has been given the copies to restore.
+
+The process gap was on this side too: epoch 11's record had been verified in memory
+and only its digest kept. `scripts/verify_external_record.py` now does verification
+and archiving as one step, refusing to append a record to `records.json` until its
+preimage is on disk and recomputes.

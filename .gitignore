@@ -36,3 +36,8 @@ live/*-rehearsal/
 # input to the binding ritual; every line is re-verified against the public checkpoint
 # route before anything is bound. Untracked so a sibling write never touches the manifest.
 live/naxytra-delegation-work/incoming/
+
+# Preimages of external records, archived at verification time so an epoch stays
+# openable even if the external system stops serving them. Local and vault only:
+# record content does not cross into the public repository (ADR-0008 s.4).
+live/*/preimages/
