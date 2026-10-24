@@ -14,7 +14,7 @@ One command gives a verdict: `python scripts/verify_all.py`.
 
 ## What has actually been done
 
-Nine checkpoints shipped here, each committed into a real proof-of-work block, each chained to the
+Ten checkpoints shipped here, each committed into a real proof-of-work block, each chained to the
 one before it, all offline-verifiable:
 
 | epoch | block | what it establishes |
@@ -29,12 +29,13 @@ one before it, all offline-verifiable:
 | 7 | 628 | 958 observations from two particulate sensors and a hygrometer, 104 deep at publication (2026-09-07) |
 | 8 | 1270 | a capture of Galileo satellite signals, bounded below by Galileo itself and above by the block |
 | 10 | 1365 | two signed attestations from another system — real paid transaction-status records — bounded below by the tag they carry and above by the block |
+| 11 | 1368 | a checkpoint of another system's append-only key-delegation log, bounded above by the block; its lower bound is the session's B0, fixed once for the log's whole weekly cadence |
 
 Epoch 9 is not absent; it is held by a downstream repository that bound its own
 record through this protocol and records that binding itself. This repository does
 not list its consumers, so the gap in the table is the rule working, not a hole.
 
-**12 proofs · 33 attestations · 25 distinct blocks** — OpenTimestamps proofs and the public
+**13 proofs · 33 attestations · 25 distinct blocks** — OpenTimestamps proofs and the public
 Bitcoin blocks they land in — every one confirmed against a public explorer by
 `scripts/confirm_attestations.py`, which ships, so the count can be repeated rather than taken
 on trust. That public-Bitcoin proof-of-work is the only

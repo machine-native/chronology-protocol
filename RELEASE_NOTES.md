@@ -596,3 +596,56 @@ verified and closed as epoch 11, awaiting burial; it publishes separately.
 That the other system's records are meaningful — the sandwich bounds a digest in
 time, and whether the record it names is true is that system's question. That the
 OTS proof is attested — it is pending. Operator diversity on the anchor chain.
+
+# Unreleased — Epoch 11: the first recurring binding (2026-10-24)
+
+One checkpoint of another system's append-only key-delegation log — every agent-key
+mint and revocation, hash-chained — bound under system id `NAXYTRA-DELEGATION-LOG/1`
+and mined into **block 1368**. It is the first binding meant to recur: the log
+checkpoints weekly, and each batch becomes its own epoch.
+
+```
+B0            1365 (session opened 2026-10-23)
+record        1 checkpoint, digest only, re-fetched and recomputed here before binding
+witnesses     five NTP operators, two exchanges each, every nonce echoed
+checkpoint    epoch 11, chained to epoch 10
+C             1368
+burial        2 at assembly (the chain stood at 1379)
+verdict       SANDWICH_PASS
+bundle        vectors/valid/naxytra-delegation-binding-bundle.cbor
+              sha256 339e89255abf7b3763d3ff112db671c6f983dff6c799471e8a262a373bdc938b
+OTS           stamped at three of four calendars (one timed out), pending
+```
+
+## The lower bound is stale by design, and says so
+
+A binding tag is derived from one B0, so every checkpoint carrying this tag is bounded
+**below by block 1365 however many weeks later it is made**. The upper bound is fresh
+per batch; the lower bound is not. For an append-only hash-chained log that is sound —
+the log's own chaining orders its checkpoints, and this protocol supplies "no later
+than C" for each batch and "no earlier than 1365" once. A tight lower bound per
+checkpoint would need the tag rotated every cycle. This is stated here rather than
+left for a reader to infer from the B0 height.
+
+## The tooling is now two scripts, not one per epoch
+
+`scripts/open_binding_session.py` fixes B0 and sends the tag;
+`scripts/close_binding_session.py` re-derives q and the tag, refuses on any mismatch
+or if the half has run, and binds exactly the records marked VERIFIED — refusing
+outright, not skipping, if any is not. The sibling system writes each week's digest
+into a gitignored `incoming/` directory, and nothing is bound from that file: every
+line is re-fetched from the public route and recomputed first.
+
+## A stall, and why it did not become a reorg
+
+Between C and burial the laboratory VM lost its peers and mined privately to 1380
+while the seeds sat at 1369. Assembly was held until the VM's chain was confirmed to
+contain this epoch's C; it did, so the reconnect was a fast-forward. Mining a burial
+block from this side was considered and refused: the VM already held a longer branch,
+so that block would have been orphaned, and a bundle assembled on it would have
+embedded the orphan permanently.
+
+## Not claimed
+
+That the log's content is correct — the sandwich bounds a digest in time. That the OTS
+proof is attested — it is pending.

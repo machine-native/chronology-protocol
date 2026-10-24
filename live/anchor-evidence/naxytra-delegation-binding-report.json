@@ -1,0 +1,51 @@
+{
+  "bundle": "vectors\\valid\\naxytra-delegation-binding-bundle.cbor",
+  "bytes": 431915,
+  "sha256": "339e89255abf7b3763d3ff112db671c6f983dff6c799471e8a262a373bdc938b",
+  "epoch": 11,
+  "bound_system": "NAXYTRA-DELEGATION-LOG/1",
+  "bound_record_sha256": "77e32857f4fe6d1b86d5f08690ae61f6f82ea07cd4af8bd37e0b27606c70895f",
+  "binding_tag": "df45bb8d5480ac955877cbb5ce811b79a710d12a1ea306a2e152762a3550a148",
+  "b0": {
+    "hash": "0000000027a50682d7fb8f36b8ce81b9606612ae10fbc92265523d5661dba473",
+    "height": 1365
+  },
+  "block_c": {
+    "hash": "000000000b670281bc569eb5ba72167cac472658393f8c2624c824b9076b299c",
+    "height": 1368
+  },
+  "burial_depth": 2,
+  "b1_depth_frozen_at": 2,
+  "reproduce": "python scripts/assemble_binding_bundle.py --work live/naxytra-delegation-work --dest vectors/valid/naxytra-delegation-binding-bundle.cbor --report live/anchor-evidence/naxytra-delegation-binding-report.json --b1-depth 2",
+  "witnesses": 5,
+  "checkpoint_verdict": "CONSENSUS",
+  "consensus_interval": [
+    38891799206362900,
+    38891848209401446
+  ],
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_EXTERNAL_RECORD_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": true
+  },
+  "verdict": "SANDWICH_PASS",
+  "note": "the sandwich bounds the record's DIGEST in time. Whether the record itself is meaningful is the originating system's question, not this one's."
+}

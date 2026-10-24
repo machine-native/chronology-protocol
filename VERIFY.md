@@ -293,7 +293,7 @@ python scripts/confirm_attestations.py
 
 It reads the required (height, merkle root) pairs out of every `.ots` proof,
 asks an explorer that has never heard of this project what those blocks actually
-contain, and compares. As of 2026-10-24 that is **12 proofs · 33 attestations ·
+contain, and compares. As of 2026-10-24 that is **13 proofs · 33 attestations ·
 25 distinct blocks**, all CONFIRMED, no mismatches. Point it at a different
 explorer with `--explorer` if you would rather not ask that one.
 
