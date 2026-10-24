@@ -29,8 +29,13 @@ from ctp.sandwich import challenge
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--system-id", required=True)
+    ap.add_argument("--system-id", default=None)
     ap.add_argument("--work", required=True, help="e.g. live/naxytra-delegation-work")
+    ap.add_argument("--continue-from", default=None,
+                    help="an earlier work dir whose session this batch continues. Copies its "
+                         "challenge.json byte-for-byte: same B0, same q, same tag. Used for a "
+                         "recurring binding, where the external system keeps carrying one tag "
+                         "and each batch of its records closes in a work dir of its own.")
     ap.add_argument("--seed", default="bitcoin.bitcoin-lab.org")
     ap.add_argument("--port", default="18026")
     a = ap.parse_args()
@@ -40,6 +45,31 @@ def main() -> int:
     ch_path = work / "challenge.json"
     if ch_path.exists():
         print(f"  a session is already open in {a.work}; refusing to overwrite it")
+        return 2
+
+    if a.continue_from:
+        # One work dir holds one batch -- close_binding_session.py refuses to run twice
+        # in the same dir -- so a recurring binding continues its session in a new dir.
+        # The bytes are copied, not re-derived, so the tag the external system carries
+        # stays exactly the one it was given.
+        src = ROOT / a.continue_from / "challenge.json"
+        if not src.exists():
+            print(f"  no session in {a.continue_from} to continue")
+            return 2
+        prior = json.loads(src.read_text(encoding="utf-8"))
+        if a.system_id and a.system_id != prior["system_id"]:
+            print(f"  --system-id {a.system_id} differs from the continued session's "
+                  f"{prior['system_id']}; a different system needs its own session")
+            return 2
+        ch_path.write_bytes(src.read_bytes())
+        print(f"\n  session continued  {a.continue_from} -> {a.work}")
+        print(f"  system_id          {prior['system_id']}")
+        print(f"  B0                 height {prior['b0_height']} (unchanged)")
+        print(f"  binding_tag        {prior['binding_tag']} (unchanged)\n")
+        return 0
+
+    if not a.system_id:
+        print("  --system-id is required when opening a new session")
         return 2
 
     r = subprocess.run([sys.executable, str(ROOT / "live" / "fetch_tip_context.py"),
