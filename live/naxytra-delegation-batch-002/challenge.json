@@ -1,0 +1,12 @@
+{
+  "record_type": "external_binding_session",
+  "system_id": "NAXYTRA-DELEGATION-LOG/1",
+  "opened_utc": "2026-10-23T10:22:00Z",
+  "b0_height": 1365,
+  "b0_hash": "0000000027a50682d7fb8f36b8ce81b9606612ae10fbc92265523d5661dba473",
+  "session_id": "980876ea6a998d2519dd6e22a8b75225f84c49759b3c10e18775b4bc68a00212",
+  "challenge": "b6adafb1e4663b20587bb9266460eda1574b2523f6cdbd5e1cd45e8bad8bbe16",
+  "binding_tag": "df45bb8d5480ac955877cbb5ce811b79a710d12a1ea306a2e152762a3550a148",
+  "what_crosses_to_the_external_system": "binding_tag only. q never leaves this record.",
+  "what_the_external_system_returns": "the record's digest, verified here against the public source before binding"
+}

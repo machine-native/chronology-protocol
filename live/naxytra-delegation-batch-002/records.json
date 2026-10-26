@@ -1,0 +1,17 @@
+{
+  "record_type": "external_records_verified",
+  "system_id": "NAXYTRA-DELEGATION-LOG/1",
+  "records": [
+    {
+      "seq": 0,
+      "id": "att_a860ce9e5724",
+      "record_sha256": "325a678d30a63a1dc13de54035fead07b8fea57f96b8fbe4476378c121bf78bb",
+      "fetch": "https://xytara.onrender.com/v1/delegation-log/checkpoints/att_a860ce9e5724",
+      "verified_utc": "2026-10-26T06:07:06Z",
+      "recompute_matches": true,
+      "tag_present_in_signed_bytes": true,
+      "preimage_archived": "preimages/att_a860ce9e5724.json",
+      "verdict": "VERIFIED"
+    }
+  ]
+}
