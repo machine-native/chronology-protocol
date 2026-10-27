@@ -672,3 +672,29 @@ The process gap was on this side too: epoch 11's record had been verified in mem
 and only its digest kept. `scripts/verify_external_record.py` now does verification
 and archiving as one step, refusing to append a record to `records.json` until its
 preimage is on disk and recomputes.
+
+## The front door undercounted, and the manual walk stopped at epoch 8 (2026-10-27)
+
+Found while drafting the post that will send strangers here. The README said "Ten
+checkpoints" over an eleven-row table; the count had been off by one since v0.5.0
+("Seven" over eight rows) and was incremented, never recounted. VERIFY.md had fallen
+further behind: step 4 ran eight of the ten bundles `verify_all.py` checks, omitting
+both consumer epochs; step 5 promised "nine anchors (epochs 0–8)", and against the
+live chain a verifier would have seen epochs 9, 10 and 11 at heights 1352, 1365 and
+1368 with nothing explaining them. It also described the shipped chain dump as
+captured at height 298, which has not been true since it was refreshed to 1245.
+
+Every line in step 5 is re-derived from the live seed (tip 1400, linkage verified from
+genesis) and from the shipped dump, and both consumer hashes match their epoch
+reports. Nothing about any anchor changed; only what the documents say about them.
+
+The existing guard missed it for a structural reason: it reads the shipped dump,
+which is pinned and stops at 1245, so any epoch anchored later can go undocumented
+with it passing. Three guards close that: the README's count word must equal its
+table's rows; every README epoch must appear in VERIFY.md's scan output (offline, so
+it cannot skip); and step 4 must run every bundle `verify_all.py` checks. Each was run
+against the unfixed documents first and failed, naming the exact gap. 127 → 130 tests.
+
+Both consumer epochs' proofs have since upgraded and are attested in Bitcoin. The
+"pending" wording in the two sections above is kept as the record of what was true
+when each shipped; `scripts/confirm_attestations.py` gives the current state.

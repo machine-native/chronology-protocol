@@ -14,7 +14,7 @@ One command gives a verdict: `python scripts/verify_all.py`.
 
 ## What has actually been done
 
-Ten checkpoints shipped here, each committed into a real proof-of-work block, each chained to the
+Eleven checkpoints shipped here, each committed into a real proof-of-work block, each chained to the
 one before it, all offline-verifiable:
 
 | epoch | block | what it establishes |
@@ -219,7 +219,7 @@ accepted block belongs to whoever finds it.
 ## Verify this yourself
 
 Everything here is checkable from bytes, by you, without trusting us: **[VERIFY.md](VERIFY.md)**
-walks from `git clone` to a verdict on all seven anchored epochs, then out to the public
+walks from `git clone` to a verdict on every epoch in the table above, then out to the public
 Bitcoin blocks that attest them. It states the one hard dependency (OpenSSL 3.5+) up
 front and names the platform where the official OpenTimestamps client is currently
 broken, rather than letting you discover either the hard way.

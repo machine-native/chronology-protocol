@@ -85,7 +85,7 @@ cd chronology-protocol
 python -m pytest -q
 ```
 
-Expected: **zero failures** out of 127 tests. Some may report `skipped` rather
+Expected: **zero failures** out of 130 tests. Some may report `skipped` rather
 than `passed` — several tests gate on evidence files that a given checkout may not
 carry (`live/chain-blocks.hex`, `.ots` proofs, a reference session), and a skip
 there means "this evidence is not present to check", never "this check failed".
@@ -119,7 +119,7 @@ python scripts/verify_bundle.py vectors/valid/evidence-bundle-live-anchored.cbor
 Expected: **all 13 checks true**, verdict **`PASS`**. The same sealed evidence, now
 carried in a block that really satisfies difficulty-1 proof-of-work.
 
-## 4. Verify the eight sandwich and binding bundles (offline)
+## 4. Verify the ten sandwich and binding bundles (offline)
 
 ```bash
 python scripts/verify_sandwich.py vectors/valid/reality-sandwich-bundle.cbor
@@ -130,9 +130,11 @@ python scripts/verify_sandwich.py vectors/valid/satroot-binding-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/pm-binding-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/pm2-binding-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/galileo-binding-bundle.cbor
+python scripts/verify_sandwich.py vectors/valid/naxytra-binding-bundle.cbor
+python scripts/verify_sandwich.py vectors/valid/naxytra-delegation-binding-bundle.cbor
 ```
 
-Seven should print **`SANDWICH_PASS`** with every check `true`; `satroot-binding` prints
+Nine should print **`SANDWICH_PASS`** with every check `true`; `satroot-binding` prints
 `SANDWICH_PASS_NO_TIME_CONSENSUS`, for the reason recorded in
 [`live/anchor-evidence/FINDING-sequential-polling-2026-08-31.md`](live/anchor-evidence/FINDING-sequential-polling-2026-08-31.md)
 (its causal claim holds; its NTP witnesses did not agree on a wall-clock instant).
@@ -144,12 +146,13 @@ What the first three prove:
 | `astro-sandwich` | 5 NTP + 1 camera | a photographed Moon inside the bounds |
 | `roughtime-sandwich` | 2 Roughtime + 5 NTP | Ed25519-**signed** time evidence |
 
-The five later bundles — `rolling-code-sandwich` (epoch 4), `satroot-binding` (epoch
-5), `pm-binding` (epoch 6), `pm2-binding` (epoch 7) and `galileo-binding` (epoch 8) —
+The seven later bundles — `rolling-code-sandwich` (epoch 4), `satroot-binding` (epoch
+5), `pm-binding` (epoch 6), `pm2-binding` (epoch 7), `galileo-binding` (epoch 8),
+`naxytra-binding` (epoch 10) and `naxytra-delegation-binding` (epoch 11) —
 verify with the same script;
 what each establishes is in the README's epoch table and in `RELEASE_NOTES.md`. The
 `rolling-code-sandwich-bundle-depth0` vector is the epoch-4 bundle as first assembled,
-at burial depth 0, which is why ten bundles carry eleven proofs.
+at burial depth 0, which is why twelve bundles carry thirteen proofs.
 
 For the astronomical one you can also re-hash the original photographs and confirm they
 are the exact frames the bundle commits to:
@@ -185,7 +188,7 @@ python live/fetch_full_chain.py
 ```
 
 This downloads every block from the public seed, verifies prev-hash linkage from the
-fixed genesis, and writes `live/chain-blocks.hex`. Then confirm the nine anchors (epochs 0–8) are
+fixed genesis, and writes `live/chain-blocks.hex`. Then confirm every epoch's anchor is
 really there:
 
 ```bash
@@ -204,8 +207,8 @@ EOF
 ```
 
 Expected (heights grow as the chain does; the hashes do not change). The
-`live/chain-blocks.hex` that ships in this repository was captured at height 298, so
-against that file the scan prints these five lines:
+`live/chain-blocks.hex` that ships in this repository was captured at height 1245, so
+against that file the scan prints these ten lines:
 
 ```
 epoch 0  height 221  00000000fc80fe4f27b59cafbf782f029f586151bd144115b3d5f1ee360d088b
@@ -213,19 +216,27 @@ epoch 1  height 222  0000000055cddf6e969747b574d17435af0799c839a3f149e020745b694
 epoch 2  height 253  00000000eafb36b7c47b0a9ac975595b3e5ecc7006c85757bf5008380affe3ee
 epoch 3  height 269  000000001a5380c4c618b2fd2dc4a8768e5cd807cf3122a24ce2fc4c548dc112
 epoch 0  height 298  000000004d255fbd71886cba88f5730185aed1a73fb2ac1a17dadd61c0016d48
-```
-
-After `fetch_full_chain.py` has refreshed the file from the seed, the scan continues
-(re-derived from the live seed on 2026-10-01, tip height 1272):
-
-```
 epoch 4  height 322  00000000d2627afbbba405d7c429142c34e3c8c0eb4b5cc8f5391ebeac47c742
 epoch 5  height 479  000000001853dc58d540808bf17feadc47cdede5f1ae20fcbfb33b03b1c31270
 epoch 6  height 530  00000000273dbf8abbced93bd91917b253b6ef6fa9b733a86d392951c5fe714e
 epoch 7  height 628  000000004b9ececee24df9cfc0d50d7d128d03b1c73634280c10ab2c7641f27b
 epoch 7  height 732  00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205f46a0
-epoch 8  height 1270  000000007b2aa16971a0bec5dc346b1be20965c9743ab4cbfe1347684b6d39c6
 ```
+
+After `fetch_full_chain.py` has refreshed the file from the seed, the scan continues
+(re-derived from the live seed on 2026-10-27, tip height 1400):
+
+```
+epoch 8  height 1270  000000007b2aa16971a0bec5dc346b1be20965c9743ab4cbfe1347684b6d39c6
+epoch 9  height 1352  000000003e6ced1302f8742da296235615f65cd649dab215707d740c47356969
+epoch 10  height 1365  0000000027a50682d7fb8f36b8ce81b9606612ae10fbc92265523d5661dba473
+epoch 11  height 1368  000000000b670281bc569eb5ba72167cac472658393f8c2624c824b9076b299c
+```
+
+`epoch 9` at height 1352 is a real anchor whose evidence this repository does not
+ship: it belongs to a downstream repository that bound its own record through this
+protocol and holds that binding itself (the README's note under the epoch table).
+Every other epoch line above has its bundle in step 4.
 
 **The repeated `epoch 0` at height 298 is expected and is not a defect, and the same
 holds for the repeated `epoch 7` at height 732.** Height 298 was mined on 2026-08-23 by an FPGA built for
@@ -233,8 +244,8 @@ this project; height 732 was mined on 2026-09-06 by this project's own miner dur
 radio experiment. Both were mined without a fresh payload, so each coinbase carries a
 *copy* of the preceding anchor (the same payload bytes as heights 221 and 628
 respectively) rather than new evidence. They are genuine proof-of-work blocks and they
-are not new chronology claims. Only the nine epoch heights — 221, 222, 253, 269, 322,
-479, 530, 628 and 1270 — carry anchors that assert anything, and each epoch's anchor first
+are not new chronology claims. Only the twelve epoch heights — 221, 222, 253, 269, 322,
+479, 530, 628, 1270, 1352, 1365 and 1368 — carry anchors that assert anything, and each epoch's anchor first
 appears exactly once. Details in
 [`live/anchor-evidence/FPGA-BLOCK-298.md`](live/anchor-evidence/FPGA-BLOCK-298.md) and
 [`live/lora-experiment/`](live/lora-experiment/).

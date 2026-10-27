@@ -99,3 +99,22 @@ def test_a_repeated_epoch_is_explained_rather_than_left_looking_like_a_bug():
         f"epoch(s) {sorted(dupes)} appear more than once on the chain, and "
         "VERIFY.md does not explain it. A reader will read a repeat as a bug."
     )
+
+
+def test_every_epoch_in_the_readme_table_is_in_verify_md_scan_output():
+    """The offline half of the drift check: README's table against VERIFY.md's scan.
+
+    The two tests above read the shipped chain dump, which is pinned (MANIFEST-live)
+    and stops at height 1245, so every epoch anchored after it could go undocumented
+    with both passing. That is what happened: epochs 10 and 11 were added to the
+    README while VERIFY.md's scan output stayed at epoch 8, found 2026-10-27. This
+    needs no chain at all, so it cannot skip.
+    """
+    rows = re.findall(r"^\| (\d+) \| (\d+) \|",
+                      (ROOT / "README.md").read_text(encoding="utf-8"), re.M)
+    assert rows, "README's epoch table is no longer in the known form"
+    doc = VERIFY.read_text(encoding="utf-8")
+    missing = [f"epoch {e} at height {h}" for e, h in rows
+               if not re.search(rf"^epoch {e}  height {h}  [0-9a-f]{{64}}$", doc, re.M)]
+    assert not missing, ("README's table has epochs VERIFY.md's scan output does not show:\n  "
+                         + "\n  ".join(missing))

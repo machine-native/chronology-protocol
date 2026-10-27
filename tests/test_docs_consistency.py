@@ -170,3 +170,44 @@ def test_manifest_covers_every_tracked_file():
             listed.add(line.split(maxsplit=1)[1].lstrip("*"))
     missing = sorted(tracked - listed)
     assert not missing, "tracked files missing from MANIFEST.sha256:\n  " + "\n  ".join(missing)
+
+
+_COUNT_WORDS = {w: i for i, w in enumerate(
+    "zero one two three four five six seven eight nine ten eleven twelve thirteen "
+    "fourteen fifteen sixteen seventeen eighteen nineteen twenty".split())}
+
+
+def _readme_epoch_rows(text):
+    return re.findall(r"^\| (\d+) \| (\d+) \|", text, re.M)
+
+
+def test_readme_checkpoint_count_matches_its_own_table():
+    """The sentence above the epoch table counts the rows below it.
+
+    Added 2026-10-27. It said "Seven checkpoints" over an eight-row table from
+    v0.5.0 onward and was incremented, not recounted, at every epoch since --
+    "Ten" over eleven rows when it was caught, while drafting the post that would
+    send strangers to it.
+    """
+    text = (ROOT / "README.md").read_text(encoding="utf-8")
+    m = re.search(r"^(\w+) checkpoints shipped here", text, re.M)
+    assert m, "README no longer states a checkpoint count in the known form"
+    stated = _COUNT_WORDS.get(m.group(1).lower())
+    assert stated is not None, f"unrecognised count word {m.group(1)!r}"
+    rows = len(_readme_epoch_rows(text))
+    assert stated == rows, f"README says {m.group(1)} checkpoints; its table has {rows} rows"
+
+
+def test_verify_md_step_4_runs_every_bundle_verify_all_checks():
+    """A bundle the one-command verifier checks is one the manual walk shows too.
+
+    Added 2026-10-27, when step 4 still said "the eight" bundles and stopped at
+    epoch 8 although verify_all.py had checked ten since epoch 11.
+    """
+    src = (ROOT / "scripts" / "verify_all.py").read_text(encoding="utf-8")
+    block = re.search(r"SANDWICH_BUNDLES = \[(.*?)\]", src, re.S)
+    assert block, "verify_all.py no longer declares SANDWICH_BUNDLES in the known form"
+    bundles = re.findall(r'"([^"]+\.cbor)"', block.group(1))
+    doc = (ROOT / "VERIFY.md").read_text(encoding="utf-8")
+    missing = [b for b in bundles if f"verify_sandwich.py vectors/valid/{b}" not in doc]
+    assert not missing, "VERIFY.md step 4 does not run:\n  " + "\n  ".join(missing)
