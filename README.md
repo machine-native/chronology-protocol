@@ -35,7 +35,7 @@ Epoch 9 is not absent; it is held by a downstream repository that bound its own
 record through this protocol and records that binding itself. This repository does
 not list its consumers, so the gap in the table is the rule working, not a hole.
 
-**13 proofs · 33 attestations · 25 distinct blocks** — OpenTimestamps proofs and the public
+**13 proofs · 36 attestations · 28 distinct blocks** — OpenTimestamps proofs and the public
 Bitcoin blocks they land in — every one confirmed against a public explorer by
 `scripts/confirm_attestations.py`, which ships, so the count can be repeated rather than taken
 on trust. That public-Bitcoin proof-of-work is the only
