@@ -154,6 +154,26 @@ what each establishes is in the README's epoch table and in `RELEASE_NOTES.md`. 
 `rolling-code-sandwich-bundle-depth0` vector is the epoch-4 bundle as first assembled,
 at burial depth 0, which is why twelve bundles carry thirteen proofs.
 
+**Opening the naxytra records at their issuer.** Epochs 10 and 11 bind digests of
+records signed by another system. To confirm a digest opens to the record it names,
+fetch the record, take its `attestation` object, and SHA-256 its RFC 8785 form
+(`scripts/verify_external_record.py` does exactly this). naxytra moved to its own
+domain in November 2026, so the `fetch` URLs in `live/naxytra-*/records.json` are where
+each record was fetched *at the time*. The two `xytara.onrender.com` routes no
+longer answer. The current routes, each re-checked on 2026-11-13 against the archived
+copy:
+
+| record | epoch | current route | SHA-256 (RFC 8785) |
+|---|---|---|---|
+| `att_7901a5f0869e` | 10 | `https://mcp.naxytra.com/attestations/att_7901a5f0869e` | `ba7d2d3345db…` |
+| `att_9ba842d872c4` | 10 | `https://mcp.naxytra.com/attestations/att_9ba842d872c4` | `79dee98c1a4d…` |
+| `att_61682b456a1d` | 11 | `https://api.naxytra.com/v1/delegation-log/checkpoints/att_61682b456a1d` | `77e32857f4fe…` |
+| `att_a860ce9e5724` | not anchored yet | `https://api.naxytra.com/v1/delegation-log/checkpoints/att_a860ce9e5724` | `325a678d30a6…` |
+
+If the issuer stops serving a record, the anchors and verdicts above do not change;
+only your ability to open that record from the issuer does. The author keeps an
+archived copy of every one and can supply it on request.
+
 For the astronomical one you can also re-hash the original photographs and confirm they
 are the exact frames the bundle commits to:
 
