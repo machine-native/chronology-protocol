@@ -1,0 +1,15 @@
+{
+  "record_type": "external_records_verified",
+  "system_id": "NAXYTRA-ATTESTATION/1",
+  "records": [
+    {
+      "seq": 0,
+      "record_sha256": "6683a1c92087a0e2566034fc86547a8cc30ea88b6061d426adf4aecfc11e25d9",
+      "verified_utc": "2026-11-14T17:25:08Z",
+      "recompute_matches": true,
+      "tag_present_in_signed_bytes": true,
+      "preimage_archived": "preimages/6683a1c92087a0e2566034fc86547a8cc30ea88b6061d426adf4aecfc11e25d9.json",
+      "verdict": "VERIFIED"
+    }
+  ]
+}
