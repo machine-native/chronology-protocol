@@ -1,0 +1,12 @@
+{
+  "record_type": "external_binding_session",
+  "system_id": "NAXYTRA-ATTESTATION/1",
+  "opened_utc": "2026-11-14T11:25:17Z",
+  "b0_height": 1570,
+  "b0_hash": "000000003ec14c94e1adacf4ae7d060d610255b017dbf202748905b9edc78d38",
+  "session_id": "df07f334505cd1d2c648d73dcde5e7fbc6c26416aa9a0cedfcf66e14107a96fb",
+  "challenge": "3786b8c030a1709586375cdb0c3bb396c80ed33cc2b261963ef97f97b064bd6a",
+  "binding_tag": "933f0793a9447dab6b800999c6aabecb8ff9cd03272529a8ee726d296d26a60e",
+  "what_crosses_to_the_external_system": "binding_tag only. q never leaves this record.",
+  "what_the_external_system_returns": "the record's digest, verified here against the public source before binding"
+}

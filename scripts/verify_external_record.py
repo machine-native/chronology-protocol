@@ -24,6 +24,13 @@ copied into the vault by tools/build_mn_backup.py -- and appends the record to
 <work>/records.json as VERIFIED. Only digests and identifiers go into records.json;
 the record's content stays out of the public repository (ADR-0008 s.4).
 
+A work dir holding a file named `record-ids-private` keeps identifiers out too: a
+stream of a system's paid attestations, where publishing every id would hand anyone
+a list of what its buyers had attested. records.json then carries the digest alone,
+the preimage is archived as preimages/<digest>.json, and the id and URL go to
+preimages/index.jsonl, which is gitignored with the preimages. A holder of the
+record still proves inclusion from the digest; nobody else can enumerate.
+
 Exit codes: 0 verified and archived · 1 refused (record does not check) · 2 could not fetch
 """
 from __future__ import annotations
@@ -83,11 +90,17 @@ def main() -> int:
     if tag not in json.dumps(att):
         return refuse("tag not present inside the signed object")
 
+    private = (work / "record-ids-private").exists()
     pre = work / "preimages"
     pre.mkdir(exist_ok=True)
-    (pre / f"{a.id}.json").write_bytes(raw)
-    if hashlib.sha256(jcs(json.loads((pre / f"{a.id}.json").read_bytes())["attestation"])).hexdigest() != digest:
+    name = f"{digest}.json" if private else f"{a.id}.json"
+    (pre / name).write_bytes(raw)
+    if hashlib.sha256(jcs(json.loads((pre / name).read_bytes())["attestation"])).hexdigest() != digest:
         return refuse("archived copy does not recompute; disk problem")
+    idx = pre / "index.jsonl"
+    if private and digest not in (idx.read_text(encoding="utf-8") if idx.exists() else ""):
+        with open(idx, "a", encoding="utf-8", newline="\n") as f:
+            f.write(json.dumps({"id": a.id, "record_sha256": digest, "fetch": a.url}) + "\n")
 
     rp = work / "records.json"
     recs = (json.loads(rp.read_text(encoding="utf-8")) if rp.exists() else
@@ -96,16 +109,19 @@ def main() -> int:
         print(f"  already recorded: {a.id} {digest}")
         return 0
     seq = max((r["seq"] for r in recs["records"]), default=-1) + 1
-    recs["records"].append({
-        "seq": seq, "id": a.id, "record_sha256": digest, "fetch": a.url,
+    entry = {"seq": seq, "id": a.id, "record_sha256": digest, "fetch": a.url}
+    if private:
+        entry = {"seq": seq, "record_sha256": digest}
+    entry.update({
         "verified_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "recompute_matches": True, "tag_present_in_signed_bytes": True,
-        "preimage_archived": f"preimages/{a.id}.json", "verdict": "VERIFIED",
+        "preimage_archived": f"preimages/{name}", "verdict": "VERIFIED",
     })
+    recs["records"].append(entry)
     rp.write_text(json.dumps(recs, indent=2) + "\n", encoding="utf-8", newline="\n")
 
     print(f"\n  VERIFIED  {a.id}  seq {seq}\n  digest    {digest}")
-    print(f"  archived  {a.work}/preimages/{a.id}.json\n")
+    print(f"  archived  {a.work}/preimages/{name}\n")
     return 0
 
 

@@ -159,9 +159,11 @@ records signed by another system. To confirm a digest opens to the record it nam
 fetch the record, take its `attestation` object, and SHA-256 its RFC 8785 form
 (`scripts/verify_external_record.py` does exactly this). naxytra moved to its own
 domain in November 2026, so the `fetch` URLs in `live/naxytra-*/records.json` are where
-each record was fetched *at the time*. The two `xytara.onrender.com` routes no
-longer answer. The current routes, each re-checked on 2026-11-13 against the archived
-copy:
+each record was fetched *at the time*. Since 2026-11-14 the two `xytara.onrender.com`
+routes redirect (301) to `api.naxytra.com`. The by-id one still opens its record;
+epoch 11's was the issuer's *latest-checkpoint* route, which now serves a later
+checkpoint, so open epoch 11 by id. The current routes, each re-checked on
+2026-11-13 against the archived copy:
 
 | record | epoch | current route | SHA-256 (RFC 8785) |
 |---|---|---|---|
