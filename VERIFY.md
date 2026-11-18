@@ -342,9 +342,8 @@ python scripts/confirm_attestations.py
 
 It reads the required (height, merkle root) pairs out of every `.ots` proof,
 asks an explorer that has never heard of this project what those blocks actually
-contain, and compares. As of 2026-11-18 that is **14 proofs · 36 attestations ·
-28 distinct blocks**, all CONFIRMED, no mismatches; epoch 12's proof, stamped that day,
-is still pending and contributes no attestation yet. Point it at a different
+contain, and compares. As of 2026-11-18 that is **14 proofs · 38 attestations ·
+30 distinct blocks**, all CONFIRMED, no mismatches. Point it at a different
 explorer with `--explorer` if you would rather not ask that one.
 
 If it cannot reach the network it reports INDETERMINATE and exits 2, not 1.
@@ -365,11 +364,10 @@ carries four Bitcoin attestations from four independent calendar operators —
 blocks 965353, 965355, 965361 and 965419. It upgraded on its own, which is what
 pending means.
 
-**Twelve of the thirteen attested proofs carry at least two Bitcoin attestations**, and
+**Thirteen of the fourteen proofs carry at least two Bitcoin attestations**, and
 five binding bundles (`satroot`, `pm`, `pm2`, `galileo`, `naxytra`) carry four each, from
 four independent calendar operators. The exception is
-`rolling-code-sandwich-bundle-depth0.cbor.ots`, which carries one. The fourteenth,
-epoch 12's, is pending.
+`rolling-code-sandwich-bundle-depth0.cbor.ots`, which carries one.
 Every proof also still lists pending calendar commitments; further attestations
 are added as calendars complete them — `python scripts/ots_upgrade.py` collects
 them, and none of it changes what is already proved.
