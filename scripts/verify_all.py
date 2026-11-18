@@ -48,6 +48,7 @@ SANDWICH_BUNDLES = [
     "galileo-binding-bundle.cbor",
     "naxytra-binding-bundle.cbor",
     "naxytra-delegation-binding-bundle.cbor",
+    "naxytra-attestation-binding-bundle.cbor",
 ]
 
 

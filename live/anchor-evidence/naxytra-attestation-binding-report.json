@@ -1,0 +1,48 @@
+{
+  "bundle": "vectors\\valid\\naxytra-attestation-binding-bundle.cbor",
+  "bytes": 442622,
+  "sha256": "11506b9e0108ca1ff67067bf2ce32299136ecce8a66475947fcfaa9c74d9a2a8",
+  "epoch": 12,
+  "bound_system": "NAXYTRA-ATTESTATION/1",
+  "bound_record_sha256": "6683a1c92087a0e2566034fc86547a8cc30ea88b6061d426adf4aecfc11e25d9",
+  "binding_tag": "933f0793a9447dab6b800999c6aabecb8ff9cd03272529a8ee726d296d26a60e",
+  "b0": {
+    "hash": "000000003ec14c94e1adacf4ae7d060d610255b017dbf202748905b9edc78d38",
+    "height": 1570
+  },
+  "block_c": {
+    "hash": "0000000089329c3bc8b2d8e44eaecbd0e7f254adcb2796d8296c383e409f071b",
+    "height": 1703
+  },
+  "burial_depth": 2,
+  "b1_depth_frozen_at": 2,
+  "reproduce": "python scripts/assemble_binding_bundle.py --work live/naxytra-attestation-work --dest vectors/valid/naxytra-attestation-binding-bundle.cbor --report live/anchor-evidence/naxytra-attestation-binding-report.json --b1-depth 2",
+  "witnesses": 5,
+  "checkpoint_verdict": "TIME_CONFLICT",
+  "consensus_interval": null,
+  "checks": {
+    "S_B0_POW": true,
+    "S_NONCE_ECHO": true,
+    "S_CHALLENGE_BINDING": true,
+    "S_EXTERNAL_RECORD_BINDING": true,
+    "S_EVIDENCE_MEASUREMENT": true,
+    "PROJECT_GENESIS_REPRODUCES": true,
+    "PROTOCOL_GENESIS_BINDING": true,
+    "ALL_OBSERVATION_PQ_SIGNATURES": true,
+    "WITNESS_CHAINS": true,
+    "UNIQUE_CHECKPOINT_WITNESSES": true,
+    "CHECKPOINT_LATEST_OBSERVATION_SET": true,
+    "MERKLE_ROOT": true,
+    "CONSENSUS_RULE": true,
+    "CHECKPOINT_PQ_SIGNATURES": true,
+    "ANCHOR_PAYLOAD_96": true,
+    "JAN09_COINBASE_SCRIPTSIG_98": true,
+    "BITCOIN_RAW_STRUCTURE": true,
+    "BITCOIN_POW": true,
+    "S_LINKAGE_B0_TO_C": true,
+    "S_B1_CHAIN_VALID": true,
+    "S_EXPECTATION_RECOMPUTED": "NOT_APPLICABLE"
+  },
+  "verdict": "SANDWICH_PASS_NO_TIME_CONSENSUS",
+  "note": "the sandwich bounds the record's DIGEST in time. Whether the record itself is meaningful is the originating system's question, not this one's."
+}

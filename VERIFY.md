@@ -7,7 +7,7 @@ open an issue with the output.
 
 ## What you will end up having checked
 
-- Nine evidence bundles (ten OpenTimestamps proofs), each carrying post-quantum
+- Eleven evidence bundles (twelve OpenTimestamps proofs), each carrying post-quantum
   signatures over real acquired evidence, verified **completely offline**.
 - That each one's checkpoint is committed inside a real proof-of-work block on a live
   chain, and that the causal chain from the challenge block to the anchor block is
@@ -119,7 +119,7 @@ python scripts/verify_bundle.py vectors/valid/evidence-bundle-live-anchored.cbor
 Expected: **all 13 checks true**, verdict **`PASS`**. The same sealed evidence, now
 carried in a block that really satisfies difficulty-1 proof-of-work.
 
-## 4. Verify the ten sandwich and binding bundles (offline)
+## 4. Verify the eleven sandwich and binding bundles (offline)
 
 ```bash
 python scripts/verify_sandwich.py vectors/valid/reality-sandwich-bundle.cbor
@@ -132,12 +132,14 @@ python scripts/verify_sandwich.py vectors/valid/pm2-binding-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/galileo-binding-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/naxytra-binding-bundle.cbor
 python scripts/verify_sandwich.py vectors/valid/naxytra-delegation-binding-bundle.cbor
+python scripts/verify_sandwich.py vectors/valid/naxytra-attestation-binding-bundle.cbor
 ```
 
-Nine should print **`SANDWICH_PASS`** with every check `true`; `satroot-binding` prints
-`SANDWICH_PASS_NO_TIME_CONSENSUS`, for the reason recorded in
+Nine should print **`SANDWICH_PASS`** with every check `true`; `satroot-binding` and
+`naxytra-attestation-binding` print `SANDWICH_PASS_NO_TIME_CONSENSUS`, also with every
+check `true`, for the reason recorded in
 [`live/anchor-evidence/FINDING-sequential-polling-2026-08-31.md`](live/anchor-evidence/FINDING-sequential-polling-2026-08-31.md)
-(its causal claim holds; its NTP witnesses did not agree on a wall-clock instant).
+(the causal claim holds; the NTP witnesses did not agree on a wall-clock instant).
 What the first three prove:
 
 | bundle | witnesses | what is special |
@@ -146,15 +148,16 @@ What the first three prove:
 | `astro-sandwich` | 5 NTP + 1 camera | a photographed Moon inside the bounds |
 | `roughtime-sandwich` | 2 Roughtime + 5 NTP | Ed25519-**signed** time evidence |
 
-The seven later bundles — `rolling-code-sandwich` (epoch 4), `satroot-binding` (epoch
+The eight later bundles — `rolling-code-sandwich` (epoch 4), `satroot-binding` (epoch
 5), `pm-binding` (epoch 6), `pm2-binding` (epoch 7), `galileo-binding` (epoch 8),
-`naxytra-binding` (epoch 10) and `naxytra-delegation-binding` (epoch 11) —
+`naxytra-binding` (epoch 10), `naxytra-delegation-binding` (epoch 11) and
+`naxytra-attestation-binding` (epoch 12) —
 verify with the same script;
 what each establishes is in the README's epoch table and in `RELEASE_NOTES.md`. The
 `rolling-code-sandwich-bundle-depth0` vector is the epoch-4 bundle as first assembled,
-at burial depth 0, which is why twelve bundles carry thirteen proofs.
+at burial depth 0, which is why thirteen bundles carry fourteen proofs.
 
-**Opening the naxytra records at their issuer.** Epochs 10 and 11 bind digests of
+**Opening the naxytra records at their issuer.** Epochs 10, 11 and 12 bind digests of
 records signed by another system. To confirm a digest opens to the record it names,
 fetch the record, take its `attestation` object, and SHA-256 its RFC 8785 form
 (`scripts/verify_external_record.py` does exactly this). naxytra moved to its own
@@ -171,6 +174,13 @@ checkpoint, so open epoch 11 by id. The current routes, each re-checked on
 | `att_9ba842d872c4` | 10 | `https://mcp.naxytra.com/attestations/att_9ba842d872c4` | `79dee98c1a4d…` |
 | `att_61682b456a1d` | 11 | `https://api.naxytra.com/v1/delegation-log/checkpoints/att_61682b456a1d` | `77e32857f4fe…` |
 | `att_a860ce9e5724` | not anchored yet | `https://api.naxytra.com/v1/delegation-log/checkpoints/att_a860ce9e5724` | `325a678d30a6…` |
+
+Epoch 12 is not in the table, by design. It binds one record from the issuer's stream
+of paid attestations, and publishing each id would hand anyone a list of what that
+issuer's buyers had attested. So `live/naxytra-attestation-work/records.json` carries
+the digest alone (`6683a1c92087…`). Whoever holds the record recomputes its digest and
+finds it in the bundle; nobody else can enumerate. The record was fetched by id and
+recomputed here before binding, like the others, and is archived the same way.
 
 If the issuer stops serving a record, the anchors and verdicts above do not change;
 only your ability to open that record from the issuer does. The author keeps an
@@ -246,13 +256,16 @@ epoch 7  height 732  00000000001d96786a5dc9ffe4e7998078d55a5dfb7e2bf9c23161e9205
 ```
 
 After `fetch_full_chain.py` has refreshed the file from the seed, the scan continues
-(re-derived from the live seed on 2026-10-27, tip height 1400):
+(re-derived from the live seed on 2026-11-18, tip height 1705):
 
 ```
 epoch 8  height 1270  000000007b2aa16971a0bec5dc346b1be20965c9743ab4cbfe1347684b6d39c6
 epoch 9  height 1352  000000003e6ced1302f8742da296235615f65cd649dab215707d740c47356969
 epoch 10  height 1365  0000000027a50682d7fb8f36b8ce81b9606612ae10fbc92265523d5661dba473
 epoch 11  height 1368  000000000b670281bc569eb5ba72167cac472658393f8c2624c824b9076b299c
+epoch 12  height 1703  0000000089329c3bc8b2d8e44eaecbd0e7f254adcb2796d8296c383e409f071b
+epoch 12  height 1704  000000002644e5b0d563b7dba75869e0ca4c4e295ec1b2be82137632ecc6b9f8
+epoch 12  height 1705  00000000c1e719a56f1125a39db0651887ca5932e80939ec58fcccbeda984034
 ```
 
 `epoch 9` at height 1352 is a real anchor whose evidence this repository does not
@@ -261,13 +274,16 @@ protocol and holds that binding itself (the README's note under the epoch table)
 Every other epoch line above has its bundle in step 4.
 
 **The repeated `epoch 0` at height 298 is expected and is not a defect, and the same
-holds for the repeated `epoch 7` at height 732.** Height 298 was mined on 2026-08-23 by an FPGA built for
+holds for the repeated `epoch 7` at height 732, and for the repeated `epoch 12` at
+heights 1704 and 1705.** Height 298 was mined on 2026-08-23 by an FPGA built for
 this project; height 732 was mined on 2026-09-06 by this project's own miner during the
 radio experiment. Both were mined without a fresh payload, so each coinbase carries a
 *copy* of the preceding anchor (the same payload bytes as heights 221 and 628
-respectively) rather than new evidence. They are genuine proof-of-work blocks and they
-are not new chronology claims. Only the twelve epoch heights — 221, 222, 253, 269, 322,
-479, 530, 628, 1270, 1352, 1365 and 1368 — carry anchors that assert anything, and each epoch's anchor first
+respectively) rather than new evidence. Heights 1704 and 1705 are the burial blocks for
+epoch 12, mined on 2026-11-18 by this project's miner, which carries the anchor payload
+it is given, so they repeat height 1703's. They are genuine proof-of-work blocks and they
+are not new chronology claims. Only the thirteen epoch heights — 221, 222, 253, 269, 322,
+479, 530, 628, 1270, 1352, 1365, 1368 and 1703 — carry anchors that assert anything, and each epoch's anchor first
 appears exactly once. Details in
 [`live/anchor-evidence/FPGA-BLOCK-298.md`](live/anchor-evidence/FPGA-BLOCK-298.md) and
 [`live/lora-experiment/`](live/lora-experiment/).
@@ -326,8 +342,9 @@ python scripts/confirm_attestations.py
 
 It reads the required (height, merkle root) pairs out of every `.ots` proof,
 asks an explorer that has never heard of this project what those blocks actually
-contain, and compares. As of 2026-10-27 that is **13 proofs · 36 attestations ·
-28 distinct blocks**, all CONFIRMED, no mismatches. Point it at a different
+contain, and compares. As of 2026-11-18 that is **14 proofs · 36 attestations ·
+28 distinct blocks**, all CONFIRMED, no mismatches; epoch 12's proof, stamped that day,
+is still pending and contributes no attestation yet. Point it at a different
 explorer with `--explorer` if you would rather not ask that one.
 
 If it cannot reach the network it reports INDETERMINATE and exits 2, not 1.
@@ -335,7 +352,7 @@ If it cannot reach the network it reports INDETERMINATE and exits 2, not 1.
 different findings because conflating them was the most serious defect outside
 review ever found here.
 
-One of the seventeen blocks (963190) was independently confirmed by a verifier
+One of these blocks (963190) was independently confirmed by a verifier
 outside this project in [issue #1](https://github.com/machine-native/chronology-protocol/issues/1).
 The rest were checked by the author, which is exactly why the script exists —
 repeat them yourself if it matters to you.
@@ -348,9 +365,11 @@ carries four Bitcoin attestations from four independent calendar operators —
 blocks 965353, 965355, 965361 and 965419. It upgraded on its own, which is what
 pending means.
 
-**Nine of the ten proofs carry at least two Bitcoin attestations**, and the three
-binding bundles carry four each, from four independent calendar operators. The
-exception is `rolling-code-sandwich-bundle-depth0.cbor.ots`, which carries one.
+**Twelve of the thirteen attested proofs carry at least two Bitcoin attestations**, and
+five binding bundles (`satroot`, `pm`, `pm2`, `galileo`, `naxytra`) carry four each, from
+four independent calendar operators. The exception is
+`rolling-code-sandwich-bundle-depth0.cbor.ots`, which carries one. The fourteenth,
+epoch 12's, is pending.
 Every proof also still lists pending calendar commitments; further attestations
 are added as calendars complete them — `python scripts/ots_upgrade.py` collects
 them, and none of it changes what is already proved.

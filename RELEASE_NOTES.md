@@ -698,3 +698,89 @@ against the unfixed documents first and failed, naming the exact gap. 127 → 13
 Both consumer epochs' proofs have since upgraded and are attested in Bitcoin. The
 "pending" wording in the two sections above is kept as the record of what was true
 when each shipped; `scripts/confirm_attestations.py` gives the current state.
+
+# Unreleased — Epoch 12: a paid attestation, bound by digest alone (2026-11-18)
+
+One signed attestation from another system's stream of paid attestations, bound under
+system id `NAXYTRA-ATTESTATION/1` and mined into **block 1703**. It is the first
+binding whose public record carries no identifier: `records.json` lists the digest
+and nothing else.
+
+```
+B0            1570 (session opened 2026-11-14)
+record        1 attestation, re-fetched by id and recomputed here before binding;
+              published as its digest only, 6683a1c92087a0e2…
+witnesses     five NTP operators, two exchanges each, every nonce echoed
+checkpoint    epoch 12, chained to epoch 11; TIME_CONFLICT (see below)
+C             1703, 0000000089329c3bc8b2d8e44eaecbd0e7f254adcb2796d8296c383e409f071b
+burial        2 at assembly (the chain stood at 1705)
+verdict       SANDWICH_PASS_NO_TIME_CONSENSUS, all 21 checks true
+bundle        vectors/valid/naxytra-attestation-binding-bundle.cbor
+              sha256 11506b9e0108ca1ff67067bf2ce32299136ecce8a66475947fcfaa9c74d9a2a8
+OTS           stamped at all four calendars, pending
+```
+
+## Why the identifier is withheld
+
+The issuer sells attestations, and an attestation's id opens it. A public list of the
+ids bound here would be a list of what that issuer's buyers had attested, readable by
+anyone. So a work dir holding a `record-ids-private` marker keeps ids and fetch URLs in
+a gitignored index beside the archived preimages, and publishes the digest alone. The
+record's holder recomputes the digest and finds it in the bundle; nobody else can
+enumerate. Nothing about verification changes: the record was fetched by id, its
+RFC 8785 digest recomputed, and its binding tag found inside the signed bytes before it
+was bound, exactly as for epochs 10 and 11.
+
+## Two anchors orphaned before this one held
+
+The commit that first recorded this epoch said it was **anchored at height 1698**. That
+block, `00000000183145db…`, was valid and briefly the tip on every seed, but the
+laboratory's other miner never received it, found its own 1698, and extended it; two
+blocks beat one. The same payload was mined again at **1701**, `0000000053a6d653…`, and
+was orphaned the same way, apparently while that miner's link was down: it built its
+own 1701 and 1702 on 1700, without ever seeing ours, and won when they reached the seeds. The third attempt, at 1703, holds.
+
+Nothing in the evidence depended on which block won. The record, the binding tag, the
+checkpoint and the payload are byte-identical across all three; only block C moved, and
+each move widened the window above B0 without touching either bound. Both orphans' bytes
+are kept in `live/anchor-evidence/orphans/` (`orphan-epoch12-h1698.hex`,
+`orphan-epoch12-h1701.hex`), and the commit that said 1698 is left as it was, corrected
+here rather than rewritten.
+
+## The burial blocks were mined here, and carry copies of the anchor
+
+After two orphans, a lone block at the tip was the weak point, so the two burial blocks
+were mined from this side straight after C (heights 1704 and 1705) and sent to every
+seed, giving the branch a three-block lead. Epoch 11 refused to do this, and the reason
+does not apply: then the other miner already held a longer private branch, so blocks
+mined here would have been orphaned into the bundle. This time every seed agreed on our C
+at 1703 before the burial blocks were mined, and all three still agreed at 1705.
+
+This project's miner always carries the anchor payload it is given, so 1704 and 1705
+repeat 1703's. They are proof-of-work and nothing more, like the copies at 298 and 732:
+the scan in VERIFY.md step 5 shows `epoch 12` three times, and the epoch's anchor first
+appears at 1703.
+
+## The witnesses did not agree on an instant
+
+The five NTP witnesses each returned a narrow interval (0.09–0.42 s), but they were
+polled one after another over about 1.9 s, so no three intervals overlap and the
+checkpoint carries `TIME_CONFLICT`. This is the same effect recorded for epoch 5 in
+`live/anchor-evidence/FINDING-sequential-polling-2026-08-31.md`. The bundle says so
+rather than inventing an agreed instant: its expectation is a no-consensus marker, and
+the verdict is `SANDWICH_PASS_NO_TIME_CONSENSUS`. The causal claim, B0 1570 < record <
+C 1703, does not depend on the witnesses and is unaffected. The checkpoint was already
+mined into the chain when this was found, and it ships as it is.
+
+## Not claimed
+
+That the attestation's content is correct: the sandwich bounds a digest in time. That
+the OTS proof is attested: it is pending. A wall-clock instant for the checkpoint: the
+witnesses did not give one.
+
+Front door: README row 12, twelve checkpoints shipped, tally 14 proofs. VERIFY.md: step 4
+runs the new bundle, step 5's scan is re-derived from the live chain at 1705, and the
+attestation tally was re-confirmed against a public explorer the same day (28 blocks, no
+mismatches). Three stale counts there were recounted rather than incremented: the
+bundle count in the opening summary, the "nine of the ten proofs" sentence, and the
+"seventeen blocks" sentence. `verify_all` 16 → 17.
